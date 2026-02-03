@@ -35,6 +35,7 @@ public class NhanVienDAO {
                 nv = new NhanVien_DTO();
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setMaCN(rs.getString("MaCN"));
             }
@@ -48,19 +49,12 @@ public class NhanVienDAO {
         return nv;
     }
 
-    // --- MAIN TEST ---
     public static void main(String[] args) {
         NhanVienDAO dao = new NhanVienDAO();
 
         System.out.println("--- ĐANG TEST VỚI CLASS 'database' TRONG GÓI DAO ---");
 
         // Thay user/pass bằng dữ liệu thật của bạn
-        NhanVien_DTO user = dao.checkLogin("NV01", "123");
 
-        if (user != null) {
-            System.out.println("Kết quả: Đăng nhập thành công! Hello " + user.getHoTen());
-        } else {
-            System.out.println("Kết quả: Thất bại (Sai pass hoặc lỗi kết nối).");
-        }
     }
 }
