@@ -29,10 +29,10 @@ public class NhanVienGUI extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         Header = new javax.swing.JPanel();
-        leftGroupHeader = new javax.swing.JPanel();
-        xinChaoText = new javax.swing.JTextField();
-        dangXuatBtn = new javax.swing.JButton();
         tenCty = new javax.swing.JLabel();
+        leftGroupHeader = new javax.swing.JPanel();
+        dangXuatBtn = new javax.swing.JButton();
+        xinChaoText = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -46,19 +46,12 @@ public class NhanVienGUI extends javax.swing.JFrame {
         Header.setBackground(new java.awt.Color(0, 0, 153));
         Header.setPreferredSize(new java.awt.Dimension(1280, 100));
 
-        leftGroupHeader.setBackground(new java.awt.Color(0, 0, 153));
+        tenCty.setBackground(new java.awt.Color(255, 0, 51));
+        tenCty.setFont(new java.awt.Font("Arial", 1, 48)); // NOI18N
+        tenCty.setForeground(new java.awt.Color(255, 102, 0));
+        tenCty.setText("ABC GROUP");
 
-        xinChaoText.setBackground(new java.awt.Color(0, 0, 153));
-        xinChaoText.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        xinChaoText.setForeground(new java.awt.Color(255, 255, 255));
-        xinChaoText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        xinChaoText.setText("Xin chào + Tên Nhân Viên");
-        xinChaoText.setBorder(null);
-        xinChaoText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                xinChaoTextActionPerformed(evt);
-            }
-        });
+        leftGroupHeader.setBackground(new java.awt.Color(0, 0, 153));
 
         dangXuatBtn.setBackground(new java.awt.Color(255, 255, 255));
         dangXuatBtn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -69,33 +62,30 @@ public class NhanVienGUI extends javax.swing.JFrame {
             }
         });
 
+        xinChaoText.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        xinChaoText.setForeground(new java.awt.Color(255, 255, 255));
+        xinChaoText.setText("Xin chào + Tên Nhân Viên");
+
         javax.swing.GroupLayout leftGroupHeaderLayout = new javax.swing.GroupLayout(leftGroupHeader);
         leftGroupHeader.setLayout(leftGroupHeaderLayout);
         leftGroupHeaderLayout.setHorizontalGroup(
             leftGroupHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftGroupHeaderLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(56, Short.MAX_VALUE)
                 .addGroup(leftGroupHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(xinChaoText, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftGroupHeaderLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(dangXuatBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(dangXuatBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xinChaoText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         leftGroupHeaderLayout.setVerticalGroup(
             leftGroupHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftGroupHeaderLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(xinChaoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
+                .addComponent(xinChaoText, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dangXuatBtn)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        tenCty.setBackground(new java.awt.Color(255, 0, 51));
-        tenCty.setFont(new java.awt.Font("Arial", 1, 48)); // NOI18N
-        tenCty.setForeground(new java.awt.Color(255, 102, 0));
-        tenCty.setText("ABC GROUP");
 
         javax.swing.GroupLayout HeaderLayout = new javax.swing.GroupLayout(Header);
         Header.setLayout(HeaderLayout);
@@ -109,12 +99,12 @@ public class NhanVienGUI extends javax.swing.JFrame {
         );
         HeaderLayout.setVerticalGroup(
             HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(leftGroupHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(HeaderLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tenCty, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(HeaderLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(tenCty, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(leftGroupHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -175,10 +165,6 @@ public class NhanVienGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void xinChaoTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xinChaoTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_xinChaoTextActionPerformed
-
     private void dangXuatBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dangXuatBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dangXuatBtnActionPerformed
@@ -236,6 +222,6 @@ public class NhanVienGUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel leftGroupHeader;
     private javax.swing.JLabel tenCty;
-    private javax.swing.JTextField xinChaoText;
+    private javax.swing.JLabel xinChaoText;
     // End of variables declaration//GEN-END:variables
 }

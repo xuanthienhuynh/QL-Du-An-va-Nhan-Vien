@@ -49,6 +49,31 @@ public class NhanVienDAO {
         return nv;
     }
 
+    // Hàm lấy danh sách nhân viên (Trả về ArrayList)
+    public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
+        java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
+        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien"; // Thêm MaCN nếu có
+
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                // nv.setMaCN(rs.getString("MaCN")); // Nhớ lấy thêm chi nhánh
+                list.add(nv);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         NhanVienDAO dao = new NhanVienDAO();
 
