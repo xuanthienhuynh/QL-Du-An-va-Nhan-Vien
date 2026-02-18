@@ -74,6 +74,37 @@ public class NhanVienDAO {
         return list;
     }
 
+    // Thêm vào file DAO.NhanVienDAO.java
+    public java.util.ArrayList<DTO.NhanVien_DTO> timKiemNhanVien(String tuKhoa) {
+        java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
+        // Tìm gần đúng theo MaNV hoặc HoTen
+        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
+
+        try {
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+
+            // Bỏ từ khóa vào định dạng %tuKhoa% của SQL
+            String keyword = "%" + tuKhoa + "%";
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ps.setString(3, keyword);
+
+            java.sql.ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                list.add(nv);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         NhanVienDAO dao = new NhanVienDAO();
 

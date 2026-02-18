@@ -20,7 +20,6 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
 
             // 4. Mở kết nối
             Connection sql = DriverManager.getConnection(url, username, password);
-            System.out.println("Kết nối thành công tới Database: QL_DuAn_CongTy!");
             return sql;
 
         } catch (ClassNotFoundException e) {
