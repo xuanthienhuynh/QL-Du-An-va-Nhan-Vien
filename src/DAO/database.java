@@ -1,4 +1,4 @@
-package DAO; 
+package DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,6 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
             // 2. Cấu hình chuỗi kết nối
-            // LƯU Ý: Sửa 'Thientam' thành 'QL_DuAn_CongTy'
             String url = "jdbc:sqlserver://localhost:1433;databaseName=QL_DuAn_CongTy;encrypt=true;trustServerCertificate=true";
 
             // 3. Tài khoản SQL (Kiểm tra lại xem máy bạn có đúng pass là 3842 không nhé)
@@ -21,7 +20,6 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
 
             // 4. Mở kết nối
             Connection sql = DriverManager.getConnection(url, username, password);
-            System.out.println("Kết nối thành công tới Database: QL_DuAn_CongTy!");
             return sql;
 
         } catch (ClassNotFoundException e) {

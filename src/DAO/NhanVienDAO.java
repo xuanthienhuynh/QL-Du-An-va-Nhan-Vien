@@ -35,6 +35,7 @@ public class NhanVienDAO {
                 nv = new NhanVien_DTO();
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setMaCN(rs.getString("MaCN"));
             }
@@ -48,19 +49,68 @@ public class NhanVienDAO {
         return nv;
     }
 
-    // --- MAIN TEST ---
+    // Hàm lấy danh sách nhân viên (Trả về ArrayList)
+    public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
+        java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
+        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien"; // Thêm MaCN nếu có
+
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                // nv.setMaCN(rs.getString("MaCN")); // Nhớ lấy thêm chi nhánh
+                list.add(nv);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Thêm vào file DAO.NhanVienDAO.java
+    public java.util.ArrayList<DTO.NhanVien_DTO> timKiemNhanVien(String tuKhoa) {
+        java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
+        // Tìm gần đúng theo MaNV hoặc HoTen
+        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
+
+        try {
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+
+            // Bỏ từ khóa vào định dạng %tuKhoa% của SQL
+            String keyword = "%" + tuKhoa + "%";
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ps.setString(3, keyword);
+
+            java.sql.ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                list.add(nv);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         NhanVienDAO dao = new NhanVienDAO();
 
         System.out.println("--- ĐANG TEST VỚI CLASS 'database' TRONG GÓI DAO ---");
 
         // Thay user/pass bằng dữ liệu thật của bạn
-        NhanVien_DTO user = dao.checkLogin("NV01", "123");
 
-        if (user != null) {
-            System.out.println("Kết quả: Đăng nhập thành công! Hello " + user.getHoTen());
-        } else {
-            System.out.println("Kết quả: Thất bại (Sai pass hoặc lỗi kết nối).");
-        }
     }
 }
