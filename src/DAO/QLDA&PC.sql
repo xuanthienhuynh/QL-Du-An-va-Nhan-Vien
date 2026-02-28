@@ -46,6 +46,7 @@ CREATE TABLE DuAn (
     TrangThai NVARCHAR(50), -- 'DangChay', 'KetThuc'
     MaCN CHAR(10) REFERENCES ChiNhanh(MaCN) -- FK
 );
+ALTER TABLE DuAn ADD DoanhThu DECIMAL(18, 0) DEFAULT 0;
 
 -- 6. Tạo bảng Phân Công (Bảng trung gian N-N)
 CREATE TABLE PhanCong (
@@ -143,3 +144,17 @@ INSERT INTO PhanCong (MaNV, MaDA, NgayThamGia, NgayKetThuc, VaiTroDuAn, DanhGia)
 ('NV06', 'DA06', '2023-08-05', NULL,          N'BA',              NULL),
 ('NV08', 'DA08', '2023-09-05', '2024-03-01',  N'Kho vận',         8),    -- Đã xong
 ('NV10', 'DA10', '2024-02-05', NULL,          N'Developer',       NULL);
+
+
+
+
+
+
+-- 2. Update dữ liệu giả: Doanh thu sẽ cao hơn Kinh phí từ 10% đến 50%
+UPDATE DuAn 
+SET DoanhThu = KinhPhi * (1.1 + (ABS(CHECKSUM(NEWID())) % 5) / 10.0)
+WHERE DoanhThu = NULL; -- Chỉ update những dòng chưa có tiền
+
+
+UPDATE DuAn SET DoanhThu = 0 WHERE DoanhThu IS NULL;
+

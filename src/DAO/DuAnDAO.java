@@ -10,7 +10,7 @@ public class DuAnDAO {
     public ArrayList<DuAn_DTO> layDanhSachDuAn() {
         ArrayList<DuAn_DTO> list = new ArrayList<>();
         // Lấy đầy đủ các cột theo DTO
-        String sql = "SELECT MaDA, TenDA, KinhPhi, NgayBatDau, NgayKetThuc, TrangThai, MaCN FROM DuAn";
+        String sql = "SELECT MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, TrangThai, MaCN FROM DuAn";
 
         try {
             Connection conn = database.createConnection();
@@ -22,6 +22,7 @@ public class DuAnDAO {
                 da.setMaDA(rs.getString("MaDA"));
                 da.setTenDA(rs.getString("TenDA"));
                 da.setKinhPhi(rs.getDouble("KinhPhi"));
+                da.setDoanhThu(rs.getDouble("DoanhThu"));
                 da.setNgayBatDau(rs.getDate("NgayBatDau"));
                 da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
                 da.setTrangThai(rs.getString("TrangThai"));

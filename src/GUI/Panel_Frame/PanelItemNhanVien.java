@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.Panel_Frame;
 
 /**
  *
@@ -31,16 +31,20 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         lblTenNV = new javax.swing.JLabel();
         lblMaNV = new javax.swing.JLabel();
         lblChiNhanh = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        setPreferredSize(new java.awt.Dimension(800, 60));
+        setMinimumSize(new java.awt.Dimension(516, 35));
+        setPreferredSize(new java.awt.Dimension(800, 40));
         setLayout(new java.awt.GridLayout(1, 0));
 
         lblTenNV.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -55,14 +59,22 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         lblChiNhanh.setText("Chức vụ");
         add(lblChiNhanh);
 
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(106, 106));
+        jPanel2.add(jButton1);
+
         btnEdit.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        btnEdit.setText("Chỉnh sửa");
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-edit-30.png"))); // NOI18N
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
             }
         });
-        add(btnEdit);
+        jPanel2.add(btnEdit);
+
+        add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
@@ -71,6 +83,9 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblChiNhanh;
     private javax.swing.JLabel lblMaNV;
     private javax.swing.JLabel lblTenNV;

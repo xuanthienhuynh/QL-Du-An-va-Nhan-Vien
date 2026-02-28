@@ -5,12 +5,10 @@
 package GUI;
 
 import DTO.NhanVien_DTO;
+import GUI.Panel_Frame.PanelItemDuAn;
+import GUI.Panel_Frame.PanelItemNhanVien;
 
 public class SepGUI extends javax.swing.JFrame {
-
-        /**
-         * Creates new form SepGUI
-         */
 
         private NhanVien_DTO user;
 
@@ -46,6 +44,9 @@ public class SepGUI extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
@@ -68,9 +69,10 @@ public class SepGUI extends javax.swing.JFrame {
                 thanhTimKiem1 = new javax.swing.JTextField();
                 timKiem_btn1 = new javax.swing.JButton();
                 chiNhanh_cbb1 = new javax.swing.JComboBox<>();
-                add_btn1 = new javax.swing.JButton();
+                addduan_btn1 = new javax.swing.JButton();
                 jScrollPane2 = new javax.swing.JScrollPane();
                 panelDanhSachDuAn = new javax.swing.JPanel();
+                jPanel4 = new javax.swing.JPanel();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,8 +105,9 @@ public class SepGUI extends javax.swing.JFrame {
                                 leftGroupHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(leftGroupHeaderLayout.createSequentialGroup()
                                                                 .addContainerGap(56, Short.MAX_VALUE)
-                                                                .addGroup(leftGroupHeaderLayout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(leftGroupHeaderLayout
+                                                                                .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addComponent(dangXuatBtn,
                                                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -159,7 +162,8 @@ public class SepGUI extends javax.swing.JFrame {
                                                 .addComponent(leftGroupHeader,
                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                Short.MAX_VALUE));
 
                 jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -170,8 +174,9 @@ public class SepGUI extends javax.swing.JFrame {
                         }
                 });
 
-                chiNhanh_cbb.setModel(new javax.swing.DefaultComboBoxModel<>(
-                                new String[] { "Cơ sở 1", "Cơ sở 2 ", "Cơ sở 3" }));
+                chiNhanh_cbb
+                                .setModel(new javax.swing.DefaultComboBoxModel<>(
+                                                new String[] { "Cơ sở 1", "Cơ sở 2 ", "Cơ sở 3" }));
                 chiNhanh_cbb.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 chiNhanh_cbbActionPerformed(evt);
@@ -202,7 +207,8 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                48, Short.MAX_VALUE)
+                                                                                72,
+                                                                                Short.MAX_VALUE)
                                                                 .addComponent(chiNhanh_cbb,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 163,
@@ -222,7 +228,8 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
                                                                                 .addComponent(thanhTimKiem,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                43, Short.MAX_VALUE)
+                                                                                                43,
+                                                                                                Short.MAX_VALUE)
                                                                                 .addComponent(timKiem_btn)
                                                                                 .addComponent(chiNhanh_cbb,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -238,20 +245,12 @@ public class SepGUI extends javax.swing.JFrame {
                 nhanVien.setLayout(nhanVienLayout);
                 nhanVienLayout.setHorizontalGroup(
                                 nhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(nhanVienLayout.createSequentialGroup()
-                                                                .addContainerGap()
-                                                                .addGroup(nhanVienLayout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addComponent(jPanel1,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(jScrollPane1))
-                                                                .addContainerGap()));
+                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jScrollPane1));
                 nhanVienLayout.setVerticalGroup(
                                 nhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(nhanVienLayout.createSequentialGroup()
-                                                                .addContainerGap()
                                                                 .addComponent(jPanel1,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -260,7 +259,7 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jScrollPane1,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                484, Short.MAX_VALUE)
+                                                                                504, Short.MAX_VALUE)
                                                                 .addContainerGap()));
 
                 jTabbedPane1.addTab("Xem Nhân Viên", nhanVien);
@@ -274,18 +273,19 @@ public class SepGUI extends javax.swing.JFrame {
                         }
                 });
 
-                chiNhanh_cbb1.setModel(new javax.swing.DefaultComboBoxModel<>(
-                                new String[] { "Cơ sở 1", "Cơ sở 2 ", "Cơ sở 3" }));
+                chiNhanh_cbb1
+                                .setModel(new javax.swing.DefaultComboBoxModel<>(
+                                                new String[] { "Cơ sở 1", "Cơ sở 2 ", "Cơ sở 3" }));
                 chiNhanh_cbb1.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 chiNhanh_cbb1ActionPerformed(evt);
                         }
                 });
 
-                add_btn1.setText("Thêm");
-                add_btn1.addActionListener(new java.awt.event.ActionListener() {
+                addduan_btn1.setText("Thêm");
+                addduan_btn1.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                add_btn1ActionPerformed(evt);
+
                         }
                 });
 
@@ -306,13 +306,14 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                72, Short.MAX_VALUE)
+                                                                                72,
+                                                                                Short.MAX_VALUE)
                                                                 .addComponent(chiNhanh_cbb1,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 163,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(57, 57, 57)
-                                                                .addComponent(add_btn1,
+                                                                .addComponent(addduan_btn1,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 146,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -326,13 +327,14 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
                                                                                 .addComponent(thanhTimKiem1,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                43, Short.MAX_VALUE)
+                                                                                                43,
+                                                                                                Short.MAX_VALUE)
                                                                                 .addComponent(timKiem_btn1)
                                                                                 .addComponent(chiNhanh_cbb1,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(add_btn1))
+                                                                                .addComponent(addduan_btn1))
                                                                 .addContainerGap()));
 
                 panelDanhSachDuAn.setLayout(new javax.swing.BoxLayout(panelDanhSachDuAn, javax.swing.BoxLayout.Y_AXIS));
@@ -356,9 +358,21 @@ public class SepGUI extends javax.swing.JFrame {
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jScrollPane2,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                508, Short.MAX_VALUE)));
+                                                                                516,
+                                                                                Short.MAX_VALUE)));
 
                 jTabbedPane1.addTab("Xem Dự Án", jPanel2);
+
+                javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+                jPanel4.setLayout(jPanel4Layout);
+                jPanel4Layout.setHorizontalGroup(
+                                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 1287, Short.MAX_VALUE));
+                jPanel4Layout.setVerticalGroup(
+                                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 595, Short.MAX_VALUE));
+
+                jTabbedPane1.addTab("Thống Kê", jPanel4);
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -381,9 +395,22 @@ public class SepGUI extends javax.swing.JFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_add_btnActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_add_btnActionPerformed
+        private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {
+                // 1. Tạo một cửa sổ Dialog mới (Cửa sổ con)
+                javax.swing.JDialog dialog = new javax.swing.JDialog(this, "Thêm Nhân Viên Mới", true);
+
+                // 2. Tạo PanelAddNhanVien và bỏ vào Dialog
+                GUI.Panel_Frame.PanelAddNhanVien panel = new GUI.Panel_Frame.PanelAddNhanVien(dialog);
+                dialog.getContentPane().add(panel);
+
+                // 3. Setup kích thước và hiển thị
+                dialog.pack(); // Tự động co giãn theo kích thước Panel
+                dialog.setLocationRelativeTo(null); // Ra giữa màn hình
+                dialog.setVisible(true);
+
+                // 4. Khi Dialog đóng lại thì load lại danh sách bên ngoài
+                loadDanhSachNV();
+        }
 
         private void timKiem_btn1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_timKiem_btn1ActionPerformed
                 // TODO add your handling code here:
@@ -392,10 +419,6 @@ public class SepGUI extends javax.swing.JFrame {
         private void chiNhanh_cbb1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_chiNhanh_cbb1ActionPerformed
                 // TODO add your handling code here:
         }// GEN-LAST:event_chiNhanh_cbb1ActionPerformed
-
-        private void add_btn1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_add_btn1ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_add_btn1ActionPerformed
 
         private void chiNhanh_cbbActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_chiNhanh_cbbActionPerformed
                 // TODO add your handling code here:
@@ -459,6 +482,7 @@ public class SepGUI extends javax.swing.JFrame {
                         PanelItemDuAn item = new PanelItemDuAn(
                                         da.getMaDA(),
                                         da.getTenDA(),
+                                        da.getDoanhThu(),
                                         da.getKinhPhi(),
                                         da.getNgayBatDau());
 
@@ -538,13 +562,14 @@ public class SepGUI extends javax.swing.JFrame {
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JPanel Header;
         private javax.swing.JButton add_btn;
-        private javax.swing.JButton add_btn1;
+        private javax.swing.JButton addduan_btn1;
         private javax.swing.JComboBox<String> chiNhanh_cbb;
         private javax.swing.JComboBox<String> chiNhanh_cbb1;
         private javax.swing.JButton dangXuatBtn;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel2;
         private javax.swing.JPanel jPanel3;
+        private javax.swing.JPanel jPanel4;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JScrollPane jScrollPane2;
         private javax.swing.JTabbedPane jTabbedPane1;
