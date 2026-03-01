@@ -53,4 +53,18 @@ public class NhanVienBUS {
         return dao.themNhanVien(nv);
     }
 
+    public DTO.NhanVien_DTO getChiTietNhanVien(String maNV) {
+        return dao.layThongTinNhanVien(maNV);
+    }
+
+    // Gọi DAO cập nhật
+    public boolean capNhatNhanVien(DTO.NhanVien_DTO nv) {
+        return dao.capNhatNhanVien(nv);
+    }
+
+    // Gọi DAO cho nghỉ việc
+    public boolean choNghiViec(String maNV) {
+        return dao.choNghiViec(maNV);
+    }
+
 }

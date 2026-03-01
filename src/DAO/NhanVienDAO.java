@@ -23,7 +23,7 @@ public class NhanVienDAO {
                 return null;
             }
 
-            String sql = "SELECT * FROM NhanVien WHERE MaNV = ? AND MatKhau = ?";
+            String sql = "SELECT * FROM NhanVien WHERE MaNV = ? AND MatKhau = ? AND TinhTrang = 1";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, user);
@@ -36,6 +36,7 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
+                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
                 // nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setMaCN(rs.getString("MaCN"));
             }
@@ -52,7 +53,7 @@ public class NhanVienDAO {
     // Hàm lấy danh sách nhân viên (Trả về ArrayList)
     public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien"; // Thêm MaCN nếu có
+        String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang FROM NhanVien"; // Thêm MaCN nếu có
 
         try {
             Connection conn = database.createConnection();
@@ -64,6 +65,7 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
+                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
                 // nv.setMaCN(rs.getString("MaCN")); // Nhớ lấy thêm chi nhánh
                 list.add(nv);
             }
@@ -168,7 +170,8 @@ public class NhanVienDAO {
 
     // 4. Hàm Thêm Nhân Viên
     public boolean themNhanVien(DTO.NhanVien_DTO nv) {
-        String sql = "INSERT INTO NhanVien(MaNV, HoTen, GioiTinh, NgaySinh, Luong, MaPB, MaCN, VaiTro, MatKhau) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO NhanVien(MaNV, HoTen, GioiTinh, NgaySinh, Luong, MaPB, MaCN, VaiTro, MatKhau, TinhTrang) "
+                + "VALUES(?,?,?,?,?,?,?,?,?,?)";
         try {
             Connection conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -181,7 +184,73 @@ public class NhanVienDAO {
             ps.setString(7, nv.getMaCN());
             ps.setString(8, "NhanVien"); // Mặc định là nhân viên thường
             ps.setString(9, "123"); // Mật khẩu mặc định
+            ps.setBoolean(10, nv.getTinhTrang());
 
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public DTO.NhanVien_DTO layThongTinNhanVien(String maNV) {
+        DTO.NhanVien_DTO nv = null;
+        String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
+        try {
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maNV);
+            java.sql.ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setGioiTinh(rs.getString("GioiTinh"));
+                nv.setNgaySinh(rs.getDate("NgaySinh"));
+                nv.setLuong(rs.getDouble("Luong"));
+                nv.setMaPB(rs.getString("MaPB"));
+                nv.setMaCN(rs.getString("MaCN"));
+                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                nv.setDcSoNha(rs.getString("DcSoNha"));
+                nv.setDcPhuong(rs.getString("DcPhuong"));
+                nv.setDcTinh(rs.getString("DcTinh"));
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nv;
+    }
+
+    // 2. Cập nhật thông tin nhân viên
+    public boolean capNhatNhanVien(DTO.NhanVien_DTO nv) {
+        String sql = "UPDATE NhanVien SET HoTen=?, GioiTinh=?, NgaySinh=?, Luong=?, MaPB=?, MaCN=? WHERE MaNV=?";
+        try {
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, nv.getHoTen());
+            ps.setString(2, nv.getGioiTinh());
+            ps.setDate(3, new java.sql.Date(nv.getNgaySinh().getTime()));
+            ps.setDouble(4, nv.getLuong());
+            ps.setString(5, nv.getMaPB());
+            ps.setString(6, nv.getMaCN());
+            ps.setString(7, nv.getMaNV()); // Điều kiện WHERE
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 3. Cho nghỉ việc (Đổi tình trạng thành False/0)
+    public boolean choNghiViec(String maNV) {
+        String sql = "UPDATE NhanVien SET TinhTrang = 0 WHERE MaNV = ?";
+        try {
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maNV);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

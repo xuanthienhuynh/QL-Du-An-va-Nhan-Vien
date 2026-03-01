@@ -18,9 +18,11 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         initComponents();
 
         // Bây giờ code mới hiểu ma, ten, cn là gì để gán vào
+        // System.out.println("Item -> Mã: " + ma + " | Tên: " + ten + " | CV: " + cn);
         lblMaNV.setText(ma);
         lblTenNV.setText(ten);
         lblChiNhanh.setText(cn);
+
     }
 
     /**
@@ -31,7 +33,9 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -39,7 +43,7 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         lblMaNV = new javax.swing.JLabel();
         lblChiNhanh = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        detailNhanVien_btn = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -59,11 +63,16 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         lblChiNhanh.setText("Chức vụ");
         add(lblChiNhanh);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
-        jButton1.setPreferredSize(new java.awt.Dimension(106, 106));
-        jPanel2.add(jButton1);
+        detailNhanVien_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
+        detailNhanVien_btn.setPreferredSize(new java.awt.Dimension(106, 106));
+        detailNhanVien_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailNhanVien_btnActionPerformed(evt);
+            }
+        });
+        jPanel2.add(detailNhanVien_btn);
 
         btnEdit.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-edit-30.png"))); // NOI18N
@@ -77,13 +86,55 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_btnEditActionPerformed
+    private void detailNhanVien_btnActionPerformed(java.awt.event.ActionEvent evt) {
+        // 1. Lấy mã nhân viên
+        String maNV = lblMaNV.getText();
+
+        // 2. Tìm cửa sổ cha
+        java.awt.Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        // 3. Tạo Dialog mới
+        javax.swing.JDialog dialog = new javax.swing.JDialog((java.awt.Frame) parentWindow, "Thông Tin Chi Tiết", true);
+
+        // 4. Gọi PanelDetailsNhanVien và truyền Mã NV vào
+        PanelDetailsNhanVien panelDetails = new PanelDetailsNhanVien(maNV);
+
+        // 5. Setup Dialog
+        dialog.getContentPane().add(panelDetails);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null); // Ra giữa màn hình
+        dialog.setVisible(true);
+    }
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {
+        // 1. Lấy mã nhân viên từ Label đang hiển thị
+        String maNV = lblMaNV.getText();
+
+        // 2. Tìm cửa sổ cha (JFrame) để tạo Dialog
+        java.awt.Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        // 3. Tạo Dialog chỉnh sửa
+        javax.swing.JDialog dialog = new javax.swing.JDialog((java.awt.Frame) parentWindow, "Chỉnh Sửa Nhân Viên",
+                true);
+
+        // 4. Gọi PanelEditNhanVien và truyền Mã NV vào
+        PanelEditNhanVien panelEdit = new PanelEditNhanVien(dialog, maNV);
+
+        dialog.getContentPane().add(panelEdit);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        // 5. Quan trọng: Sau khi Dialog đóng, cần load lại danh sách ở GUI chính
+        // (Cách đơn giản nhất là gọi hàm refresh của SepGUI nếu bạn truyền callback,
+        // hoặc người dùng phải bấm nút Tìm kiếm/Refresh lại bằng tay.
+        // Để đơn giản, tạm thời chấp nhận người dùng phải bấm lại tab hoặc tìm kiếm để
+        // thấy thay đổi).
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton detailNhanVien_btn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblChiNhanh;

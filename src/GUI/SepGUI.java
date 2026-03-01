@@ -514,6 +514,7 @@ public class SepGUI extends javax.swing.JFrame {
                 }
 
                 // 5. Cập nhật lại màn hình
+                panelDanhSach.add(javax.swing.Box.createVerticalGlue());
                 panelDanhSach.revalidate();
                 panelDanhSach.repaint();
         }
