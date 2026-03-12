@@ -67,4 +67,36 @@ public class NhanVienBUS {
         return dao.choNghiViec(maNV);
     }
 
+    public java.util.ArrayList<NhanVien_DTO> thongKeTopDuAn(String maCN, String maPB, String sapXep) {
+        return dao.thongKeTopDuAn(maCN, maPB, sapXep);
+    }
+
+    public java.util.ArrayList<NhanVien_DTO> thongKeLuong(String maCN, String maPB, String sapXep) {
+        return dao.thongKeLuongNhanVien(maCN, maPB, sapXep);
+    }
+
+    public java.util.ArrayList<String> layDuAnCuaNhanVien(String maNV) {
+        return dao.layDuAnCuaNhanVien(maNV);
+    }
+
+    public java.util.ArrayList<DTO.NhanVien_DTO> timKiemVaLoc(String tuKhoa, String maCN) {
+        // 1. Lấy danh sách theo từ khóa trước (Nếu không nhập gì thì nó tự lấy full)
+        java.util.ArrayList<DTO.NhanVien_DTO> list = timKiem(tuKhoa);
+
+        // 2. Lọc tiếp theo Chi Nhánh
+        if (maCN == null || maCN.equals("Tất cả Chi Nhánh") || maCN.trim().isEmpty()) {
+            return list;
+        }
+
+        java.util.ArrayList<DTO.NhanVien_DTO> listLoc = new java.util.ArrayList<>();
+        if (list != null) {
+            for (DTO.NhanVien_DTO nv : list) {
+                // MẤU CHỐT SỬA LỖI: Dùng .trim() để gọt sạch khoảng trắng thừa của SQL
+                if (nv.getMaCN() != null && nv.getMaCN().trim().equalsIgnoreCase(maCN.trim())) {
+                    listLoc.add(nv);
+                }
+            }
+        }
+        return listLoc;
+    }
 }

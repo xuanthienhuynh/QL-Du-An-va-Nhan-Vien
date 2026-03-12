@@ -48,7 +48,7 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
     public static void main(String[] args) {
         Connection c = createConnection();
         if (c != null) {
-            // Nếu chạy ra dòng này là ngon lành
+   
             closeConnection(c);
         }
     }
