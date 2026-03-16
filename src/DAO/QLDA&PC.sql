@@ -29,7 +29,7 @@ CREATE TABLE NhanVien (
     DcSoNha NVARCHAR(50),
     NgaySinh DATE,
     Luong DECIMAL(18,2),
-    TinhTrang NVARCHAR(20), -- 'DangLamViec', 'DaNghiViec'
+    TinhTrang NVARCHAR(20), 
     VaiTro NVARCHAR(20),    -- 'NhanVien', 'QuanLy', 'Sep'
     MatKhau VARCHAR(50),    -- Đơn giản hóa, thực tế nên mã hóa
     MaPB CHAR(10) REFERENCES PhongBan(MaPB), -- FK 1
@@ -46,6 +46,8 @@ CREATE TABLE DuAn (
     TrangThai NVARCHAR(50), -- 'DangChay', 'KetThuc'
     MaCN CHAR(10) REFERENCES ChiNhanh(MaCN) -- FK
 );
+ALTER TABLE DuAn ADD DoanhThu DECIMAL(18, 0) DEFAULT 0;
+
 
 -- 6. Tạo bảng Phân Công (Bảng trung gian N-N)
 CREATE TABLE PhanCong (
@@ -128,7 +130,7 @@ INSERT INTO DuAn (MaDA, TenDA, KinhPhi, NgayBatDau, NgayKetThuc, TrangThai, MaCN
 ('DA09', N'Hệ thống giáo dục trực tuyến',  2500000000, '2023-10-01', '2025-10-01', N'DangChay', 'CN_HN'),
 ('DA10', N'Ứng dụng đặt xe nội bộ',        100000000,  '2024-02-01', '2024-12-31', N'DangChay', 'CN_HCM');
 
--- =============================================
+-- =============================================	
 -- 5. DỮ LIỆU BẢNG PHÂN CÔNG (10 Lượt phân công)
 -- Logic: NV01 tham gia nhiều dự án (để test logic "Tối đa 3")
 -- =============================================
@@ -143,3 +145,18 @@ INSERT INTO PhanCong (MaNV, MaDA, NgayThamGia, NgayKetThuc, VaiTroDuAn, DanhGia)
 ('NV06', 'DA06', '2023-08-05', NULL,          N'BA',              NULL),
 ('NV08', 'DA08', '2023-09-05', '2024-03-01',  N'Kho vận',         8),    -- Đã xong
 ('NV10', 'DA10', '2024-02-05', NULL,          N'Developer',       NULL);
+
+
+
+
+
+
+-- 2. Update dữ liệu giả: Doanh thu sẽ cao hơn Kinh phí từ 10% đến 50%
+UPDATE DuAn 
+SET DoanhThu = KinhPhi * (1.1 + (ABS(CHECKSUM(NEWID())) % 5) / 10.0)
+
+
+
+UPDATE DuAn SET DoanhThu = 0 WHERE DoanhThu IS NULL;
+
+UPDATE NhanVien SET TinhTrang = '1' WHERE TinhTrang IS NOT NULL;

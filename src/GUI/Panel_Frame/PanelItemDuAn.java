@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.Panel_Frame;
 
 import java.awt.Color;
 
@@ -15,23 +15,34 @@ public class PanelItemDuAn extends javax.swing.JPanel {
     /**
      * Creates new form PanelItemDuAn
      */
-    public PanelItemDuAn(String maDA, String tenDA, double chiPhi, java.util.Date ngayBD) {
+    public PanelItemDuAn(String maDA, String tenDA, double DoanhThu, double chiPhi, java.util.Date ngayBD) {
         initComponents();
         // Gán chuỗi bình thường
         lblMaDA.setText(maDA);
         lblTenDA.setText(tenDA);
 
-        // Format Chi phí (double -> String có dấu phẩy)
-        lblChiPhi.setText(String.format("%,.0f VNĐ", chiPhi));
-        lblChiPhi.setForeground(Color.blue);
-        ;
+        double loiNhuan = DoanhThu - chiPhi;
 
-        // Format Ngày tháng (Date -> String "dd/MM/yyyy")
+        // Format Chi phí (double -> String có dấu phẩy)
+        String loiNhuanText = String.format("%,.0f VNĐ", loiNhuan);
+
+        if (loiNhuan > 0) {
+            lblChiPhi.setText("Lãi: " + loiNhuanText);
+            lblChiPhi.setForeground(java.awt.Color.BLUE); // Lời thì màu Xanh
+        } else if (loiNhuan < 0) {
+            lblChiPhi.setText("Lỗ: " + loiNhuanText);
+            lblChiPhi.setForeground(java.awt.Color.RED); // Lỗ thì màu Đỏ
+        } else {
+            lblChiPhi.setText("Hòa vốn");
+            lblChiPhi.setForeground(java.awt.Color.BLACK);
+        }
+        // ---------------------------------
+
         if (ngayBD != null) {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
             lblNgayBD.setText(sdf.format(ngayBD));
         } else {
-            lblNgayBD.setText("Chưa bắt đầu");
+            lblNgayBD.setText("...");
         }
 
     }
@@ -46,16 +57,21 @@ public class PanelItemDuAn extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblTenDA = new javax.swing.JLabel();
         lblMaDA = new javax.swing.JLabel();
         lblChiPhi = new javax.swing.JLabel();
         lblNgayBD = new javax.swing.JLabel();
-        btnEdit = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        btnEdit1 = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(800, 60));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(800, 40));
         setLayout(new java.awt.GridLayout(1, 0));
 
         lblTenDA.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -74,22 +90,36 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         lblNgayBD.setText("Ngày BĐ");
         add(lblNgayBD);
 
-        btnEdit.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        btnEdit.setText("Chỉnh sửa");
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(106, 106));
+        jPanel2.add(jButton1);
+
+        btnEdit1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnEdit1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-edit-30.png"))); // NOI18N
+        btnEdit1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
+                btnEdit1ActionPerformed(evt);
             }
         });
-        add(btnEdit);
+        jPanel2.add(btnEdit1);
+
+        add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEdit1ActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnEdit1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblChiPhi;
     private javax.swing.JLabel lblMaDA;
     private javax.swing.JLabel lblNgayBD;
