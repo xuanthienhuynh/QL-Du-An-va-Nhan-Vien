@@ -10,12 +10,15 @@ public class DuAnBUS {
     public ArrayList<DuAn_DTO> layToanBoDuAn() {
         return dao.layDanhSachDuAn();
     }
-    public java.util.ArrayList<DTO.DuAn_DTO> timKiemNangCao(String tuKhoa, java.util.Date tuNgay, java.util.Date denNgay, String chiNhanh) {
+
+    public java.util.ArrayList<DTO.DuAn_DTO> timKiemNangCao(String tuKhoa, java.util.Date tuNgay,
+            java.util.Date denNgay, String chiNhanh) {
         // Lấy tất cả dự án lên trước
         java.util.ArrayList<DTO.DuAn_DTO> tatCa = layToanBoDuAn();
         java.util.ArrayList<DTO.DuAn_DTO> ketQua = new java.util.ArrayList<>();
 
-        if (tatCa == null) return ketQua;
+        if (tatCa == null)
+            return ketQua;
 
         for (DTO.DuAn_DTO da : tatCa) {
             boolean matchTuKhoa = true;
@@ -26,7 +29,7 @@ public class DuAnBUS {
             if (tuKhoa != null && !tuKhoa.trim().isEmpty()) {
                 String keyword = tuKhoa.toLowerCase();
                 matchTuKhoa = (da.getTenDA() != null && da.getTenDA().toLowerCase().contains(keyword)) ||
-                              (da.getMaDA() != null && da.getMaDA().toLowerCase().contains(keyword));
+                        (da.getMaDA() != null && da.getMaDA().toLowerCase().contains(keyword));
             }
 
             // 2. Lọc theo Chi nhánh
@@ -42,7 +45,7 @@ public class DuAnBUS {
                     matchThoiGian = false;
                 }
             }
-            
+
             if (denNgay != null && da.getNgayKetThuc() != null) {
                 // Nếu ngày kết thúc của dự án xảy ra SAU "denNgay" -> Không thỏa mãn
                 if (da.getNgayKetThuc().after(denNgay)) {
@@ -58,7 +61,8 @@ public class DuAnBUS {
 
         return ketQua;
     }
-     public java.util.ArrayList<DTO.DuAn_DTO> timKiem(String tuKhoa) {
+
+    public java.util.ArrayList<DTO.DuAn_DTO> timKiem(String tuKhoa) {
         // 1. Lấy toàn bộ danh sách dự án
         java.util.ArrayList<DTO.DuAn_DTO> tatCa = layToanBoDuAn();
         java.util.ArrayList<DTO.DuAn_DTO> ketQua = new java.util.ArrayList<>();
@@ -68,7 +72,7 @@ public class DuAnBUS {
             return tatCa;
         }
 
-        // 3. Chuyển từ khóa về chữ thường và cắt khoảng trắng thừa 
+        // 3. Chuyển từ khóa về chữ thường và cắt khoảng trắng thừa
         // (Giúp tìm kiếm không phân biệt chữ HOA/thường)
         String keyword = tuKhoa.toLowerCase().trim();
 
@@ -86,9 +90,10 @@ public class DuAnBUS {
         // 5. Trả về danh sách đã được lọc
         return ketQua;
     }
-      public String taoMaDuAnMoi() {
+
+    public String taoMaDuAnMoi() {
         java.util.ArrayList<DTO.DuAn_DTO> list = layToanBoDuAn();
-        
+
         // Nếu danh sách trống, trả về mã đầu tiên
         if (list == null || list.isEmpty()) {
             return "DA01";
@@ -103,7 +108,7 @@ public class DuAnBUS {
                     // Cắt bỏ 2 ký tự đầu ("DA"), lấy phần số phía sau để chuyển thành int
                     String phanSo = ma.substring(2).trim();
                     int currentNum = Integer.parseInt(phanSo);
-                    
+
                     // Tìm số lớn nhất
                     if (currentNum > maxId) {
                         maxId = currentNum;
@@ -113,34 +118,39 @@ public class DuAnBUS {
                 }
             }
         }
-        
+
         // Cộng thêm 1 vào số lớn nhất tìm được
         maxId++;
-        
+
         // Ghép lại chữ "DA" và định dạng số luôn có 2 chữ số (vd: 01, 02... 10)
         return String.format("DA%02d", maxId);
     }
-     public DTO.DuAn_DTO getChiTietDuAn(String maDA) {
+
+    public DTO.DuAn_DTO getChiTietDuAn(String maDA) {
         return dao.layThongTinDuAn(maDA);
     }
-     public boolean capNhatDuAn(DTO.DuAn_DTO DA) {
+
+    public boolean capNhatDuAn(DTO.DuAn_DTO DA) {
         return dao.capNhatDuAn(DA);
     }
-      public boolean themDuAn(DTO.DuAn_DTO da) {
+
+    public boolean themDuAn(DTO.DuAn_DTO da) {
         DAO.DuAnDAO dao = new DAO.DuAnDAO();
         return dao.themDuAn(da);
     }
-     
+
     public boolean xoaDuAn(String maDA) {
         DAO.DuAnDAO dao = new DAO.DuAnDAO();
         return dao.xoaDuAn(maDA);
     }
-   public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
+
+    public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
         DAO.DuAnDAO dao = new DAO.DuAnDAO();
         return dao.capNhatTrangThaiDuAn(da);
     }
-    public boolean suaThongTin(DuAn_DTO dto){
-       DuAnDAO dao = new DuAnDAO();
-       return dao.capNhatDuAn(dto);
+
+    public boolean suaThongTin(DuAn_DTO dto) {
+        DuAnDAO dao = new DuAnDAO();
+        return dao.capNhatDuAn(dto);
     }
 }

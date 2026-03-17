@@ -35,29 +35,26 @@ public class DuAnDAO {
         }
         return list;
     }
-    
+
     public boolean themDuAn(DuAn_DTO da) {
         Connection conn = database.createConnection();
         if (conn != null) {
             try {
-                String sql = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, MaCN) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                // THÊM TrangThai vào câu SQL (dấu ? thứ 7) và đẩy MaCN sang dấu ? thứ 8
+                String sql = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, TrangThai, MaCN) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement ps = conn.prepareStatement(sql);
-                
-                // Truyền tham số an toàn vào dấu ?
+
                 ps.setString(1, da.getMaDA());
                 ps.setString(2, da.getTenDA());
                 ps.setDouble(3, da.getKinhPhi());
                 ps.setDouble(4, da.getDoanhThu());
-                
-                // Xử lý chuyển đổi java.util.Date sang java.sql.Date
                 ps.setDate(5, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
                 ps.setDate(6, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                
-                ps.setString(7, da.getMaCN());
-               
+                ps.setString(7, da.getTrangThai()); // THÊM DÒNG NÀY
+                ps.setString(8, da.getMaCN()); // Đổi thành số 8
+
                 int rowsAffected = ps.executeUpdate();
-                return rowsAffected > 0; // Trả về true nếu thêm thành công
-                
+                return rowsAffected > 0;
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -74,23 +71,21 @@ public class DuAnDAO {
         Connection conn = database.createConnection();
         if (conn != null) {
             try {
-                String sql = "UPDATE DuAn SET TenDA=?, KinhPhi=?, DoanhThu=?, NgayBatDau=?, NgayKetThuc=?, MaCN=? WHERE MaDA=?";
+                // THÊM TrangThai=? vào câu lệnh UPDATE
+                String sql = "UPDATE DuAn SET TenDA=?, KinhPhi=?, DoanhThu=?, NgayBatDau=?, NgayKetThuc=?, TrangThai=?, MaCN=? WHERE MaDA=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
-                
-                // Gán dữ liệu thay đổi
+
                 ps.setString(1, da.getTenDA());
                 ps.setDouble(2, da.getKinhPhi());
                 ps.setDouble(3, da.getDoanhThu());
                 ps.setDate(4, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
                 ps.setDate(5, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                ps.setString(6, da.getMaCN());
-                
-                // Điều kiện WHERE (Mã DA nằm ở dấu ? thứ 7)
-                ps.setString(7, da.getMaDA());
-                
+                ps.setString(6, da.getTrangThai()); // THÊM DÒNG NÀY
+                ps.setString(7, da.getMaCN()); // Đổi thành số 7
+                ps.setString(8, da.getMaDA()); // Đổi thành số 8 (WHERE)
+
                 int rowsAffected = ps.executeUpdate();
                 return rowsAffected > 0;
-                
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -124,25 +119,27 @@ public class DuAnDAO {
 
                 // Xác nhận thực thi lệnh xóa cả 2 bảng
                 conn.commit();
-                
+
                 return rowsAffected > 0;
-                
+
             } catch (Exception e) {
                 try {
-                    // Nếu quá trình xóa có lỗi (vd đứt cáp mạng), hoàn tác lại như chưa có gì xảy ra
-                    conn.rollback(); 
+                    // Nếu quá trình xóa có lỗi (vd đứt cáp mạng), hoàn tác lại như chưa có gì xảy
+                    // ra
+                    conn.rollback();
                 } catch (Exception rollbackEx) {
                     rollbackEx.printStackTrace();
                 }
-                
+
                 System.err.println("Lỗi xóa: " + e.getMessage());
                 e.printStackTrace();
             } finally {
                 // Bật lại auto-commit và đóng kết nối
                 try {
                     conn.setAutoCommit(true);
-                } catch (Exception ex) {}
-                
+                } catch (Exception ex) {
+                }
+
                 database.closeConnection(conn);
             }
         }
@@ -179,21 +176,22 @@ public class DuAnDAO {
 
         return da;
     }
-     public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
+
+    public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
         java.sql.Connection conn = database.createConnection();
         if (conn != null) {
             try {
                 // Lệnh SQL chỉ cập nhật duy nhất cột TrangThai
                 String sql = "UPDATE DuAn SET TrangThai = ? WHERE MaDA = ?";
                 java.sql.PreparedStatement ps = conn.prepareStatement(sql);
-                
+
                 // Lấy trạng thái đã được set bên trong đối tượng DTO
-                ps.setString(1, da.getTrangThai()); 
+                ps.setString(1, da.getTrangThai());
                 ps.setString(2, da.getMaDA());
-                
+
                 int rowsAffected = ps.executeUpdate();
                 return rowsAffected > 0;
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
