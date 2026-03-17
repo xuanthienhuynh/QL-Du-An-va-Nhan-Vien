@@ -154,7 +154,11 @@ INSERT INTO PhanCong (MaNV, MaDA, NgayThamGia, NgayKetThuc, VaiTroDuAn, DanhGia)
 -- 2. Update dữ liệu giả: Doanh thu sẽ cao hơn Kinh phí từ 10% đến 50%
 UPDATE DuAn 
 SET DoanhThu = KinhPhi * (1.1 + (ABS(CHECKSUM(NEWID())) % 5) / 10.0)
+<<<<<<< HEAD
 
+=======
+WHERE DoanhThu = NULL; -- Chỉ update những dòng chưa có tiền
+>>>>>>> b19caaa (lan 1 du an)
 
 
 UPDATE DuAn SET DoanhThu = 0 WHERE DoanhThu IS NULL;
