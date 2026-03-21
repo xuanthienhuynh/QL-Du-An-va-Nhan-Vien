@@ -67,12 +67,15 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         lblChiPhi = new javax.swing.JLabel();
         lblNgayBD = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnDetail = new javax.swing.JButton();
         btnEdit1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(800, 40));
-        setLayout(new java.awt.GridLayout(1, 0));
+        setMaximumSize(new java.awt.Dimension(32767, 45));
+        setMinimumSize(new java.awt.Dimension(10, 45));
+        setPreferredSize(new java.awt.Dimension(10, 40));
+        setLayout(new java.awt.GridLayout());
 
         lblTenDA.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         lblTenDA.setText("Tên Dự Án");
@@ -90,14 +93,23 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         lblNgayBD.setText("Ngày BĐ");
         add(lblNgayBD);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setMinimumSize(new java.awt.Dimension(200, 40));
+        jPanel2.setPreferredSize(new java.awt.Dimension(120, 40));
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
-        jButton1.setPreferredSize(new java.awt.Dimension(106, 106));
-        jPanel2.add(jButton1);
+        btnDetail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
+        btnDetail.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnDetail.setPreferredSize(new java.awt.Dimension(35, 35));
+        btnDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnDetail);
 
         btnEdit1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnEdit1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-edit-30.png"))); // NOI18N
+        btnEdit1.setMinimumSize(new java.awt.Dimension(40, 40));
         btnEdit1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEdit1ActionPerformed(evt);
@@ -105,20 +117,125 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         });
         jPanel2.add(btnEdit1);
 
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-delete-30.png"))); // NOI18N
+        btnDelete.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnDelete);
+
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void btnEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit1ActionPerformed
         // TODO add your handling code here:
+        
+        // 1. Lấy mã nhân viên từ Label đang hiển thị
+        String maDA = lblMaDA.getText();
+
+        // 2. Tìm cửa sổ cha (JFrame) để tạo Dialog
+        java.awt.Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        // 3. Tạo Dialog chỉnh sửa
+        javax.swing.JDialog dialog = new javax.swing.JDialog((java.awt.Frame) parentWindow, "Chỉnh Sửa Dự Án",
+                true);
+
+        // 4. Gọi PanelEditNhanVien và truyền Mã da vào
+        PanelEditDuAn panelEdit = new PanelEditDuAn(dialog, maDA);
+
+        dialog.getContentPane().add(panelEdit);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        // 5. Quan trọng: Sau khi Dialog đóng, cần load lại danh sách ở GUI chính
+        // (Cách đơn giản nhất là gọi hàm refresh của SepGUI nếu bạn truyền callback,
+        // hoặc người dùng phải bấm nút Tìm kiếm/Refresh lại bằng tay.
+        // Để đơn giản, tạm thời chấp nhận người dùng phải bấm lại tab hoặc tìm kiếm để
+        // thấy thay đổi).
+   
     }//GEN-LAST:event_btnEdit1ActionPerformed
+
+    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
+        // TODO add your handling code here:
+        String maDA = lblMaDA.getText().trim();
+
+        // 2. Tìm cửa sổ cha
+        java.awt.Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        // 3. Tạo Dialog mới
+        javax.swing.JDialog dialog = new javax.swing.JDialog((java.awt.Frame) parentWindow, "Thông Tin Chi Tiết", true);
+
+        // 4. Gọi PanelDetailsNhanVien và truyền Mã NV vào
+        PanelDetailsDuAn panelDetails = new PanelDetailsDuAn(maDA);
+
+        // 5. Setup Dialog
+        dialog.getContentPane().add(panelDetails);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null); // Ra giữa màn hình
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnDetailActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+         // 1. Lấy mã và tên dự án từ thẻ giao diện
+        String maDA = lblMaDA.getText().trim();
+        String tenDA = lblTenDA.getText().trim();
+
+        // 2. Hỏi xác nhận người dùng
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, 
+                "Chuyển dự án:\n[" + maDA + "] - " + tenDA + "\nsang trạng thái 'Đã kết thúc'?", 
+                "Xác nhận kết thúc dự án", 
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            
+            BUS.DuAnBUS bus = new BUS.DuAnBUS();
+            
+            // 3. Lấy đối tượng DTO hiện tại từ Database lên
+            DTO.DuAn_DTO da = bus.getChiTietDuAn(maDA); 
+            
+            if (da != null) {
+                // Kiểm tra nếu đã kết thúc rồi thì chặn lại không cho bấm nữa
+                if ("Đã kết thúc".equalsIgnoreCase(da.getTrangThai())) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Dự án này đã kết thúc từ trước rồi!", "Cảnh báo", javax.swing.JOptionPane.WARNING_MESSAGE);
+                    return; 
+                }
+
+                da.chuyenSangTrangThaiKetThuc(); 
+               
+                boolean isUpdated = bus.capNhatTrangThaiDuAn(da);
+                
+                // 6. Xử lý kết quả trả về
+                if (isUpdated) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Đã cập nhật trạng thái xuống Database thành công!");
+                    
+                    // Cập nhật lại bề mặt giao diện thẻ dự án cho người dùng thấy
+                    
+                    btnDelete.setVisible(false); // Ẩn nút xóa
+                    lblTenDA.setText("<html>" + tenDA + " <font color='red'>(Đã kết thúc)</font></html>"); // Thêm chữ đỏ
+                    this.setBackground(new java.awt.Color(230, 230, 230)); // Làm mờ nền thẻ
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Lỗi: Không thể lưu xuống Database!", "Lỗi", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu dự án trên hệ thống!");
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnEdit1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblChiPhi;
     private javax.swing.JLabel lblMaDA;

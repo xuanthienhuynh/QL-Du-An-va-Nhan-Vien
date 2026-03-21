@@ -90,6 +90,9 @@ public class DuAn_DTO {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
-    
+
+    public void chuyenSangTrangThaiKetThuc() {
+        this.trangThai = "Đã kết thúc";
+    }
 
 }

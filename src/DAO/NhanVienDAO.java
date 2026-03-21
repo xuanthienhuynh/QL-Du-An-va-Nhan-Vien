@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 
 public class NhanVienDAO {
 
+    // xuanthien
     public NhanVien_DTO checkLogin(String user, String pass) {
         NhanVien_DTO nv = null;
         Connection conn = null;
@@ -16,9 +17,7 @@ public class NhanVienDAO {
         ResultSet rs = null;
 
         try {
-            // GỌI TRỰC TIẾP class database (vì đang ở cùng thư mục DAO)
             conn = database.createConnection();
-
             if (conn == null) {
                 return null;
             }
@@ -33,28 +32,39 @@ public class NhanVienDAO {
 
             if (rs.next()) {
                 nv = new NhanVien_DTO();
-                nv.setMaNV(rs.getString("MaNV"));
-                nv.setHoTen(rs.getString("HoTen"));
-                nv.setVaiTro(rs.getString("VaiTro"));
+                // Lấy các thông tin cơ bản (Có trim() để tránh lỗi khoảng trắng)
+                nv.setMaNV(rs.getString("MaNV").trim());
+                nv.setHoTen(rs.getString("HoTen").trim());
+                nv.setVaiTro(rs.getString("VaiTro") != null ? rs.getString("VaiTro").trim() : "");
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
-                // nv.setVaiTro(rs.getString("VaiTro"));
-                // nv.setMaCN(rs.getString("MaCN"));
+
+                // --- BỔ SUNG LẤY FULL THÔNG TIN ĐỂ HIỂN THỊ TRÊN PROFILE ---
+                nv.setGioiTinh(rs.getString("GioiTinh"));
+                nv.setLuong(rs.getDouble("Luong"));
+
+                String maPB = rs.getString("MaPB");
+                nv.setMaPB(maPB != null ? maPB.trim() : "");
+
+                String maCN = rs.getString("MaCN");
+                nv.setMaCN(maCN != null ? maCN.trim() : "");
+
+                // Lấy địa chỉ
+                nv.setDcSoNha(rs.getString("DcSoNha"));
+                nv.setDcPhuong(rs.getString("DcPhuong"));
+                nv.setDcTinh(rs.getString("DcTinh"));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Đóng kết nối
             database.closeConnection(conn);
         }
         return nv;
     }
 
     // Hàm lấy danh sách nhân viên (Trả về ArrayList)
-    // Hàm lấy danh sách nhân viên (Trả về ArrayList)
     public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        // FIX LỖI: Thêm MaCN vào câu SELECT
         String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang, MaCN FROM NhanVien";
 
         try {
@@ -64,17 +74,27 @@ public class NhanVienDAO {
 
             while (rs.next()) {
                 DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
-                nv.setMaNV(rs.getString("MaNV"));
-                nv.setHoTen(rs.getString("HoTen"));
-                nv.setVaiTro(rs.getString("VaiTro"));
+
+                // Xử lý an toàn: Kiểm tra NULL trước khi trim() để tránh sập vòng lặp
+                String maNV = rs.getString("MaNV");
+                nv.setMaNV(maNV != null ? maNV.trim() : "");
+
+                String hoTen = rs.getString("HoTen");
+                nv.setHoTen(hoTen != null ? hoTen.trim() : "");
+
+                String vaiTro = rs.getString("VaiTro");
+                nv.setVaiTro(vaiTro != null ? vaiTro.trim() : "");
+
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
 
-                // FIX LỖI: Đã mở comment lấy Chi nhánh
-                nv.setMaCN(rs.getString("MaCN"));
+                String maCN = rs.getString("MaCN");
+                nv.setMaCN(maCN != null ? maCN.trim() : "");
+
                 list.add(nv);
             }
             conn.close();
         } catch (Exception e) {
+            System.out.println("Lỗi sập vòng lặp Load Danh Sách: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -377,8 +397,5 @@ public class NhanVienDAO {
         return list;
     }
 
-    public static void main(String[] args) {
-        NhanVienDAO dao = new NhanVienDAO();
-
-    }
+    // xuan thien
 }

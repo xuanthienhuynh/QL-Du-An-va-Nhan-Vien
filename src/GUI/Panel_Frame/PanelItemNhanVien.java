@@ -35,7 +35,7 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -47,6 +47,7 @@ public class PanelItemNhanVien extends javax.swing.JPanel {
         btnEdit = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setMaximumSize(new java.awt.Dimension(32767, 40));
         setMinimumSize(new java.awt.Dimension(516, 35));
         setPreferredSize(new java.awt.Dimension(800, 40));
         setLayout(new java.awt.GridLayout(1, 0));

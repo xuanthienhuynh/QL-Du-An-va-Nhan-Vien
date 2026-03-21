@@ -15,9 +15,7 @@ import java.util.Locale;
  */
 public class PanelDetailsNhanVien extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelDetailsNhanVien
-     */
+
     public PanelDetailsNhanVien(String maNV) {
         initComponents();
         loadData(maNV);
