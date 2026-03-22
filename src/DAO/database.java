@@ -14,9 +14,9 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
             // 2. Cấu hình chuỗi kết nối
             String url = "jdbc:sqlserver://localhost:1433;databaseName=QL_DuAn_CongTy;encrypt=true;trustServerCertificate=true";
 
-            // 3. Tài khoản SQL (Kiểm tra lại xem máy bạn có đúng pass là 3842 không nhé)
+            // 3. Tài khoản SQL (Kiểm tra lại xem máy bạn có đúng pass là 123 không nhé)
             String username = "sa";
-            String password = "3842";
+            String password = "12";
 
             // 4. Mở kết nối
             Connection sql = DriverManager.getConnection(url, username, password);

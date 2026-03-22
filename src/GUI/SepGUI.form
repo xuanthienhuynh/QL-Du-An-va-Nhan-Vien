@@ -23,7 +23,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="Header" pref="1292" max="32767" attributes="0"/>
+          <Component id="Header" pref="1348" max="32767" attributes="0"/>
           <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -63,7 +63,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tenCty" pref="76" max="32767" attributes="0"/>
+                  <Component id="tenCty" pref="88" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Component id="leftGroupHeader" alignment="1" max="32767" attributes="0"/>
@@ -98,8 +98,11 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace pref="56" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="dangXuatBtn" alignment="1" min="-2" pref="158" max="-2" attributes="0"/>
-                          <Component id="xinChaoText" alignment="1" min="-2" pref="275" max="-2" attributes="0"/>
+                          <Component id="xinChaoText" min="-2" pref="275" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="dangXuatBtn" min="-2" pref="158" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -110,7 +113,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="xinChaoText" min="-2" pref="37" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="dangXuatBtn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -148,6 +151,11 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+      <Properties>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[1348, 736]"/>
+        </Property>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -163,23 +171,16 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel1" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="484" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="504" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -201,7 +202,7 @@
                           <Component id="thanhTimKiem" min="-2" pref="467" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="timKiem_btn" min="-2" pref="146" max="-2" attributes="0"/>
-                          <EmptySpace pref="48" max="32767" attributes="0"/>
+                          <EmptySpace pref="139" max="32767" attributes="0"/>
                           <Component id="chiNhanh_cbb" min="-2" pref="163" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                           <Component id="add_btn" min="-2" pref="146" max="-2" attributes="0"/>
@@ -288,8 +289,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel3" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -297,7 +298,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="508" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="528" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -315,66 +316,124 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="thanhTimKiem1" min="-2" pref="467" max="-2" attributes="0"/>
+                          <Component id="txtTimkiem" min="-2" pref="467" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="timKiem_btn1" min="-2" pref="146" max="-2" attributes="0"/>
-                          <EmptySpace pref="72" max="32767" attributes="0"/>
-                          <Component id="chiNhanh_cbb1" min="-2" pref="163" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                          <Component id="add_btn1" min="-2" pref="146" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="206" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="cmbNBD" min="-2" pref="95" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" pref="81" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cmbNKT" min="-2" pref="95" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cmbChiNhanh" min="-2" pref="81" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnTimKiem" min="-2" pref="94" max="-2" attributes="0"/>
+                          <EmptySpace pref="19" max="32767" attributes="0"/>
+                          <Component id="btnReload" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="btnThem" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="thanhTimKiem1" alignment="3" pref="43" max="32767" attributes="0"/>
-                              <Component id="timKiem_btn1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="chiNhanh_cbb1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="add_btn1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="txtTimkiem" alignment="3" pref="43" max="32767" attributes="0"/>
+                                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="cmbNBD" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cmbChiNhanh" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnTimKiem" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnReload" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnThem" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="cmbNKT" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JTextField" name="thanhTimKiem1">
-                </Component>
-                <Component class="javax.swing.JButton" name="timKiem_btn1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
-                  </Properties>
+                <Component class="javax.swing.JTextField" name="txtTimkiem">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timKiem_btn1ActionPerformed"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTimkiemKeyReleased"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="chiNhanh_cbb1">
+                <Component class="de.wannawork.jcalendar.JCalendarComboBox" name="cmbNBD">
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ng&#xe0;y b&#x1eaf;t &#x111;&#x1ea7;u"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ng&#xe0;y k&#x1ebf;t th&#xfa;c"/>
+                  </Properties>
+                </Component>
+                <Component class="de.wannawork.jcalendar.JCalendarComboBox" name="cmbNKT">
+                </Component>
+                <Component class="javax.swing.JComboBox" name="cmbChiNhanh">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="3">
-                        <StringItem index="0" value="C&#x1a1; s&#x1edf; 1"/>
-                        <StringItem index="1" value="C&#x1a1; s&#x1edf; 2 "/>
-                        <StringItem index="2" value="C&#x1a1; s&#x1edf; 3"/>
+                      <StringArray count="4">
+                        <StringItem index="0" value="Item 1"/>
+                        <StringItem index="1" value="Item 2"/>
+                        <StringItem index="2" value="Item 3"/>
+                        <StringItem index="3" value="Item 4"/>
                       </StringArray>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chiNhanh_cbb1ActionPerformed"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="add_btn1">
+                <Component class="javax.swing.JLabel" name="jLabel3">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Chi nh&#xe1;nh"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnTimKiem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnReload">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Reload"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReloadActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnThem">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Th&#xea;m"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="add_btn1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnThemActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -392,6 +451,28 @@
               </SubComponents>
             </Container>
           </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel4">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Th&#x1ed1;ng K&#xea;">
+                <Property name="tabTitle" type="java.lang.String" value="Th&#x1ed1;ng K&#xea;"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="1348" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="595" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
       </SubComponents>
     </Container>
