@@ -33,7 +33,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="Header" pref="973" max="32767" attributes="0"/>
+          <Component id="Header" pref="1292" max="32767" attributes="0"/>
           <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -134,9 +134,6 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="dangXuatBtn">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="14" style="1"/>
                 </Property>
@@ -177,12 +174,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="968" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1292" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="438" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="673" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -190,8 +187,8 @@
         <Container class="javax.swing.JPanel" name="jPanel2">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="tab2">
-                <Property name="tabTitle" type="java.lang.String" value="tab2"/>
+              <JTabbedPaneConstraints tabName="D&#x1ef1; &#xe1;n c&#x1ee7;a t&#xf4;i">
+                <Property name="tabTitle" type="java.lang.String" value="D&#x1ef1; &#xe1;n c&#x1ee7;a t&#xf4;i"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -199,21 +196,35 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="968" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="1292" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="438" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Container class="javax.swing.JPanel" name="pnListDuAnCuaToi">
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+                    <Property name="axis" type="int" value="1"/>
+                  </Layout>
+                </Container>
+              </SubComponents>
+            </Container>
+          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel3">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="tab3">
-                <Property name="tabTitle" type="java.lang.String" value="tab3"/>
+              <JTabbedPaneConstraints tabName="D&#x1ef1; &#xe1;n c&#xf4;ng ty">
+                <Property name="tabTitle" type="java.lang.String" value="D&#x1ef1; &#xe1;n c&#xf4;ng ty"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -221,12 +232,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="968" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1292" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="438" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="673" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>

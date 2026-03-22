@@ -44,7 +44,6 @@ public class QuanLyGUI extends javax.swing.JFrame {
 
         leftGroupHeader.setBackground(new java.awt.Color(0, 0, 153));
 
-        dangXuatBtn.setBackground(new java.awt.Color(255, 255, 255));
         dangXuatBtn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         dangXuatBtn.setText("Đăng xuất");
         dangXuatBtn.addActionListener(new java.awt.event.ActionListener() {

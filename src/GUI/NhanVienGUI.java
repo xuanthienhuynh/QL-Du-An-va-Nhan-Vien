@@ -36,6 +36,8 @@ public class NhanVienGUI extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        pnListDuAnCuaToi = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
         jLabel1.setText("jLabel1");
@@ -53,7 +55,6 @@ public class NhanVienGUI extends javax.swing.JFrame {
 
         leftGroupHeader.setBackground(new java.awt.Color(0, 0, 153));
 
-        dangXuatBtn.setBackground(new java.awt.Color(255, 255, 255));
         dangXuatBtn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         dangXuatBtn.setText("Đăng xuất");
         dangXuatBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -112,46 +113,49 @@ public class NhanVienGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addGap(0, 1292, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 438, Short.MAX_VALUE)
+            .addGap(0, 673, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("tab1", jPanel1);
+
+        pnListDuAnCuaToi.setLayout(new javax.swing.BoxLayout(pnListDuAnCuaToi, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(pnListDuAnCuaToi);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1292, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 438, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
 
-        jTabbedPane1.addTab("tab2", jPanel2);
+        jTabbedPane1.addTab("Dự án của tôi", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addGap(0, 1292, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 438, Short.MAX_VALUE)
+            .addGap(0, 673, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab3", jPanel3);
+        jTabbedPane1.addTab("Dự án công ty", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE)
+            .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 1292, Short.MAX_VALUE)
             .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
@@ -219,8 +223,10 @@ public class NhanVienGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel leftGroupHeader;
+    private javax.swing.JPanel pnListDuAnCuaToi;
     private javax.swing.JLabel tenCty;
     private javax.swing.JLabel xinChaoText;
     // End of variables declaration//GEN-END:variables
