@@ -181,7 +181,7 @@ public class DangNhap extends javax.swing.JFrame {
                 new SepGUI(nv).setVisible(true);
 
             } else if ("QuanLy".equalsIgnoreCase(vaiTro)) {
-                new QuanLyGUI().setVisible(true);
+                new QuanLyGUI(nv).setVisible(true);
             } else {
                 new NhanVienGUI().setVisible(true);
             }

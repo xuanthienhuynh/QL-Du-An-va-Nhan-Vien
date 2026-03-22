@@ -128,7 +128,11 @@ INSERT INTO DuAn (MaDA, TenDA, KinhPhi, NgayBatDau, NgayKetThuc, TrangThai, MaCN
 ('DA07', N'Nông nghiệp công nghệ cao CT',  1200000000, '2023-02-01', '2025-02-01', N'DangChay', 'CN_CT'),
 ('DA08', N'Quản lý kho bãi Bình Dương',    600000000,  '2023-09-01', '2024-03-01', N'KetThuc',  'CN_BD'),
 ('DA09', N'Hệ thống giáo dục trực tuyến',  2500000000, '2023-10-01', '2025-10-01', N'DangChay', 'CN_HN'),
-('DA10', N'Ứng dụng đặt xe nội bộ',        100000000,  '2024-02-01', '2024-12-31', N'DangChay', 'CN_HCM');
+('DA10', N'Ứng dụng đặt xe nội bộ',        100000000,  '2024-02-01', '2024-12-31', N'DangChay', 'CN_HCM'),
+('DA11', N'Nền tảng quản lý cảng biển VT', 900000000,  '2024-03-01', '2025-09-30', N'DangChay', 'CN_VT'),
+('DA12', N'Hệ thống du lịch thông minh DL',700000000,  '2024-04-15', '2025-10-15', N'DangChay', 'CN_DL'),
+('DA13', N'Cổng dịch vụ công Nghệ An',     650000000,  '2024-05-01', '2025-12-31', N'DangChay', 'CN_NA'),
+('DA14', N'Nền tảng nông nghiệp số Thanh Hóa', 750000000, '2024-06-01', '2026-01-31', N'DangChay', 'CN_TH');
 
 -- =============================================	
 -- 5. DỮ LIỆU BẢNG PHÂN CÔNG (10 Lượt phân công)
