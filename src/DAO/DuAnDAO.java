@@ -7,199 +7,221 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DuAnDAO {
+    
+    // === READ: Lấy tất cả dự án ===
     public ArrayList<DuAn_DTO> layDanhSachDuAn() {
         ArrayList<DuAn_DTO> list = new ArrayList<>();
-        // Lấy đầy đủ các cột theo DTO
-        String sql = "SELECT MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, TrangThai, MaCN FROM DuAn";
-
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
         try {
-            Connection conn = database.createConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            conn = database.createConnection();
+            String sql = "SELECT MaDA, TenDA, KinhPhi, NgayBatDau, NgayKetThuc, TrangThai, MaCN FROM DuAn ORDER BY MaDA";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 DuAn_DTO da = new DuAn_DTO();
                 da.setMaDA(rs.getString("MaDA"));
                 da.setTenDA(rs.getString("TenDA"));
                 da.setKinhPhi(rs.getDouble("KinhPhi"));
-                da.setDoanhThu(rs.getDouble("DoanhThu"));
                 da.setNgayBatDau(rs.getDate("NgayBatDau"));
                 da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
                 da.setTrangThai(rs.getString("TrangThai"));
                 da.setMaCN(rs.getString("MaCN"));
                 list.add(da);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }
     
-    public boolean themDuAn(DuAn_DTO da) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                String sql = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, MaCN) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                
-                // Truyền tham số an toàn vào dấu ?
-                ps.setString(1, da.getMaDA());
-                ps.setString(2, da.getTenDA());
-                ps.setDouble(3, da.getKinhPhi());
-                ps.setDouble(4, da.getDoanhThu());
-                
-                // Xử lý chuyển đổi java.util.Date sang java.sql.Date
-                ps.setDate(5, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
-                ps.setDate(6, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                
-                ps.setString(7, da.getMaCN());
-               
-                int rowsAffected = ps.executeUpdate();
-                return rowsAffected > 0; // Trả về true nếu thêm thành công
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                database.closeConnection(conn);
-            }
-        }
-        return false;
-    }
-
-    // ========================================================
-    // 3. SỬA DỮ LIỆU (UPDATE) - Cập nhật dự án
-    // ========================================================
-    public boolean capNhatDuAn(DuAn_DTO da) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                String sql = "UPDATE DuAn SET TenDA=?, KinhPhi=?, DoanhThu=?, NgayBatDau=?, NgayKetThuc=?, MaCN=? WHERE MaDA=?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                
-                // Gán dữ liệu thay đổi
-                ps.setString(1, da.getTenDA());
-                ps.setDouble(2, da.getKinhPhi());
-                ps.setDouble(3, da.getDoanhThu());
-                ps.setDate(4, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
-                ps.setDate(5, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                ps.setString(6, da.getMaCN());
-                
-                // Điều kiện WHERE (Mã DA nằm ở dấu ? thứ 7)
-                ps.setString(7, da.getMaDA());
-                
-                int rowsAffected = ps.executeUpdate();
-                return rowsAffected > 0;
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                database.closeConnection(conn);
-            }
-        }
-        return false;
-    }
-
-    // ========================================================
-    // 4. XÓA DỮ LIỆU (DELETE) - Hủy/Xóa dự án
-    // ========================================================
-    public boolean xoaDuAn(String maDA) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                // Tắt auto-commit để thực hiện xóa nhiều bảng cùng lúc (Transaction)
-                conn.setAutoCommit(false);
-
-                // BƯỚC 1: Xóa các ràng buộc ở bảng con (bảng PhanCong) trước
-                String sqlPhanCong = "DELETE FROM PhanCong WHERE MaDA = ?";
-                PreparedStatement psPhanCong = conn.prepareStatement(sqlPhanCong);
-                psPhanCong.setString(1, maDA);
-                psPhanCong.executeUpdate(); // Có thể có hoặc không có nhân viên nào bị xóa
-
-                // BƯỚC 2: Sau khi dọn sạch bảng con, tiến hành xóa Dự án ở bảng cha
-                String sqlDuAn = "DELETE FROM DuAn WHERE MaDA = ?";
-                PreparedStatement psDuAn = conn.prepareStatement(sqlDuAn);
-                psDuAn.setString(1, maDA);
-                int rowsAffected = psDuAn.executeUpdate();
-
-                // Xác nhận thực thi lệnh xóa cả 2 bảng
-                conn.commit();
-                
-                return rowsAffected > 0;
-                
-            } catch (Exception e) {
-                try {
-                    // Nếu quá trình xóa có lỗi (vd đứt cáp mạng), hoàn tác lại như chưa có gì xảy ra
-                    conn.rollback(); 
-                } catch (Exception rollbackEx) {
-                    rollbackEx.printStackTrace();
-                }
-                
-                System.err.println("Lỗi xóa: " + e.getMessage());
-                e.printStackTrace();
-            } finally {
-                // Bật lại auto-commit và đóng kết nối
-                try {
-                    conn.setAutoCommit(true);
-                } catch (Exception ex) {}
-                
-                database.closeConnection(conn);
-            }
-        }
-        return false;
-    }
-
-    public DTO.DuAn_DTO layThongTinDuAn(String maDA) {
-        DTO.DuAn_DTO da = null;
-        String sql = "SELECT * FROM DuAn WHERE MaDA = ?";
-
+    // === READ: Lấy thông tin 1 dự án theo mã ===
+    public DuAn_DTO getDuAnByMa(String maDA) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        DuAn_DTO da = null;
+        
         try {
-            java.sql.Connection conn = database.createConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            conn = database.createConnection();
+            String sql = "SELECT * FROM DuAn WHERE MaDA = ?";
+            ps = conn.prepareStatement(sql);
             ps.setString(1, maDA);
-            java.sql.ResultSet rs = ps.executeQuery();
-
+            rs = ps.executeQuery();
+            
             if (rs.next()) {
-                da = new DTO.DuAn_DTO();
+                da = new DuAn_DTO();
                 da.setMaDA(rs.getString("MaDA"));
                 da.setTenDA(rs.getString("TenDA"));
                 da.setKinhPhi(rs.getDouble("KinhPhi"));
-                da.setDoanhThu(rs.getDouble("DoanhThu"));
                 da.setNgayBatDau(rs.getDate("NgayBatDau"));
                 da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
                 da.setTrangThai(rs.getString("TrangThai"));
                 da.setMaCN(rs.getString("MaCN"));
             }
-
-            conn.close();
-
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        return da;
-    }
-     public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
-        java.sql.Connection conn = database.createConnection();
-        if (conn != null) {
+        } finally {
             try {
-                // Lệnh SQL chỉ cập nhật duy nhất cột TrangThai
-                String sql = "UPDATE DuAn SET TrangThai = ? WHERE MaDA = ?";
-                java.sql.PreparedStatement ps = conn.prepareStatement(sql);
-                
-                // Lấy trạng thái đã được set bên trong đối tượng DTO
-                ps.setString(1, da.getTrangThai()); 
-                ps.setString(2, da.getMaDA());
-                
-                int rowsAffected = ps.executeUpdate();
-                return rowsAffected > 0;
-                
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                database.closeConnection(conn);
             }
         }
-        return false;
+        return da;
+    }
+    
+    // === CREATE: Thêm dự án mới ===
+    public boolean themDuAn(DuAn_DTO da) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = database.createConnection();
+            String sql = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, NgayBatDau, NgayKetThuc, TrangThai, MaCN) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, da.getMaDA());
+            ps.setString(2, da.getTenDA());
+            ps.setDouble(3, da.getKinhPhi());
+            ps.setDate(4, new java.sql.Date(da.getNgayBatDau().getTime()));
+            ps.setDate(5, new java.sql.Date(da.getNgayKetThuc().getTime()));
+            ps.setString(6, da.getTrangThai());
+            ps.setString(7, da.getMaCN());
+            
+            int result = ps.executeUpdate();
+            return result > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    // === UPDATE: Cập nhật dự án ===
+    public boolean suaDuAn(DuAn_DTO da) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = database.createConnection();
+            String sql = "UPDATE DuAn SET TenDA=?, KinhPhi=?, NgayBatDau=?, NgayKetThuc=?, TrangThai=?, MaCN=? " +
+                        "WHERE MaDA=?";
+            
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, da.getTenDA());
+            ps.setDouble(2, da.getKinhPhi());
+            ps.setDate(3, new java.sql.Date(da.getNgayBatDau().getTime()));
+            ps.setDate(4, new java.sql.Date(da.getNgayKetThuc().getTime()));
+            ps.setString(5, da.getTrangThai());
+            ps.setString(6, da.getMaCN());
+            ps.setString(7, da.getMaDA()); // WHERE condition
+            
+            int result = ps.executeUpdate();
+            return result > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    // === DELETE: Xóa dự án ===
+    public boolean xoaDuAn(String maDA) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = database.createConnection();
+            String sql = "DELETE FROM DuAn WHERE MaDA = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, maDA);
+            
+            int result = ps.executeUpdate();
+            return result > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    // === Tìm kiếm dự án ===
+    public ArrayList<DuAn_DTO> timKiemDuAn(String tuKhoa) {
+        ArrayList<DuAn_DTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = database.createConnection();
+            String sql = "SELECT * FROM DuAn WHERE MaDA LIKE ? OR TenDA LIKE ? OR TrangThai LIKE ? ORDER BY MaDA";
+            ps = conn.prepareStatement(sql);
+            
+            String keyword = "%" + tuKhoa + "%";
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ps.setString(3, keyword);
+            
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                DuAn_DTO da = new DuAn_DTO();
+                da.setMaDA(rs.getString("MaDA"));
+                da.setTenDA(rs.getString("TenDA"));
+                da.setKinhPhi(rs.getDouble("KinhPhi"));
+                da.setNgayBatDau(rs.getDate("NgayBatDau"));
+                da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
+                da.setTrangThai(rs.getString("TrangThai"));
+                da.setMaCN(rs.getString("MaCN"));
+                list.add(da);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) database.closeConnection(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 }
