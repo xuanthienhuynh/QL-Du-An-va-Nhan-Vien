@@ -314,7 +314,7 @@ public class QuanLyGUI extends JFrame {
 
         private void loadComboBoxData() {
             cboNhanVien.removeAllItems();
-            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.getAllNhanVien();
+            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.layDanhSachNhanVien();
             Map<String, Integer> soDuAnDangLamTheoNhanVien = taoMapSoDuAnDangLamTheoNhanVien();
 
             for (NhanVien_DTO nv : nhanVienList) {
@@ -395,7 +395,7 @@ public class QuanLyGUI extends JFrame {
 
         private Map<String, String> taoMapTenNhanVien() {
             Map<String, String> map = new HashMap<>();
-            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.getAllNhanVien();
+            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.layDanhSachNhanVien();
             for (NhanVien_DTO nv : nhanVienList) {
                 map.put(nv.getMaNV(), nv.getHoTen());
             }
@@ -616,10 +616,10 @@ public class QuanLyGUI extends JFrame {
             tableModel.setRowCount(0);
 
             Map<String, Integer> soDuAnDangLamTheoNhanVien = taoMapSoDuAnDangLamTheoNhanVien();
-            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.getAllNhanVien();
+            ArrayList<NhanVien_DTO> nhanVienList = nhanVienDAO.layDanhSachNhanVien();
 
             for (NhanVien_DTO nv : nhanVienList) {
-                if (!isDangLamViec(nv.getTinhTrang()) || !isNhanVienThuong(nv.getVaiTro())) {
+                if (nv.getTinhTrang().equals("DaNghiViec") || !isNhanVienThuong(nv.getVaiTro())) {
                     continue;
                 }
 

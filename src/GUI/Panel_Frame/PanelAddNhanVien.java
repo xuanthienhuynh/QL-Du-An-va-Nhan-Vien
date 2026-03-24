@@ -333,7 +333,7 @@ public class PanelAddNhanVien extends javax.swing.JPanel {
             nv.setNgaySinh(jCalendarComboBox1.getDate()); // Lấy ngày từ lịch
             nv.setMaPB(maPB_cbb.getSelectedItem().toString());
             nv.setMaCN(chiNhanh_cbb.getSelectedItem().toString());
-            nv.setTinhTrang(true);
+            nv.setTinhTrang("DangLamViec");
 
             // Lấy lương (đang để combobox, nên parse sang Double)
             String luongStr = maPB_cbb1.getSelectedItem().toString();
