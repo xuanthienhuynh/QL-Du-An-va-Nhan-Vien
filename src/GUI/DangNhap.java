@@ -3,7 +3,6 @@ package GUI;
 
 import DAO.NhanVienDAO;
 import DTO.NhanVien_DTO;
-import GUI.NhanVienGUI;
 import javax.swing.JOptionPane;
 
 public class DangNhap extends javax.swing.JFrame {
@@ -150,14 +149,14 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         // 1. Lấy thông tin từ giao diện
-        String user = unField.getText().trim(); // .trim() để xóa khoảng trắng thừa
-        String pass = new String(jPasswordField1.getPassword()); // Lấy mật khẩu an toàn
+        String user = unField.getText().trim();
+        String pass = new String(jPasswordField1.getPassword());
 
-        // 2. Kiểm tra rỗng (Validation)
+        // 2. Kiểm tra rỗng
         if (user.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!", "Cảnh báo",
                     JOptionPane.WARNING_MESSAGE);
-            return; // Dừng lại, không chạy tiếp
+            return;
         }
 
         // 3. Gọi Backend kiểm tra (DAO)
@@ -166,24 +165,30 @@ public class DangNhap extends javax.swing.JFrame {
 
         // 4. Xử lý kết quả
         if (nv == null) {
-            // Đăng nhập thất bại
             JOptionPane.showMessageDialog(this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } else {
-            // Đăng nhập thành công
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công! Xin chào: " + nv.getHoTen());
-
+            String hoTenNV = nv.getHoTen();
             String vaiTro = nv.getVaiTro();
 
-            this.dispose();
+            JOptionPane.showMessageDialog(this, "Đăng nhập thành công! Xin chào: " + hoTenNV);
 
+            this.dispose(); // Đóng form đăng nhập
+
+            // 5. Phân quyền, truyền tên và MỞ FULL MÀN HÌNH
             if ("Sep".equalsIgnoreCase(vaiTro)) {
-
-                new SepGUI(nv).setVisible(true);
+                SepGUI gui = new SepGUI(nv);
+                gui.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); // Full màn hình
+                gui.setVisible(true);
 
             } else if ("QuanLy".equalsIgnoreCase(vaiTro)) {
-                new QuanLyGUI().setVisible(true);
+                QuanLyGUI gui = new QuanLyGUI(hoTenNV);
+                gui.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); // Full màn hình
+                gui.setVisible(true);
+
             } else {
-                new NhanVienGUI().setVisible(true);
+                NhanVienGUI gui = new NhanVienGUI();
+                gui.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); // Full màn hình
+                gui.setVisible(true);
             }
         }
     }

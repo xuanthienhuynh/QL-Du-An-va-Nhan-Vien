@@ -55,7 +55,7 @@ public class NhanVienDAO {
     public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
         // FIX LỖI: Thêm MaCN vào câu SELECT
-        String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang, MaCN FROM NhanVien";
+        String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang,MaPB, MaCN FROM NhanVien";
 
         try {
             Connection conn = database.createConnection();
@@ -68,7 +68,7 @@ public class NhanVienDAO {
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
-
+                nv.setMaPB(rs.getString("MaPB"));
                 // FIX LỖI: Đã mở comment lấy Chi nhánh
                 nv.setMaCN(rs.getString("MaCN"));
                 list.add(nv);
@@ -84,7 +84,7 @@ public class NhanVienDAO {
     public java.util.ArrayList<DTO.NhanVien_DTO> timKiemNhanVien(String tuKhoa) {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
         // FIX LỖI: Thêm MaCN vào câu SELECT để BUS có dữ liệu mà lọc
-        String sql = "SELECT MaNV, HoTen, VaiTro, MaCN FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
+        String sql = "SELECT MaNV, HoTen, VaiTro,MaPB, MaCN FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
 
         try {
             java.sql.Connection conn = database.createConnection();
@@ -102,6 +102,7 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
+                nv.setMaPB(rs.getString("MaPB"));
                 // FIX LỖI: Nạp MaCN vào object
                 nv.setMaCN(rs.getString("MaCN"));
                 list.add(nv);
