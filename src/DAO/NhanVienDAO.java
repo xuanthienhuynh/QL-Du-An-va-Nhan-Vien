@@ -23,7 +23,7 @@ public class NhanVienDAO {
                 return null;
             }
 
-            String sql = "SELECT * FROM NhanVien WHERE MaNV = ? AND MatKhau = ? AND TinhTrang = 1";
+            String sql = "SELECT * FROM NhanVien WHERE MaNV = ? AND MatKhau = ? AND TinhTrang = N'DangLamViec'";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, user);
@@ -36,7 +36,7 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
-                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
+                nv.setTinhTrang(rs.getString("TinhTrang"));
                 // nv.setVaiTro(rs.getString("VaiTro"));
                 // nv.setMaCN(rs.getString("MaCN"));
             }
@@ -67,7 +67,7 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
-                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
+                nv.setTinhTrang(rs.getString("TinhTrang"));
                 nv.setMaPB(rs.getString("MaPB"));
                 // FIX LỖI: Đã mở comment lấy Chi nhánh
                 nv.setMaCN(rs.getString("MaCN"));
@@ -191,7 +191,7 @@ public class NhanVienDAO {
             ps.setString(7, nv.getMaCN());
             ps.setString(8, "NhanVien"); // Mặc định là nhân viên thường
             ps.setString(9, "123"); // Mật khẩu mặc định
-            ps.setBoolean(10, nv.getTinhTrang());
+            ps.setString(10, nv.getTinhTrang());
 
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -217,7 +217,7 @@ public class NhanVienDAO {
                 nv.setLuong(rs.getDouble("Luong"));
                 nv.setMaPB(rs.getString("MaPB"));
                 nv.setMaCN(rs.getString("MaCN"));
-                nv.setTinhTrang(rs.getBoolean("TinhTrang"));
+                nv.setTinhTrang(rs.getString("TinhTrang"));
                 nv.setVaiTro(rs.getString("VaiTro"));
                 nv.setDcSoNha(rs.getString("DcSoNha"));
                 nv.setDcPhuong(rs.getString("DcPhuong"));

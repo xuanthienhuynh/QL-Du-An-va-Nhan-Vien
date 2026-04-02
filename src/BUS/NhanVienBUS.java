@@ -99,4 +99,38 @@ public class NhanVienBUS {
         }
         return listLoc;
     }
+    
+    /**
+     * Lấy danh sách nhân viên đang làm việc nhưng chưa được phân công vào dự án nào
+     */
+    public ArrayList<NhanVien_DTO> layDanhSachNhanVienRanh(ArrayList<DTO.PhanCong_DTO> dsPhanCong) {
+        // 1. Lấy toàn bộ nhân viên từ Database
+        ArrayList<NhanVien_DTO> allNV = dao.layDanhSachNhanVien();
+        ArrayList<NhanVien_DTO> listRanh = new ArrayList<>();
+
+        if (allNV == null) return listRanh;
+
+        // 2. Tạo danh sách mã nhân viên đã có dự án để đối chiếu nhanh
+        java.util.Set<String> maNVCoDuAn = new java.util.HashSet<>();
+        if (dsPhanCong != null) {
+            for (DTO.PhanCong_DTO pc : dsPhanCong) {
+                maNVCoDuAn.add(pc.getMaNV().trim());
+            }
+        }
+
+        // 3. Lọc nhân viên rảnh
+        for (NhanVien_DTO nv : allNV) {
+            String maNV = nv.getMaNV().trim();
+            // Điều kiện: Không nằm trong ds đã phân công VÀ Tình trạng là '1' (Đang làm việc)
+            if (!maNVCoDuAn.contains(maNV) && "1".equals(nv.getTinhTrang())) {
+                listRanh.add(nv);
+            }
+        }
+        return listRanh;
+    }
+    
+    // Bổ sung thêm hàm này để GUI gọi lấy full danh sách ban đầu
+    public ArrayList<NhanVien_DTO> layDanhSachNhanVien() {
+        return dao.layDanhSachNhanVien();
+    }
 }

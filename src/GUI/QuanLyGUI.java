@@ -2,6 +2,7 @@ package GUI;
 
 import GUI.QuanLy_component.PhanCongForm;
 import GUI.QuanLy_component.QuanLyDuAnForm;
+import GUI.QuanLy_component.NhanVienRanhForm;
 import java.awt.BorderLayout;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -38,6 +39,10 @@ public class QuanLyGUI extends javax.swing.JFrame {
                 QuanLyDuAnForm pnlDuAn = new QuanLyDuAnForm();
                 jPanel2.setLayout(new BorderLayout());
                 jPanel2.add(pnlDuAn, BorderLayout.CENTER);
+                
+                NhanVienRanhForm pnlNVRanh = new NhanVienRanhForm();
+                jPanel3.setLayout(new BorderLayout());
+                jPanel3.add(pnlNVRanh, BorderLayout.CENTER);
 
                 // Đặt tên Tab
                 jTabbedPane1.setTitleAt(0, "Phân Công Nhân Sự");

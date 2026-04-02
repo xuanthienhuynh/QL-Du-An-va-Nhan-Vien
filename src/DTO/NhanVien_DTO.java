@@ -11,7 +11,7 @@ public class NhanVien_DTO {
     private String dcSoNha;
     private Date ngaySinh;
     private double luong;
-    private boolean tinhTrang; // "Đang làm việc", "Đã nghỉ việc"
+    private String tinhTrang; // "Đang làm việc", "Đã nghỉ việc"
     private String vaiTro; // "NhanVien", "QuanLy", "Sep"
     private String matKhau;
     private String maPB; // Khóa ngoại
@@ -21,7 +21,7 @@ public class NhanVien_DTO {
     }
 
     public NhanVien_DTO(String maNV, String hoTen, String gioiTinh, String dcTinh, String dcPhuong, String dcSoNha,
-            Date ngaySinh, double luong, boolean tinhTrang, String vaiTro, String matKhau, String maPB, String maCN) {
+            Date ngaySinh, double luong, String tinhTrang, String vaiTro, String matKhau, String maPB, String maCN) {
         this.maNV = maNV;
         this.hoTen = hoTen;
         this.gioiTinh = gioiTinh;
@@ -102,11 +102,11 @@ public class NhanVien_DTO {
         this.luong = luong;
     }
 
-    public boolean getTinhTrang() {
+    public String getTinhTrang() {
         return tinhTrang;
     }
 
-    public void setTinhTrang(boolean tinhTrang) {
+    public void setTinhTrang(String tinhTrang) {
         this.tinhTrang = tinhTrang;
     }
 
