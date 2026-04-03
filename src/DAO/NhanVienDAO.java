@@ -232,17 +232,20 @@ public class NhanVienDAO {
 
     // 2. Cập nhật thông tin nhân viên
     public boolean capNhatNhanVien(DTO.NhanVien_DTO nv) {
-        String sql = "UPDATE NhanVien SET HoTen=?, GioiTinh=?, NgaySinh=?, Luong=?, MaPB=?, MaCN=? WHERE MaNV=?";
-        try {
-            java.sql.Connection conn = database.createConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+        // THÊM: VaiTro=? vào danh sách SET
+        String sql = "UPDATE NhanVien SET HoTen=?, GioiTinh=?, NgaySinh=?, Luong=?, MaPB=?, MaCN=?, TinhTrang=?, VaiTro=? WHERE MaNV=?";
+        try (java.sql.Connection conn = database.createConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, nv.getHoTen());
             ps.setString(2, nv.getGioiTinh());
             ps.setDate(3, new java.sql.Date(nv.getNgaySinh().getTime()));
             ps.setDouble(4, nv.getLuong());
             ps.setString(5, nv.getMaPB());
             ps.setString(6, nv.getMaCN());
-            ps.setString(7, nv.getMaNV()); // Điều kiện WHERE
+            ps.setString(7, nv.getTinhTrang());
+            ps.setString(8, nv.getVaiTro()); // THÊM DÒNG NÀY (Tham số số 8)
+            ps.setString(9, nv.getMaNV());   // WHERE MaNV=? bây giờ là tham số số 9
 
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -253,7 +256,7 @@ public class NhanVienDAO {
 
     // 3. Cho nghỉ việc (Đổi tình trạng thành False/0)
     public boolean choNghiViec(String maNV) {
-        String sql = "UPDATE NhanVien SET TinhTrang = 0 WHERE MaNV = ?";
+        String sql = "UPDATE NhanVien SET TinhTrang = N'DaNghiViec' WHERE MaNV = ?";
         try {
             java.sql.Connection conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);

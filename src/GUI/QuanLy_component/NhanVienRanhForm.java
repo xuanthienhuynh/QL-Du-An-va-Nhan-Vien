@@ -2,27 +2,34 @@ package GUI.QuanLy_component;
 
 import BUS.NhanVienBUS;
 import BUS.PhanCongBUS;
+import BUS.ChiNhanhBUS;
 import DTO.NhanVien_DTO;
 import DTO.PhanCong_DTO;
+import DTO.ChiNhanh_DTO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.table.TableRowSorter;
 
 public class NhanVienRanhForm extends javax.swing.JPanel {
+
     private NhanVienBUS nvBUS = new NhanVienBUS();
     private PhanCongBUS pcBUS = new PhanCongBUS();
-    
+    private ChiNhanhBUS cnBUS = new ChiNhanhBUS();
+
     private JTable tblNhanVien;
     private DefaultTableModel model;
-    private JTextField txtTimKiem;
-    private JButton btnLamMoi, btnXuatFile;
+    private JTextField txtMaNV, txtHoTen, txtLuong, txtTimKiem, txtSoDALoc;
+    private JComboBox<String> cbVaiTro, cbPhongBan, cbChiNhanh, cbTinhTrang;
+    private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnLocDA;
     private JLabel lblThongKe;
 
     public NhanVienRanhForm() {
         initComponents();
+        loadDataToComboBox(); // Tải dữ liệu cho các ComboBox
         loadDataToTable();
     }
 
@@ -30,103 +37,244 @@ public class NhanVienRanhForm extends javax.swing.JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // --- 1. PANEL TIÊU ĐỀ & THÔNG KÊ ---
-        JPanel pnlNorth = new JPanel(new BorderLayout());
-        JLabel lblTitle = new JLabel("DANH SÁCH NHÂN VIÊN CHƯA THAM GIA DỰ ÁN");
-        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblTitle.setForeground(new Color(25, 118, 210));
-        
-        lblThongKe = new JLabel("Tổng cộng: 0 nhân viên rảnh");
-        lblThongKe.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-        
-        pnlNorth.add(lblTitle, BorderLayout.WEST);
-        pnlNorth.add(lblThongKe, BorderLayout.EAST);
+        // --- 1. PANEL NHẬP LIỆU ---
+        JPanel pnlTop = new JPanel(new BorderLayout(5, 5));
+        JPanel pnlInput = new JPanel(new GridBagLayout());
+        pnlInput.setBorder(BorderFactory.createTitledBorder("Thông tin nhân viên chi tiết"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- 2. PANEL ĐIỀU KHIỂN (LỌC) ---
-        JPanel pnlControl = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
-        pnlControl.setBorder(BorderFactory.createTitledBorder("Bộ lọc nhanh"));
+        txtMaNV = new JTextField(15);
+        txtMaNV.setEditable(false); // Khóa không cho nhập, chỉ hiển thị mã tự sinh
+        txtMaNV.setFocusable(false);
+        
+        txtHoTen = new JTextField(15);
+        txtLuong = new JTextField("0", 15);
 
-        txtTimKiem = new JTextField(20);
+        cbVaiTro = new JComboBox<>(new String[]{"NhanVien", "QuanLy", "Sep"});
+        cbPhongBan = new JComboBox<>();
+        cbChiNhanh = new JComboBox<>();
+        cbTinhTrang = new JComboBox<>(new String[]{"DangLamViec", "DaNghiViec"});
+
+        // Đổ dữ liệu vào GridBagLayout
+        addComp(pnlInput, "Mã NV:", txtMaNV, 0, 0, gbc);
+        addComp(pnlInput, "Họ Tên:", txtHoTen, 2, 0, gbc);
+        addComp(pnlInput, "Lương:", txtLuong, 0, 1, gbc);
+        addComp(pnlInput, "Vai Trò:", cbVaiTro, 2, 1, gbc);
+        addComp(pnlInput, "Chi Nhánh:", cbChiNhanh, 0, 2, gbc);
+        addComp(pnlInput, "Phòng Ban:", cbPhongBan, 2, 2, gbc);
+        addComp(pnlInput, "Trạng Thái:", cbTinhTrang, 0, 3, gbc);
+
+        // --- 2. PANEL ĐIỀU KHIỂN ---
+        JPanel pnlActions = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        btnThem = new JButton("Thêm mới");
+        btnSua = new JButton("Cập nhật");
+        btnXoa = new JButton("Xóa");
         btnLamMoi = new JButton("Làm mới");
-//        btnXuatFile = new JButton("Xuất báo cáo");
+        
+        txtTimKiem = new JTextField(10);
+        txtSoDALoc = new JTextField(3);
+        btnLocDA = new JButton("Lọc Số DA");
 
-        pnlControl.add(new JLabel("Tìm tên/mã:"));
-        pnlControl.add(txtTimKiem);
-        pnlControl.add(btnLamMoi);
-//        pnlControl.add(btnXuatFile);
+        pnlActions.add(btnThem);
+        pnlActions.add(btnSua);
+        pnlActions.add(btnXoa);
+        pnlActions.add(btnLamMoi);
+        pnlActions.add(new JLabel("| Tìm kiếm:"));
+        pnlActions.add(txtTimKiem);
+        pnlActions.add(new JLabel("| Số DA:"));
+        pnlActions.add(txtSoDALoc);
+        pnlActions.add(btnLocDA);
+
+        pnlTop.add(pnlInput, BorderLayout.NORTH);
+        pnlTop.add(pnlActions, BorderLayout.CENTER);
 
         // --- 3. BẢNG DỮ LIỆU ---
-        String[] headers = { "STT", "Mã NV", "Họ Tên", "Giới Tính", "Phòng Ban", "Vai Trò", "Tình Trạng" };
+        String[] headers = {"STT", "Mã NV", "Họ Tên", "Lương", "Phòng Ban", "Vai Trò", "Số DA", "Trạng Thái"};
         model = new DefaultTableModel(headers, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
         };
-        
+
         tblNhanVien = new JTable(model);
         tblNhanVien.setRowHeight(30);
-        tblNhanVien.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         // --- 4. SỰ KIỆN ---
-        btnLamMoi.addActionListener(e -> {
-            txtTimKiem.setText("");
-            loadDataToTable();
+        tblNhanVien.getSelectionModel().addListSelectionListener(e -> {
+            int row = tblNhanVien.getSelectedRow();
+            if (row >= 0) fillForm(row);
         });
 
-        // Tìm kiếm nhanh khi gõ phím
+        cbChiNhanh.addActionListener(e -> updatePhongBanCombo()); // Đổi chi nhánh thì đổi list phòng ban
+        btnThem.addActionListener(e -> actionThem());
+        btnSua.addActionListener(e -> actionSua());
+        btnLamMoi.addActionListener(e -> lamMoiForm());
+        btnLocDA.addActionListener(e -> actionLocTheoSoDA());
+        btnXoa.addActionListener(e -> actionXoa());
+        
         txtTimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                actionTimKiem();
-            }
+            public void keyReleased(java.awt.event.KeyEvent evt) { actionTimKiem(); }
         });
 
-        // Gom nhóm layout
-        JPanel pnlTopWrap = new JPanel(new BorderLayout());
-        pnlTopWrap.add(pnlNorth, BorderLayout.NORTH);
-        pnlTopWrap.add(pnlControl, BorderLayout.CENTER);
-
-        add(pnlTopWrap, BorderLayout.NORTH);
+        add(pnlTop, BorderLayout.NORTH);
         add(new JScrollPane(tblNhanVien), BorderLayout.CENTER);
+        
+        lblThongKe = new JLabel("Tổng cộng: 0 nhân viên");
+        add(lblThongKe, BorderLayout.SOUTH);
+    }
+
+    private void loadDataToComboBox() {
+        cbChiNhanh.removeAllItems();
+        ArrayList<ChiNhanh_DTO> dscn = cnBUS.layToanBoChiNhanh();
+        for (ChiNhanh_DTO cn : dscn) {
+            cbChiNhanh.addItem(cn.getMaCN().trim());
+        }
+        updatePhongBanCombo();
+    }
+
+    private void updatePhongBanCombo() {
+        cbPhongBan.removeAllItems();
+        String maCN = cbChiNhanh.getSelectedItem() != null ? cbChiNhanh.getSelectedItem().toString() : "";
+        ArrayList<String> dspb = nvBUS.getListMaPB(maCN);
+        for (String pb : dspb) {
+            cbPhongBan.addItem(pb.trim());
+        }
     }
 
     private void loadDataToTable() {
         model.setRowCount(0);
-        
-        // 1. Lấy toàn bộ danh sách nhân viên đang làm việc
         ArrayList<NhanVien_DTO> allNV = nvBUS.layDanhSachNhanVien();
-        
-        // 2. Lấy danh sách mã nhân viên đã có trong bảng Phân Công
-        ArrayList<String> nvCoDuAn = pcBUS.layToanBoPhanCong().stream()
-                                         .map(PhanCong_DTO::getMaNV)
-                                         .distinct()
-                                         .collect(Collectors.toCollection(ArrayList::new));
+        Map<String, Long> mapSoDA = pcBUS.layToanBoPhanCong().stream()
+                .collect(Collectors.groupingBy(pc -> pc.getMaNV().trim(), Collectors.counting()));
 
-        // 3. Lọc ra những người KHÔNG nằm trong danh sách đã có dự án
         int stt = 1;
-        int count = 0;
         for (NhanVien_DTO nv : allNV) {
-            // Kiểm tra: Không nằm trong bảng Phân Công VÀ Tình trạng phải là '1' (Đang làm việc)
-            if (!nvCoDuAn.contains(nv.getMaNV()) && "DangLamViec".equals(nv.getTinhTrang())) {
-                model.addRow(new Object[]{
-                    stt++,
-                    nv.getMaNV(),
-                    nv.getHoTen(),
-                    nv.getGioiTinh(),
-                    nv.getMaPB(),
-                    nv.getVaiTro(),
-                    "Sẵn sàng"
-                });
-                count++;
+            String maNV = nv.getMaNV().trim();
+            long soDA = mapSoDA.getOrDefault(maNV, 0L);
+            model.addRow(new Object[]{
+                stt++, maNV, nv.getHoTen(), nv.getLuong(), nv.getMaPB(),
+                nv.getVaiTro(), soDA, nv.getTinhTrang().trim()
+            });
+        }
+        lblThongKe.setText("Tổng cộng: " + allNV.size() + " nhân viên");
+    }
+
+    private void fillForm(int row) {
+        txtMaNV.setText(model.getValueAt(row, 1).toString());
+        txtHoTen.setText(model.getValueAt(row, 2).toString());
+        txtLuong.setText(model.getValueAt(row, 3).toString());
+        
+        String maPB = model.getValueAt(row, 4).toString();
+        String vaiTro = model.getValueAt(row, 5).toString();
+        String tinhTrang = model.getValueAt(row, 7).toString();
+
+        cbVaiTro.setSelectedItem(vaiTro);
+        cbPhongBan.setSelectedItem(maPB);
+        cbTinhTrang.setSelectedItem(tinhTrang);
+        
+        // Tìm chi nhánh của phòng ban này (dựa trên dữ liệu BUS)
+        NhanVien_DTO detail = nvBUS.getChiTietNhanVien(txtMaNV.getText());
+        if(detail != null) cbChiNhanh.setSelectedItem(detail.getMaCN().trim());
+    }
+
+    private void actionThem() {
+        NhanVien_DTO nv = new NhanVien_DTO();
+        nv.setMaNV(nvBUS.taoMaNVMoi());
+        nv.setHoTen(txtHoTen.getText().trim());
+        nv.setLuong(Double.parseDouble(txtLuong.getText().trim()));
+
+        nv.setVaiTro(cbVaiTro.getSelectedItem().toString());
+
+        nv.setMaPB(cbPhongBan.getSelectedItem().toString());
+        nv.setMaCN(cbChiNhanh.getSelectedItem().toString());
+        nv.setTinhTrang(cbTinhTrang.getSelectedItem().toString());
+
+        nv.setNgaySinh(new java.util.Date());
+        nv.setMatKhau("123");
+
+        if (nvBUS.themNhanVien(nv)) {
+            JOptionPane.showMessageDialog(this, "Thêm mới thành công!");
+            loadDataToTable();
+            lamMoiForm();
+        }
+    }
+
+    private void actionSua() {
+        String maNV = txtMaNV.getText();
+        NhanVien_DTO nv = nvBUS.getChiTietNhanVien(maNV);
+        if (nv != null) {
+            nv.setHoTen(txtHoTen.getText().trim());
+            nv.setLuong(Double.parseDouble(txtLuong.getText()));
+            nv.setMaPB(cbPhongBan.getSelectedItem().toString());
+            nv.setMaCN(cbChiNhanh.getSelectedItem().toString());
+            nv.setVaiTro(cbVaiTro.getSelectedItem().toString());
+            nv.setTinhTrang(cbTinhTrang.getSelectedItem().toString());
+
+            if (nvBUS.capNhatNhanVien(nv)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                loadDataToTable();
             }
         }
-        lblThongKe.setText("Tổng cộng: " + count + " nhân viên rảnh");
+    }
+
+    private void actionXoa() {
+        String ma = txtMaNV.getText().trim();
+        if (ma.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên cần cho nghỉ!");
+            return;
+        }
+
+        int opt = JOptionPane.showConfirmDialog(this, 
+                "Bạn có chắc muốn chuyển trạng thái nhân viên " + ma + " thành 'Đã nghỉ việc'?", 
+                "Xác nhận", JOptionPane.YES_NO_OPTION);
+
+        if (opt == JOptionPane.YES_OPTION) {
+            if (nvBUS.choNghiViec(ma)) {
+                JOptionPane.showMessageDialog(this, "Nhân viên đã nghỉ việc!");
+                loadDataToTable(); 
+                lamMoiForm();
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể cập nhật trạng thái!");
+            }
+        }
+    }
+
+    private void lamMoiForm() {
+        txtMaNV.setText("");
+        txtHoTen.setText("");
+        txtLuong.setText("0");
+        txtTimKiem.setText("");
+        txtSoDALoc.setText("");
+        tblNhanVien.setRowSorter(null);
+        loadDataToTable();
     }
 
     private void actionTimKiem() {
         String key = txtTimKiem.getText().toLowerCase().trim();
-        // Bạn có thể dùng RowSorter để lọc trực tiếp trên Table cho nhanh
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
         tblNhanVien.setRowSorter(sorter);
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + key));
+    }
+
+    private void actionLocTheoSoDA() {
+        try {
+            int soDA = Integer.parseInt(txtSoDALoc.getText().trim());
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+            tblNhanVien.setRowSorter(sorter);
+            sorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+                    return Integer.parseInt(entry.getStringValue(6)) == soDA;
+                }
+            });
+        } catch (Exception e) { JOptionPane.showMessageDialog(this, "Nhập số hợp lệ!"); }
+    }
+
+    private void addComp(JPanel p, String l, Component c, int x, int y, GridBagConstraints g) {
+        g.gridx = x; g.gridy = y; g.weightx = 0;
+        p.add(new JLabel(l), g);
+        g.gridx = x + 1; g.weightx = 0.5;
+        p.add(c, g);
     }
 }
