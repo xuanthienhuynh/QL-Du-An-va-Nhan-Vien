@@ -3,7 +3,6 @@ package GUI;
 
 import DAO.NhanVienDAO;
 import DTO.NhanVien_DTO;
-import GUI.NhanVienGUI;
 import javax.swing.JOptionPane;
 
 public class DangNhap extends javax.swing.JFrame {
