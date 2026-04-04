@@ -261,6 +261,7 @@ public class NhanVienDAO {
             ps.setDouble(4, nv.getLuong());
             ps.setString(5, nv.getMaPB());
             ps.setString(6, nv.getMaCN());
+            ps.setString(7, nv.getVaiTro());
             ps.setString(7, nv.getMaNV()); // Điều kiện WHERE
 
             return ps.executeUpdate() > 0;
