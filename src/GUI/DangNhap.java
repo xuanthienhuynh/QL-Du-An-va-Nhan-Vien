@@ -162,7 +162,6 @@ public class DangNhap extends javax.swing.JFrame {
         // 3. Gọi Backend kiểm tra (DAO)
         NhanVienDAO dao = new NhanVienDAO();
         NhanVien_DTO nv = dao.checkLogin(user, pass);
-
         // 4. Xử lý kết quả
         if (nv == null) {
             // Đăng nhập thất bại

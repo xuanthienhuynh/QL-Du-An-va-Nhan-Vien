@@ -40,7 +40,7 @@ public class DuAnBUS {
             // 2. Lọc theo Chi nhánh
             // Nếu người dùng chọn "Tất cả chi nhánh" thì bỏ qua bước lọc này (luôn true)
             if (chiNhanh != null && !chiNhanh.equals("Tất cả chi nhánh")) {
-                matchChiNhanh = (da.getMaCN() != null && da.getMaCN().equals(chiNhanh));
+                matchChiNhanh = (da.getDanhSachMaCN() != null && da.getDanhSachMaCN().contains(chiNhanh));
             }
 
             // 3. Lọc theo Thời gian (Nằm trong khoảng từ ngày cmbNBD đến ngày cmbNKT)

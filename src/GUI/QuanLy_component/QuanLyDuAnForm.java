@@ -1,21 +1,21 @@
 package GUI.QuanLy_component;
 
+import BUS.ChiNhanhBUS;
 import BUS.DuAnBUS;
-import BUS.PhanCongBUS;
 import BUS.NhanVienBUS;
-import BUS.ChiNhanhBUS; // Thêm BUS Chi Nhánh
+import BUS.PhanCongBUS; // Thêm BUS Chi Nhánh
+import DTO.ChiNhanh_DTO;
 import DTO.DuAn_DTO;
-import DTO.PhanCong_DTO;
 import DTO.NhanVien_DTO;
-import DTO.ChiNhanh_DTO; // Thêm DTO Chi Nhánh
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import DTO.PhanCong_DTO; // Thêm DTO Chi Nhánh
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 public class QuanLyDuAnForm extends JPanel {
     private DuAnBUS daBUS = new DuAnBUS();
@@ -189,7 +189,9 @@ public class QuanLyDuAnForm extends JPanel {
                 JOptionPane.showMessageDialog(this, "Tên dự án không được để trống!");
                 return null;
             }
-            return new DuAn_DTO(maDA, tenDA, kinhPhi, doanhThu, ngayBD, ngayKT, trangThai, maCN);
+            java.util.List<String> danhSachCN = new java.util.ArrayList<>();
+            danhSachCN.add(maCN);
+            return new DuAn_DTO(maDA, tenDA, kinhPhi, doanhThu, ngayBD, ngayKT, trangThai, danhSachCN);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu!");
             return null;
@@ -312,11 +314,17 @@ public class QuanLyDuAnForm extends JPanel {
             for (DuAn_DTO da : list) {
                 long soNV = listPC.stream().filter(pc -> pc.getMaDA().trim().equalsIgnoreCase(da.getMaDA().trim()))
                         .count();
+                String chuoiCacChiNhanh = "";
+                if (da.getDanhSachMaCN() != null && !da.getDanhSachMaCN().isEmpty()) {
+                    chuoiCacChiNhanh = String.join(", ", da.getDanhSachMaCN());
+                }
                 model.addRow(new Object[] {
                         da.getMaDA(), da.getTenDA(), da.getKinhPhi(), da.getDoanhThu(),
                         da.getNgayBatDau() != null ? sdf.format(da.getNgayBatDau()) : "",
                         da.getNgayKetThuc() != null ? sdf.format(da.getNgayKetThuc()) : "---",
-                        da.getTrangThai(), da.getMaCN(), soNV, "Xem NV"
+                        da.getTrangThai(),
+                        chuoiCacChiNhanh, // <-- ĐÃ ĐƯỢC THAY THẾ Ở ĐÂY
+                        soNV, "Xem NV"
                 });
             }
         }
