@@ -15,11 +15,12 @@ public class QuanLyGUI extends javax.swing.JFrame {
          * Sửa Constructor để nhận tên người đăng nhập
          */
         public QuanLyGUI(String hoTen) {
+                com.formdev.flatlaf.FlatLightLaf.setup();
                 this.tenNguoiDung = hoTen;
                 initComponents();
 
                 // Cập nhật lời chào ngay sau khi khởi tạo components
-                xinChaoText.setText("Xin chào, " + tenNguoiDung);
+                xinChaoText.setText("Xin chào: " + tenNguoiDung);
 
                 initCustomTabs();
         }
@@ -39,7 +40,7 @@ public class QuanLyGUI extends javax.swing.JFrame {
                 QuanLyDuAnForm pnlDuAn = new QuanLyDuAnForm();
                 jPanel2.setLayout(new BorderLayout());
                 jPanel2.add(pnlDuAn, BorderLayout.CENTER);
-                
+
                 NhanVienRanhForm pnlNVRanh = new NhanVienRanhForm();
                 jPanel3.setLayout(new BorderLayout());
                 jPanel3.add(pnlNVRanh, BorderLayout.CENTER);
