@@ -6,11 +6,10 @@ import BUS.PhanCongBUS;
 import DTO.DuAn_DTO;
 import DTO.NhanVien_DTO;
 import DTO.PhanCong_DTO;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class PhanCongForm extends JPanel {
     private PhanCongBUS pcBUS = new PhanCongBUS();
@@ -19,14 +18,13 @@ public class PhanCongForm extends JPanel {
 
     private JTable tblPhanCong;
     private DefaultTableModel model;
-    private JComboBox<String> cbNhanVien, cbDuAn;
-    private JTextField txtVaiTro;
+    // THAY THẾ: JComboBox thành JTextField
+    private JTextField txtMaNV, txtMaDA, txtVaiTro;
     private JButton btnThem, btnXoa, btnLamMoi;
 
     public PhanCongForm() {
         initComponents();
         loadDataToTable();
-        loadComboBoxData();
     }
 
     private void initComponents() {
@@ -43,21 +41,21 @@ public class PhanCongForm extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0;
-        pnlInput.add(new JLabel("Nhân viên:"), gbc);
+        pnlInput.add(new JLabel("Mã Nhân viên:"), gbc);
 
         gbc.gridx = 1;
         gbc.weightx = 0.5;
-        cbNhanVien = new JComboBox<>();
-        pnlInput.add(cbNhanVien, gbc);
+        txtMaNV = new JTextField(); // JTextField thay cho ComboBox
+        pnlInput.add(txtMaNV, gbc);
 
         gbc.gridx = 2;
         gbc.weightx = 0;
-        pnlInput.add(new JLabel("Dự án:"), gbc);
+        pnlInput.add(new JLabel("Mã Dự án:"), gbc);
 
         gbc.gridx = 3;
         gbc.weightx = 0.5;
-        cbDuAn = new JComboBox<>();
-        pnlInput.add(cbDuAn, gbc);
+        txtMaDA = new JTextField(); // JTextField thay cho ComboBox
+        pnlInput.add(txtMaDA, gbc);
 
         // Dòng 1: Vai trò (Trải dài)
         gbc.gridx = 0;
@@ -86,7 +84,7 @@ public class PhanCongForm extends JPanel {
         pnlBtns.add(btnXoa);
         pnlBtns.add(btnLamMoi);
 
-        // --- 3. BẢNG DỮ LIỆU (CHỈNH BORDER ĐẬM) ---
+        // --- 3. BẢNG DỮ LIỆU ---
         model = new DefaultTableModel(new Object[] { "Mã Nhân Viên", "Mã Dự Án", "Vai Trò Đảm Nhiệm" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -94,18 +92,12 @@ public class PhanCongForm extends JPanel {
             }
         };
         tblPhanCong = new JTable(model);
-
-        // Cấu hình border và grid đậm nét
         tblPhanCong.setRowHeight(32);
         tblPhanCong.setShowGrid(true);
-        tblPhanCong.setGridColor(new Color(150, 150, 150)); // Màu kẻ ô đậm
-        tblPhanCong.setIntercellSpacing(new Dimension(1, 1));
-        tblPhanCong.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblPhanCong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tblPhanCong.setGridColor(new Color(150, 150, 150));
 
         JScrollPane scroll = new JScrollPane(tblPhanCong);
 
-        // Gom nhóm phía trên
         JPanel pnlTop = new JPanel(new BorderLayout());
         pnlTop.add(pnlInput, BorderLayout.CENTER);
         pnlTop.add(pnlBtns, BorderLayout.SOUTH);
@@ -118,51 +110,20 @@ public class PhanCongForm extends JPanel {
         btnXoa.addActionListener(e -> actionXoa());
         btnLamMoi.addActionListener(e -> lamMoi());
 
-        // Sự kiện click bảng để điền ngược lại form
         tblPhanCong.getSelectionModel().addListSelectionListener(e -> {
             int row = tblPhanCong.getSelectedRow();
             if (row >= 0) {
-                String maNV = model.getValueAt(row, 0).toString();
-                String maDA = model.getValueAt(row, 1).toString();
-                String vaiTro = model.getValueAt(row, 2).toString();
+                // Đổ ngược dữ liệu từ bảng vào TextField khi click dòng
+                txtMaNV.setText(model.getValueAt(row, 0).toString());
+                txtMaDA.setText(model.getValueAt(row, 1).toString());
+                txtVaiTro.setText(model.getValueAt(row, 2).toString());
 
-                txtVaiTro.setText(vaiTro);
-                setComboValue(cbNhanVien, maNV);
-                setComboValue(cbDuAn, maDA);
+                // Khóa MaNV và MaDA khi đang chọn dòng (vì Phân công thường không sửa khóa
+                // chính)
+                txtMaNV.setEditable(false);
+                txtMaDA.setEditable(false);
             }
         });
-    }
-
-    // Hàm bổ trợ để set giá trị ComboBox theo Mã
-    private void setComboValue(JComboBox<String> cb, String ma) {
-        for (int i = 0; i < cb.getItemCount(); i++) {
-            if (cb.getItemAt(i).startsWith(ma)) {
-                cb.setSelectedIndex(i);
-                break;
-            }
-        }
-    }
-
-    private void loadComboBoxData() {
-        cbNhanVien.removeAllItems();
-        cbDuAn.removeAllItems();
-        cbNhanVien.addItem("--- Chọn nhân viên ---");
-        cbDuAn.addItem("--- Chọn dự án ---");
-
-        ArrayList<NhanVien_DTO> listNV = nvBUS.timKiem("");
-        if (listNV != null) {
-            for (NhanVien_DTO nv : listNV) {
-                // Tùy vào DTO của bạn là getHoTen hay getTenNV
-                cbNhanVien.addItem(nv.getMaNV() + " - " + nv.getHoTen());
-            }
-        }
-
-        ArrayList<DuAn_DTO> listDA = daBUS.layToanBoDuAn();
-        if (listDA != null) {
-            for (DuAn_DTO da : listDA) {
-                cbDuAn.addItem(da.getMaDA() + " - " + da.getTenDA());
-            }
-        }
     }
 
     private void loadDataToTable() {
@@ -176,34 +137,15 @@ public class PhanCongForm extends JPanel {
     }
 
     private void actionThem() {
-        if (cbNhanVien.getSelectedIndex() <= 0 || cbDuAn.getSelectedIndex() <= 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ Nhân viên và Dự án!");
-            return;
-        }
+        // Nếu bạn muốn dùng Dialog nhập hàng loạt như cũ:
+        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        Frame parentFrame = (parentWindow instanceof Frame) ? (Frame) parentWindow : null;
 
-        String vaiTro = txtVaiTro.getText().trim();
-        if (vaiTro.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập vai trò!");
-            return;
-        }
+        DialogPhanCong diag = new DialogPhanCong(parentFrame);
+        diag.setVisible(true);
 
-        try {
-            String maNV = cbNhanVien.getSelectedItem().toString().split(" - ")[0];
-            String maDA = cbDuAn.getSelectedItem().toString().split(" - ")[0];
-
-            // Tạo DTO phân công (Ngày bắt đầu mặc định là hôm nay)
-            PhanCong_DTO pc = new PhanCong_DTO(maNV, maDA, new Date(), null, vaiTro, 0);
-
-            if (pcBUS.themPhanCong(pc)) {
-                JOptionPane.showMessageDialog(this, "Phân công thành công!");
-                loadDataToTable();
-                txtVaiTro.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Nhân viên này đã có trong dự án!");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage());
-        }
+        loadDataToTable();
+        lamMoi();
     }
 
     private void actionXoa() {
@@ -213,8 +155,8 @@ public class PhanCongForm extends JPanel {
             return;
         }
 
-        String maNV = model.getValueAt(row, 0).toString();
-        String maDA = model.getValueAt(row, 1).toString();
+        String maNV = txtMaNV.getText().trim();
+        String maDA = txtMaDA.getText().trim();
 
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Xác nhận xóa phân công của NV " + maNV + " tại dự án " + maDA + "?",
@@ -230,9 +172,11 @@ public class PhanCongForm extends JPanel {
     }
 
     private void lamMoi() {
+        txtMaNV.setText("");
+        txtMaDA.setText("");
         txtVaiTro.setText("");
-        cbNhanVien.setSelectedIndex(0);
-        cbDuAn.setSelectedIndex(0);
+        txtMaNV.setEditable(true);
+        txtMaDA.setEditable(true);
         loadDataToTable();
     }
 }

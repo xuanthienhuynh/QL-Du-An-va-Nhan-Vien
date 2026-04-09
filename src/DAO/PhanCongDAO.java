@@ -136,4 +136,26 @@ public class PhanCongDAO {
         }
         return pc;
     }
+
+    // Thêm hàm này vào PhanCongDAO.java
+    public int countActiveProjects(String maNV) {
+        int count = 0;
+        // Query kết hợp bảng PhanCong và DuAn để lọc theo trạng thái dự án
+        String sql = "SELECT COUNT(*) FROM PhanCong pc " +
+                "JOIN DuAn da ON pc.MaDA = da.MaDA " +
+                "WHERE pc.MaNV = ? AND da.TrangThai = N'DangChay'"; // Lưu ý chữ DangChay khớp với DB
+
+        try (Connection conn = database.createConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maNV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 }

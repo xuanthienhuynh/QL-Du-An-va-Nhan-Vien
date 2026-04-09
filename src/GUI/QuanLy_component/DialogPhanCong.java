@@ -107,27 +107,47 @@ public class DialogPhanCong extends JDialog {
     }
 
     private void loadData() {
-        // 1. Load Dự án (Chỉ lấy dự án Đang Chạy)
+        // 1. Load Dự án
         cbDuAn.removeAllItems();
         cbDuAn.addItem("--- Chọn dự án ---");
-        for (DuAn_DTO da : daBUS.layToanBoDuAn()) {
-            if ("DangChay".equals(da.getTrangThai())) {
-                cbDuAn.addItem(da.getMaDA() + " - " + da.getTenDA());
+        ArrayList<DuAn_DTO> listDA = daBUS.layToanBoDuAn();
+        if (listDA != null) {
+            for (DuAn_DTO da : listDA) {
+                if ("DangChay".equals(da.getTrangThai())) {
+                    cbDuAn.addItem(da.getMaDA() + " - " + da.getTenDA());
+                }
             }
         }
 
-        // 2. Load Phòng Ban vào ComboBox chọn nhanh
+        // 2. Load Phòng Ban vào ComboBox
         cbPhongBan.removeAllItems();
         cbPhongBan.addItem("--- Chọn phòng để tích nhanh ---");
-        for (PhongBan_DTO pb : pbBUS.layToanBoPhongBan()) {
-            cbPhongBan.addItem(pb.getMaPB() + " - " + pb.getTenPB());
+        ArrayList<PhongBan_DTO> listPB = pbBUS.layToanBoPhongBan();
+        if (listPB != null) {
+            for (PhongBan_DTO pb : listPB) {
+                cbPhongBan.addItem(pb.getMaPB() + " - " + pb.getTenPB());
+            }
         }
 
         // 3. Load danh sách Nhân viên lên bảng
         modelNV.setRowCount(0);
-        for (NhanVien_DTO nv : nvBUS.timKiem("")) {
-            String tenPB = pbBUS.getTenPhongBan(nv.getMaPB());
-            modelNV.addRow(new Object[] { false, nv.getMaNV(), nv.getHoTen(), tenPB });
+        ArrayList<NhanVien_DTO> listNV = nvBUS.timKiem("");
+
+        for (NhanVien_DTO nv : listNV) {
+            // Kiểm tra MaPB của nhân viên có tồn tại không
+            String maPB = nv.getMaPB();
+            String tenPB = "Chưa xác định";
+
+            if (maPB != null && !maPB.trim().isEmpty()) {
+                tenPB = pbBUS.getTenPhongBan(maPB); // Lấy tên từ BUS
+            }
+
+            modelNV.addRow(new Object[] {
+                    false,
+                    nv.getMaNV(),
+                    nv.getHoTen(),
+                    (tenPB != null) ? tenPB : "Trống tên" // Đảm bảo cột index 3 có giá trị
+            });
         }
     }
 
@@ -135,16 +155,23 @@ public class DialogPhanCong extends JDialog {
         if (cbPhongBan.getSelectedIndex() <= 0)
             return;
 
-        // Lấy tên phòng ban từ chuỗi "Mã - Tên"
-        String selectedStr = cbPhongBan.getSelectedItem().toString();
-        String selectedTenPB = selectedStr.substring(selectedStr.indexOf("-") + 1).trim();
+        // Ví dụ: "PB01 - Phòng Nhân Sự" -> lấy "Phòng Nhân Sự"
+        String selectedItem = cbPhongBan.getSelectedItem().toString();
+        String tenPB_Combo = "";
+        if (selectedItem.contains("-")) {
+            tenPB_Combo = selectedItem.split("-")[1].trim();
+        } else {
+            tenPB_Combo = selectedItem.trim();
+        }
 
         for (int i = 0; i < modelNV.getRowCount(); i++) {
-            String tenPBTrongBang = modelNV.getValueAt(i, 3).toString();
-            if (tenPBTrongBang.equals(selectedTenPB)) {
-                modelNV.setValueAt(true, i, 0);
+            // Cột index 3 là cột "Phòng Ban" hiển thị tên
+            String tenPBTrongBang = modelNV.getValueAt(i, 3).toString().trim();
+
+            if (tenPBTrongBang.equalsIgnoreCase(tenPB_Combo)) {
+                modelNV.setValueAt(true, i, 0); // Tích chọn cột checkbox
             } else {
-                modelNV.setValueAt(false, i, 0);
+                modelNV.setValueAt(false, i, 0); // Bỏ tích những người khác
             }
         }
     }

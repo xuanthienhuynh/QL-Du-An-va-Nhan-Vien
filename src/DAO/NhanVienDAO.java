@@ -65,36 +65,29 @@ public class NhanVienDAO {
     // Hàm lấy danh sách nhân viên (Trả về ArrayList)
     public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang, MaCN FROM NhanVien";
+        // THÊM: Cột Luong vào câu lệnh SQL
+        String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang, MaCN, MaPB, Luong FROM NhanVien";
 
         try {
-            Connection conn = database.createConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            java.sql.Connection conn = database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setHoTen(rs.getString("HoTen"));
 
-                // Xử lý an toàn: Kiểm tra NULL trước khi trim() để tránh sập vòng lặp
-                String maNV = rs.getString("MaNV");
-                nv.setMaNV(maNV != null ? maNV.trim() : "");
+                // QUAN TRỌNG: Gán giá trị lương vào DTO
+                nv.setLuong(rs.getDouble("Luong"));
 
-                String hoTen = rs.getString("HoTen");
-                nv.setHoTen(hoTen != null ? hoTen.trim() : "");
-
-                String vaiTro = rs.getString("VaiTro");
-                nv.setVaiTro(vaiTro != null ? vaiTro.trim() : "");
-
+                nv.setMaPB(rs.getString("MaPB"));
+                nv.setVaiTro(rs.getString("VaiTro"));
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
-
-                String maCN = rs.getString("MaCN");
-                nv.setMaCN(maCN != null ? maCN.trim() : "");
-
                 list.add(nv);
             }
             conn.close();
         } catch (Exception e) {
-            System.out.println("Lỗi sập vòng lặp Load Danh Sách: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -103,14 +96,13 @@ public class NhanVienDAO {
     // Thêm vào file DAO.NhanVienDAO.java
     public java.util.ArrayList<DTO.NhanVien_DTO> timKiemNhanVien(String tuKhoa) {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        // FIX LỖI: Thêm MaCN vào câu SELECT để BUS có dữ liệu mà lọc
-        String sql = "SELECT MaNV, HoTen, VaiTro, MaCN FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
+        // FIX: Thêm MaPB vào SELECT
+        String sql = "SELECT MaNV, HoTen, VaiTro, MaCN, MaPB FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
 
         try {
             java.sql.Connection conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
 
-            // Bỏ từ khóa vào định dạng %tuKhoa% của SQL
             String keyword = "%" + tuKhoa + "%";
             ps.setString(1, keyword);
             ps.setString(2, keyword);
@@ -122,8 +114,9 @@ public class NhanVienDAO {
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
-                // FIX LỖI: Nạp MaCN vào object
                 nv.setMaCN(rs.getString("MaCN"));
+                // FIX: Nạp MaPB vào object
+                nv.setMaPB(rs.getString("MaPB") != null ? rs.getString("MaPB").trim() : "");
                 list.add(nv);
             }
             conn.close();

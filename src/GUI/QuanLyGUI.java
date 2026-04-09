@@ -2,17 +2,32 @@ package GUI;
 
 import GUI.QuanLy_component.PhanCongForm;
 import GUI.QuanLy_component.QuanLyDuAnForm;
+import GUI.QuanLy_component.NhanVienRanhForm;
 import java.awt.BorderLayout;
 import com.formdev.flatlaf.FlatLightLaf;
 
 public class QuanLyGUI extends javax.swing.JFrame {
 
+        // Biến lưu trữ tên người đăng nhập
+        private String tenNguoiDung;
+
         /**
-         * Creates new form QuanLyGUI
+         * Sửa Constructor để nhận tên người đăng nhập
          */
-        public QuanLyGUI() {
+        public QuanLyGUI(String hoTen) {
+                com.formdev.flatlaf.FlatLightLaf.setup();
+                this.tenNguoiDung = hoTen;
                 initComponents();
+
+                // Cập nhật lời chào ngay sau khi khởi tạo components
+                xinChaoText.setText("Xin chào: " + tenNguoiDung);
+
                 initCustomTabs();
+        }
+
+        // Constructor mặc định (dành cho việc xem Design trong NetBeans nếu cần)
+        public QuanLyGUI() {
+                this("Quản Trị Viên");
         }
 
         private void initCustomTabs() {
@@ -21,10 +36,14 @@ public class QuanLyGUI extends javax.swing.JFrame {
                 jPanel1.setLayout(new BorderLayout());
                 jPanel1.add(pnlPhanCong, BorderLayout.CENTER);
 
-                // Tab 2: Dự Án (Thêm phần này)
+                // Tab 2: Dự Án
                 QuanLyDuAnForm pnlDuAn = new QuanLyDuAnForm();
                 jPanel2.setLayout(new BorderLayout());
                 jPanel2.add(pnlDuAn, BorderLayout.CENTER);
+
+                NhanVienRanhForm pnlNVRanh = new NhanVienRanhForm();
+                jPanel3.setLayout(new BorderLayout());
+                jPanel3.add(pnlNVRanh, BorderLayout.CENTER);
 
                 // Đặt tên Tab
                 jTabbedPane1.setTitleAt(0, "Phân Công Nhân Sự");
@@ -66,19 +85,20 @@ public class QuanLyGUI extends javax.swing.JFrame {
                         }
                 });
 
-                xinChaoText.setFont(new java.awt.Font("Dialog", 1, 14));
+                // Thiết lập Font và màu cho Text xin chào
+                xinChaoText.setFont(new java.awt.Font("Dialog", 1, 16));
                 xinChaoText.setForeground(new java.awt.Color(255, 255, 255));
-                xinChaoText.setText("Xin chào Quản Trị Viên");
+                xinChaoText.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                xinChaoText.setText("Xin chào...");
 
                 javax.swing.GroupLayout leftGroupHeaderLayout = new javax.swing.GroupLayout(leftGroupHeader);
                 leftGroupHeader.setLayout(leftGroupHeaderLayout);
                 leftGroupHeaderLayout.setHorizontalGroup(
                                 leftGroupHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(leftGroupHeaderLayout.createSequentialGroup()
-                                                                .addContainerGap(56, Short.MAX_VALUE)
-                                                                .addGroup(leftGroupHeaderLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addContainerGap(50, Short.MAX_VALUE)
+                                                                .addGroup(leftGroupHeaderLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addComponent(dangXuatBtn,
                                                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -87,7 +107,7 @@ public class QuanLyGUI extends javax.swing.JFrame {
                                                                                 .addComponent(xinChaoText,
                                                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                275,
+                                                                                                350,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addContainerGap()));
                 leftGroupHeaderLayout.setVerticalGroup(
@@ -119,7 +139,7 @@ public class QuanLyGUI extends javax.swing.JFrame {
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                675,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                 Short.MAX_VALUE)
                                                                 .addComponent(leftGroupHeader,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -144,18 +164,7 @@ public class QuanLyGUI extends javax.swing.JFrame {
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                 .addContainerGap()));
 
-                // jPanel1 là Tab Phân Công
-                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-                jPanel1.setLayout(jPanel1Layout);
-                jPanel1Layout.setHorizontalGroup(
-                                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 1287, Short.MAX_VALUE));
-                jPanel1Layout.setVerticalGroup(
-                                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 582, Short.MAX_VALUE));
                 jTabbedPane1.addTab("Phân Công", jPanel1);
-
-                // jPanel2 và jPanel3 (Dự phòng cho Dự án và Nhân viên)
                 jTabbedPane1.addTab("Dự Án", jPanel2);
                 jTabbedPane1.addTab("Nhân Viên", jPanel3);
 
@@ -179,13 +188,21 @@ public class QuanLyGUI extends javax.swing.JFrame {
 
                 pack();
                 setLocationRelativeTo(null);
-        }// </editor-fold>
+        } // </editor-fold>
 
         private void dangXuatBtnActionPerformed(java.awt.event.ActionEvent evt) {
-                int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn đăng xuất?");
+                int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                                this,
+                                "Bạn có chắc muốn đăng xuất khỏi hệ thống?",
+                                "Xác nhận đăng xuất",
+                                javax.swing.JOptionPane.YES_NO_OPTION,
+                                javax.swing.JOptionPane.QUESTION_MESSAGE);
+
                 if (confirm == javax.swing.JOptionPane.YES_OPTION) {
                         this.dispose();
-                        new DangNhap().setVisible(true);
+                        java.awt.EventQueue.invokeLater(() -> {
+                                new DangNhap().setVisible(true);
+                        });
                 }
         }
 
@@ -197,7 +214,7 @@ public class QuanLyGUI extends javax.swing.JFrame {
                 }
 
                 java.awt.EventQueue.invokeLater(() -> {
-                        new QuanLyGUI().setVisible(true);
+                        new QuanLyGUI("Quản Trị Viên").setVisible(true);
                 });
         }
 

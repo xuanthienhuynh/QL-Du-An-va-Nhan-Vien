@@ -1,12 +1,15 @@
 package BUS;
 
 import DAO.PhanCongDAO;
+import DAO.DuAnDAO; // Cần import để kiểm tra trạng thái dự án
 import DTO.PhanCong_DTO;
+import DTO.DuAn_DTO;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class PhanCongBUS {
     private PhanCongDAO dao = new PhanCongDAO();
+    private DuAnDAO duAnDao = new DuAnDAO(); // Khởi tạo để dùng kiểm tra trạng thái
 
     // 1. LẤY TOÀN BỘ DANH SÁCH
     public ArrayList<PhanCong_DTO> layToanBoPhanCong() {
@@ -45,18 +48,15 @@ public class PhanCongBUS {
             boolean matchVaiTro = true;
             boolean matchThoiGian = true;
 
-            // Lọc theo Mã NV / Mã DA
             if (tuKhoa != null && !tuKhoa.trim().isEmpty()) {
                 String kw = tuKhoa.toLowerCase();
                 matchTuKhoa = pc.getMaNV().toLowerCase().contains(kw) || pc.getMaDA().toLowerCase().contains(kw);
             }
 
-            // Lọc theo Vai trò
             if (vaiTro != null && !vaiTro.equals("Tất cả vai trò")) {
                 matchVaiTro = (pc.getVaiTroDuAn() != null && pc.getVaiTroDuAn().equals(vaiTro));
             }
 
-            // Lọc theo Ngày tham gia (Nằm trong khoảng)
             if (tuNgay != null && pc.getNgayThamGia() != null) {
                 if (pc.getNgayThamGia().before(tuNgay))
                     matchThoiGian = false;
@@ -73,14 +73,29 @@ public class PhanCongBUS {
         return ketQua;
     }
 
-    // 4. THÊM PHÂN CÔNG (Có kiểm tra trùng lặp)
+    public boolean isOverLimit(String maNV) {
+        // Gọi trực tiếp DAO để đếm số lượng dự án 'DangChay' trong Database
+        int count = dao.countActiveProjects(maNV);
+
+        // Nếu count >= 3 thì trả về true (vi phạm giới hạn)
+        return count >= 3;
+    }
+
+    // 4. THÊM PHÂN CÔNG (Tích hợp kiểm tra trùng lặp và giới hạn 3 dự án)
     public boolean themPhanCong(PhanCong_DTO pc) {
-        // Kiểm tra xem nhân viên này đã được phân công vào dự án này chưa
-        PhanCong_DTO check = dao.layThongTinPhanCong(pc.getMaNV(), pc.getMaDA());
-        if (check != null) {
+        // Kiểm tra 1: Nhân viên đã tham gia dự án này chưa?
+        PhanCong_DTO checkTrùng = dao.layThongTinPhanCong(pc.getMaNV(), pc.getMaDA());
+        if (checkTrùng != null) {
             System.out.println("Lỗi: Nhân viên đã tham gia dự án này rồi!");
             return false;
         }
+
+        // Kiểm tra 2: Ràng buộc tối đa 3 dự án đang chạy
+        if (isOverLimit(pc.getMaNV())) {
+            System.out.println("Lỗi: Nhân viên đã tham gia tối đa 3 dự án đang hoạt động!");
+            return false;
+        }
+
         return dao.themPhanCong(pc);
     }
 

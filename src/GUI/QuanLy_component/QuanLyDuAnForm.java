@@ -16,6 +16,7 @@ import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import java.text.DecimalFormat;
 
 public class QuanLyDuAnForm extends JPanel {
     private DuAnBUS daBUS = new DuAnBUS();
@@ -23,6 +24,7 @@ public class QuanLyDuAnForm extends JPanel {
     private NhanVienBUS nvBUS = new NhanVienBUS();
     private ChiNhanhBUS cnBUS = new ChiNhanhBUS(); // Khởi tạo BUS Chi Nhánh
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private DecimalFormat dfMoney = new DecimalFormat("#,### VNĐ");
 
     private JTable tblDuAn;
     private DefaultTableModel model;
@@ -312,19 +314,27 @@ public class QuanLyDuAnForm extends JPanel {
         ArrayList<PhanCong_DTO> listPC = pcBUS.layToanBoPhanCong();
         if (list != null) {
             for (DuAn_DTO da : list) {
-                long soNV = listPC.stream().filter(pc -> pc.getMaDA().trim().equalsIgnoreCase(da.getMaDA().trim()))
+                long soNV = listPC.stream()
+                        .filter(pc -> pc.getMaDA().trim().equalsIgnoreCase(da.getMaDA().trim()))
                         .count();
+
                 String chuoiCacChiNhanh = "";
                 if (da.getDanhSachMaCN() != null && !da.getDanhSachMaCN().isEmpty()) {
                     chuoiCacChiNhanh = String.join(", ", da.getDanhSachMaCN());
                 }
+
+                // SỬA TẠI ĐÂY: Sử dụng dfMoney.format()
                 model.addRow(new Object[] {
-                        da.getMaDA(), da.getTenDA(), da.getKinhPhi(), da.getDoanhThu(),
+                        da.getMaDA(),
+                        da.getTenDA(),
+                        dfMoney.format(da.getKinhPhi()), // Định dạng kinh phí
+                        dfMoney.format(da.getDoanhThu()), // Định dạng doanh thu
                         da.getNgayBatDau() != null ? sdf.format(da.getNgayBatDau()) : "",
                         da.getNgayKetThuc() != null ? sdf.format(da.getNgayKetThuc()) : "---",
                         da.getTrangThai(),
-                        chuoiCacChiNhanh, // <-- ĐÃ ĐƯỢC THAY THẾ Ở ĐÂY
-                        soNV, "Xem NV"
+                        chuoiCacChiNhanh,
+                        soNV,
+                        "Xem NV"
                 });
             }
         }
