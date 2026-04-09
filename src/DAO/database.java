@@ -16,7 +16,7 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
 
             // 3. Tài khoản SQL (Kiểm tra lại xem máy bạn có đúng pass là 123 không nhé)
             String username = "sa";
-            String password = "12";
+            String password = "123456";
 
             // 4. Mở kết nối
             Connection sql = DriverManager.getConnection(url, username, password);
@@ -48,7 +48,7 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
     public static void main(String[] args) {
         Connection c = createConnection();
         if (c != null) {
-            // Nếu chạy ra dòng này là ngon lành
+   
             closeConnection(c);
         }
     }

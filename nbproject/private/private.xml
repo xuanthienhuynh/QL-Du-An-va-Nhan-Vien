@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelItemNhanVien.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelItemDuAn.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/SepGUI.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailsNhanVien.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelThongKeNhanVien.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelThongKeDuAn.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelAddNhanVien.java</file>
+            <file>file:/C:/Users/Fixbug/Downloads/QL-Du-An-va-Nhan-Vien-XuanThien/QL-Du-An-va-Nhan-Vien-XuanThien/src/GUI/NhanVien_component/PanelThongTinCaNhanNV.java</file>
+            <file>file:/C:/Users/Fixbug/Downloads/QL-Du-An-va-Nhan-Vien-XuanThien/QL-Du-An-va-Nhan-Vien-XuanThien/src/GUI/DangNhap.java</file>
+            <file>file:/C:/Users/Fixbug/Downloads/QL-Du-An-va-Nhan-Vien-XuanThien/QL-Du-An-va-Nhan-Vien-XuanThien/src/BUS/NhanVienBUS.java</file>
+            <file>file:/C:/Users/Fixbug/Downloads/QL-Du-An-va-Nhan-Vien-XuanThien/QL-Du-An-va-Nhan-Vien-XuanThien/src/GUI/NhanVienGUI.java</file>
         </group>
     </open-files>
 </project-private>

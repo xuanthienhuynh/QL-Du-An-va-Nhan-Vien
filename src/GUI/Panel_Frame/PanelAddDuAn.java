@@ -320,3 +320,4 @@ public class PanelAddDuAn extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenDA;
     // End of variables declaration//GEN-END:variables
 }
+

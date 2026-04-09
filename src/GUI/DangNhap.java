@@ -3,7 +3,6 @@ package GUI;
 
 import DAO.NhanVienDAO;
 import DTO.NhanVien_DTO;
-import GUI.NhanVienGUI;
 import javax.swing.JOptionPane;
 
 public class DangNhap extends javax.swing.JFrame {
@@ -181,15 +180,17 @@ public class DangNhap extends javax.swing.JFrame {
                 new SepGUI(nv).setVisible(true);
 
             } else if ("QuanLy".equalsIgnoreCase(vaiTro)) {
-                new QuanLyGUI(nv).setVisible(true);
+                new QuanLyGUI().setVisible(true);
             } else {
-                new NhanVienGUI().setVisible(true);
+                GUI.NhanVienGUI nvGui = new GUI.NhanVienGUI(user);
+                nvGui.setVisible(true);
+                this.dispose();
             }
         }
     }
 
     private void unFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_unFieldActionPerformed
-        // TODO add your handling code here:
+        jPasswordField1.requestFocus();
     }// GEN-LAST:event_unFieldActionPerformed
 
     /**

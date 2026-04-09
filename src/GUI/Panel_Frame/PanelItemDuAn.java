@@ -72,8 +72,10 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         btnDelete = new javax.swing.JButton();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(800, 40));
-        setLayout(new java.awt.GridLayout(1, 0));
+        setMaximumSize(new java.awt.Dimension(32767, 45));
+        setMinimumSize(new java.awt.Dimension(10, 45));
+        setPreferredSize(new java.awt.Dimension(10, 40));
+        setLayout(new java.awt.GridLayout());
 
         lblTenDA.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         lblTenDA.setText("Tên Dự Án");
@@ -91,10 +93,13 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         lblNgayBD.setText("Ngày BĐ");
         add(lblNgayBD);
 
+        jPanel2.setMinimumSize(new java.awt.Dimension(200, 40));
+        jPanel2.setPreferredSize(new java.awt.Dimension(120, 40));
         jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         btnDetail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-eye-30.png"))); // NOI18N
-        btnDetail.setPreferredSize(new java.awt.Dimension(106, 106));
+        btnDetail.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnDetail.setPreferredSize(new java.awt.Dimension(35, 35));
         btnDetail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDetailActionPerformed(evt);
@@ -104,6 +109,7 @@ public class PanelItemDuAn extends javax.swing.JPanel {
 
         btnEdit1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnEdit1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-edit-30.png"))); // NOI18N
+        btnEdit1.setMinimumSize(new java.awt.Dimension(40, 40));
         btnEdit1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEdit1ActionPerformed(evt);
@@ -112,6 +118,7 @@ public class PanelItemDuAn extends javax.swing.JPanel {
         jPanel2.add(btnEdit1);
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-delete-30.png"))); // NOI18N
+        btnDelete.setPreferredSize(new java.awt.Dimension(40, 40));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);

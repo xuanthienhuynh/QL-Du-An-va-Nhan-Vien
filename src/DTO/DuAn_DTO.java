@@ -1,6 +1,8 @@
 package DTO;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DuAn_DTO {
     private String maDA;
@@ -10,13 +12,15 @@ public class DuAn_DTO {
     private Date ngayBatDau;
     private Date ngayKetThuc;
     private String trangThai; // "Kết thúc", "Đang chạy"
-    private String maCN; // Khóa ngoại
+    // private String maCN; // Khóa ngoại
+
+    private List<String> danhSachMaCN = new ArrayList<>();
 
     public DuAn_DTO() {
     }
 
     public DuAn_DTO(String maDA, String tenDA, double kinhPhi, double DoanhThu, Date ngayBatDau, Date ngayKetThuc,
-            String trangThai, String maCN) {
+            String trangThai, List<String> danhSachMaCN) {
         this.maDA = maDA;
         this.tenDA = tenDA;
         this.kinhPhi = kinhPhi;
@@ -24,7 +28,7 @@ public class DuAn_DTO {
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
         this.trangThai = trangThai;
-        this.maCN = maCN;
+        this.danhSachMaCN = danhSachMaCN;
     }
 
     public double getDoanhThu() {
@@ -35,8 +39,12 @@ public class DuAn_DTO {
         return kinhPhi;
     }
 
-    public String getMaCN() {
-        return maCN;
+    public List<String> getDanhSachMaCN() {
+        return danhSachMaCN;
+    }
+
+    public void setDanhSachMaCN(List<String> danhSachMaCN) {
+        this.danhSachMaCN = danhSachMaCN;
     }
 
     public String getMaDA() {
@@ -67,10 +75,6 @@ public class DuAn_DTO {
         this.kinhPhi = kinhPhi;
     }
 
-    public void setMaCN(String maCN) {
-        this.maCN = maCN;
-    }
-
     public void setMaDA(String maDA) {
         this.maDA = maDA;
     }
@@ -94,4 +98,5 @@ public class DuAn_DTO {
     public void chuyenSangTrangThaiKetThuc() {
         this.trangThai = "Đã kết thúc";
     }
+
 }
