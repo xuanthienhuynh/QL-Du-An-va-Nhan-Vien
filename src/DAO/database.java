@@ -1,3 +1,4 @@
+/*
 package DAO;
 
 import java.sql.Connection;
@@ -50,6 +51,66 @@ public class database { // Mình đổi tên class thành ConnectDB cho chuyên 
         if (c != null) {
    
             closeConnection(c);
+        }
+    }
+} */
+package DAO;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class database {
+    // 1. Khai báo địa chỉ các Server
+    private static final String SERVER_CHINH = "jdbc:sqlserver://localhost:1433;";
+    private static final String SERVER_NODE1 = "jdbc:sqlserver://localhost:1434;";
+
+    // 2. Biến static lưu URL kết nối hiện tại (Mặc định là server chính)
+    public static String currentUrl = SERVER_CHINH;
+
+    /*
+     * public static Connection createConnection() {
+     * try {
+     * Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+     * // 3. Sử dụng currentUrl động thay vì fix cứng
+     * String url = currentUrl +
+     * "databaseName=QL_DuAn_CongTy;encrypt=true;trustServerCertificate=true";
+     * return DriverManager.getConnection(url, "sa", "123");
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * return null;
+     * }
+     * }
+     */
+
+    public static Connection createConnection() {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = currentUrl + "databaseName=QL_DuAn_CongTy;encrypt=true;trustServerCertificate=true";
+
+            // Thêm Timeout ngắn (ví dụ 3 giây) để nếu không thấy NODE1 thì báo lỗi ngay
+            // thay vì treo máy
+            DriverManager.setLoginTimeout(3);
+
+            return DriverManager.getConnection(url, "sa", "123");
+        } catch (Exception e) {
+            // Nếu kết nối vào NODE1 thất bại, tự động bẻ lái về Server chính để các bạn
+            // khác vẫn dùng được
+            System.err.println("Không tìm thấy Node chi nhánh, đang kết nối về Server chính...");
+            String backupUrl = "jdbc:sqlserver://localhost:1433;databaseName=QL_DuAn_CongTy;encrypt=true;trustServerCertificate=true";
+            try {
+                return DriverManager.getConnection(backupUrl, "sa", "123");
+            } catch (Exception ex) {
+                return null;
+            }
+        }
+    }
+
+    public static void closeConnection(Connection sql) {
+        try {
+            if (sql != null)
+                sql.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

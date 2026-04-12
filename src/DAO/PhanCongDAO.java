@@ -9,15 +9,15 @@ import java.util.ArrayList;
 public class PhanCongDAO {
 
     // 1. LẤY DANH SÁCH PHÂN CÔNG
+
     public ArrayList<PhanCong_DTO> layDanhSachPhanCong() {
         ArrayList<PhanCong_DTO> list = new ArrayList<>();
         String sql = "SELECT MaNV, MaDA, NgayThamGia, NgayKetThuc, VaiTroDuAn, DanhGia FROM PhanCong";
-
+        Connection conn = null; // Khai báo ngoài
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 PhanCong_DTO pc = new PhanCong_DTO();
                 pc.setMaNV(rs.getString("MaNV"));
@@ -26,11 +26,13 @@ public class PhanCongDAO {
                 pc.setNgayKetThuc(rs.getDate("NgayKetThuc"));
                 pc.setVaiTroDuAn(rs.getString("VaiTroDuAn"));
                 pc.setDanhGia(rs.getInt("DanhGia"));
+
                 list.add(pc);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn); // Luôn luôn đóng ở đây
         }
         return list;
     }

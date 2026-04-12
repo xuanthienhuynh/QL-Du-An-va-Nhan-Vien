@@ -23,8 +23,8 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="Header" pref="1993" max="32767" attributes="0"/>
-          <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
+          <Component id="Header" pref="1376" max="32767" attributes="0"/>
+          <Component id="thongkecucbo_tab" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -32,8 +32,8 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="Header" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" min="-2" pref="749" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="thongkecucbo_tab" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -151,7 +151,7 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+    <Container class="javax.swing.JTabbedPane" name="thongkecucbo_tab">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="99" green="99" red="99" type="rgb"/>
@@ -208,7 +208,7 @@
                           <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
                           <Component id="jPanel12" min="-2" pref="858" max="-2" attributes="0"/>
-                          <EmptySpace pref="688" max="32767" attributes="0"/>
+                          <EmptySpace pref="71" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -239,7 +239,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jButton1" max="32767" attributes="0"/>
+                                  <Component id="dangxuat_btn2" max="32767" attributes="0"/>
                                   <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
@@ -258,7 +258,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="dangxuat_btn2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -300,10 +300,13 @@
                         </DimensionLayout>
                       </Layout>
                     </Container>
-                    <Component class="javax.swing.JButton" name="jButton1">
+                    <Component class="javax.swing.JButton" name="dangxuat_btn2">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x110;&#x102;NG XU&#x1ea4;T"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dangxuat_btn2ActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -758,7 +761,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="631" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="459" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -782,7 +785,7 @@
                           <Component id="timKiem_btn1" min="-2" pref="146" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                           <Component id="chiNhanh_cbb" min="-2" pref="163" max="-2" attributes="0"/>
-                          <EmptySpace pref="684" max="32767" attributes="0"/>
+                          <EmptySpace pref="67" max="32767" attributes="0"/>
                           <Component id="reload_btn" min="-2" pref="146" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
                           <Component id="add_btn" min="-2" pref="146" max="-2" attributes="0"/>
@@ -890,7 +893,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="661" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="489" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -911,7 +914,7 @@
                           <Component id="txtTimkiem" min="-2" pref="471" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="btnTimKiem" min="-2" pref="138" max="-2" attributes="0"/>
-                          <EmptySpace pref="637" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="cmbNBD" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Component id="cmbNKT" min="-2" max="-2" attributes="0"/>
@@ -1019,8 +1022,8 @@
         <Container class="javax.swing.JPanel" name="jPanel4">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="TH&#x1ed0;NG K&#xca; NH&#xc2;N VI&#xca;N">
-                <Property name="tabTitle" type="java.lang.String" value="TH&#x1ed0;NG K&#xca; NH&#xc2;N VI&#xca;N"/>
+              <JTabbedPaneConstraints tabName="TH&#x1ed0;NG K&#xca; NHANH NH&#xc2;N VI&#xca;N">
+                <Property name="tabTitle" type="java.lang.String" value="TH&#x1ed0;NG K&#xca; NHANH NH&#xc2;N VI&#xca;N"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -1032,7 +1035,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jScrollPane3" min="-2" pref="600" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane4" pref="1382" max="32767" attributes="0"/>
+                      <Component id="jScrollPane4" pref="765" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1042,8 +1045,8 @@
                       <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane3" pref="637" max="32767" attributes="0"/>
-                          <Component id="jScrollPane4" pref="637" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="465" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" pref="465" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -1086,7 +1089,7 @@
                           <Component id="jComboBox5" min="-2" pref="179" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                           <Component id="nutXNthongke" min="-2" pref="140" max="-2" attributes="0"/>
-                          <EmptySpace pref="888" max="32767" attributes="0"/>
+                          <EmptySpace pref="271" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1270,8 +1273,8 @@
         <Container class="javax.swing.JPanel" name="jPanel6">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="TH&#x1ed0;NG K&#xca; D&#x1ef0; &#xc1;N ">
-                <Property name="tabTitle" type="java.lang.String" value="TH&#x1ed0;NG K&#xca; D&#x1ef0; &#xc1;N "/>
+              <JTabbedPaneConstraints tabName="TH&#x1ed0;NG K&#xca; NHANH D&#x1ef0; &#xc1;N ">
+                <Property name="tabTitle" type="java.lang.String" value="TH&#x1ed0;NG K&#xca; NHANH D&#x1ef0; &#xc1;N "/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -1283,7 +1286,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jScrollPane5" min="-2" pref="600" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane6" max="32767" attributes="0"/>
+                      <Component id="jScrollPane6" pref="765" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1293,8 +1296,8 @@
                       <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane5" max="32767" attributes="0"/>
-                          <Component id="jScrollPane6" max="32767" attributes="0"/>
+                          <Component id="jScrollPane5" pref="465" max="32767" attributes="0"/>
+                          <Component id="jScrollPane6" pref="465" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -1530,6 +1533,40 @@
                 </Container>
               </SubComponents>
             </Container>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel20">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="DASHBOARD PH&#xc2;N T&#xcd;CH - BI ">
+                <Property name="tabTitle" type="java.lang.String" value="DASHBOARD PH&#xc2;N T&#xcd;CH - BI "/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btn_thongkecucbo" alignment="0" pref="1371" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btn_thongkecucbo" alignment="0" pref="550" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JButton" name="btn_thongkecucbo">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/img/icons8-power-bi-2021-480.png"/>
+                </Property>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

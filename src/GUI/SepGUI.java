@@ -33,6 +33,30 @@ public class SepGUI extends javax.swing.JFrame {
 
         loadDataCombobox();
         loadBoLocDuAn();
+
+        // thong ke
+        // btn_thongkecucbo.setText("MỞ BÁO CÁO POWER BI TỔNG QUAN");
+        // btn_thongkecucbo.setFont(new java.awt.Font("Dialog", 1, 24)); // Chữ to cho
+        // ngầu
+        // btn_thongkecucbo.setBackground(new java.awt.Color(255, 204, 0)); // Màu vàng
+        // đặc trưng của Power BI
+
+        btn_thongkecucbo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    // Link lấy chính xác từ ảnh chụp màn hình Power BI của bạn
+                    String powerBiUrl = "https://app.powerbi.com/groups/me/reports/3c8507e2-37d9-425f-ae0c-113456a351d5/c0de5eed833c9f9f0c1d?experience=power-bi";
+
+                    // Lệnh gọi trình duyệt mặc định của hệ điều hành
+                    java.awt.Desktop.getDesktop().browse(new java.net.URI(powerBiUrl));
+
+                } catch (Exception ex) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Lỗi khi mở trình duyệt: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public SepGUI() {
@@ -40,6 +64,9 @@ public class SepGUI extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -58,13 +85,13 @@ public class SepGUI extends javax.swing.JFrame {
         leftGroupHeader = new javax.swing.JPanel();
         dangXuatBtn = new javax.swing.JButton();
         xinChaoText = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        thongkecucbo_tab = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        dangxuat_btn2 = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -137,6 +164,8 @@ public class SepGUI extends javax.swing.JFrame {
         PanelThongKeDuAn = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         PanelSoDoDuAn = new javax.swing.JPanel();
+        jPanel20 = new javax.swing.JPanel();
+        btn_thongkecucbo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -210,9 +239,9 @@ public class SepGUI extends javax.swing.JFrame {
                                 javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE));
 
-        jTabbedPane1.setBackground(new java.awt.Color(153, 153, 153));
-        jTabbedPane1.setToolTipText("");
-        jTabbedPane1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        thongkecucbo_tab.setBackground(new java.awt.Color(153, 153, 153));
+        thongkecucbo_tab.setToolTipText("");
+        thongkecucbo_tab.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -235,7 +264,12 @@ public class SepGUI extends javax.swing.JFrame {
                 jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 200, Short.MAX_VALUE));
 
-        jButton1.setText("ĐĂNG XUẤT");
+        dangxuat_btn2.setText("ĐĂNG XUẤT");
+        dangxuat_btn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dangxuat_btn2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -244,7 +278,7 @@ public class SepGUI extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        .addComponent(dangxuat_btn2, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -266,7 +300,7 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)
+                                .addComponent(dangxuat_btn2)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
@@ -574,7 +608,7 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addGap(184, 184, 184)
                                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 858,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(688, Short.MAX_VALUE)));
+                                .addContainerGap(71, Short.MAX_VALUE)));
         jPanel9Layout.setVerticalGroup(
                 jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
@@ -604,7 +638,7 @@ public class SepGUI extends javax.swing.JFrame {
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        jTabbedPane1.addTab("THÔNG TIN ", jPanel8);
+        thongkecucbo_tab.addTab("THÔNG TIN ", jPanel8);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -657,7 +691,7 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addGap(81, 81, 81)
                                 .addComponent(chiNhanh_cbb, javax.swing.GroupLayout.PREFERRED_SIZE, 163,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 684,
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67,
                                         Short.MAX_VALUE)
                                 .addComponent(reload_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 146,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -696,10 +730,10 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
                                 .addContainerGap()));
 
-        jTabbedPane1.addTab("XEM NHÂN VIÊN", nhanVien);
+        thongkecucbo_tab.addTab("XEM NHÂN VIÊN", nhanVien);
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -754,8 +788,8 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 138,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 637,
-                                        Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cmbNBD, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(24, 24, 24)
@@ -809,10 +843,10 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 661,
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489,
                                         Short.MAX_VALUE)));
 
-        jTabbedPane1.addTab("XEM DỰ ÁN", jPanel2);
+        thongkecucbo_tab.addTab("XEM DỰ ÁN", jPanel2);
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -894,7 +928,7 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addGap(69, 69, 69)
                                 .addComponent(nutXNthongke, javax.swing.GroupLayout.PREFERRED_SIZE, 140,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(888, Short.MAX_VALUE)));
+                                .addContainerGap(271, Short.MAX_VALUE)));
         jPanel5Layout.setVerticalGroup(
                 jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -956,7 +990,7 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 600,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1382,
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 765,
                                         Short.MAX_VALUE)));
         jPanel4Layout.setVerticalGroup(
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -965,12 +999,12 @@ public class SepGUI extends javax.swing.JFrame {
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 637,
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 465,
                                                 Short.MAX_VALUE)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 637,
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 465,
                                                 Short.MAX_VALUE))));
 
-        jTabbedPane1.addTab("THỐNG KÊ NHÂN VIÊN", jPanel4);
+        thongkecucbo_tab.addTab("THỐNG KÊ NHANH NHÂN VIÊN", jPanel4);
 
         jPanel7.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -1130,7 +1164,8 @@ public class SepGUI extends javax.swing.JFrame {
                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 600,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane6)));
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 765,
+                                        Short.MAX_VALUE)));
         jPanel6Layout.setVerticalGroup(
                 jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel6Layout.createSequentialGroup()
@@ -1138,29 +1173,65 @@ public class SepGUI extends javax.swing.JFrame {
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane5)
-                                        .addComponent(jScrollPane6))));
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 465,
+                                                Short.MAX_VALUE)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 465,
+                                                Short.MAX_VALUE))));
 
-        jTabbedPane1.addTab("THỐNG KÊ DỰ ÁN ", jPanel6);
+        thongkecucbo_tab.addTab("THỐNG KÊ NHANH DỰ ÁN ", jPanel6);
+
+        btn_thongkecucbo.setBackground(new java.awt.Color(255, 255, 255));
+        btn_thongkecucbo
+                .setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-power-bi-2021-480.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+                jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btn_thongkecucbo, javax.swing.GroupLayout.DEFAULT_SIZE, 1371, Short.MAX_VALUE));
+        jPanel20Layout.setVerticalGroup(
+                jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btn_thongkecucbo, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE));
+
+        thongkecucbo_tab.addTab("DASHBOARD PHÂN TÍCH - BI ", jPanel20);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 1993, Short.MAX_VALUE)
-                        .addComponent(jTabbedPane1));
+                        .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 1376, Short.MAX_VALUE)
+                        .addComponent(thongkecucbo_tab));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                                .addComponent(thongkecucbo_tab)
+                                .addContainerGap()));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void dangxuat_btn2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_dangxuat_btn2ActionPerformed
+
+        // 1. Hiện bảng hỏi: "Bạn có chắc không?"
+        int luaChon = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có chắc chắn muốn đăng xuất?",
+                "Xác nhận đăng xuất",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+
+        // 2. Xử lý kết quả
+        if (luaChon == javax.swing.JOptionPane.YES_OPTION) {
+            // Đóng cửa sổ Sếp lại (Giải phóng Ram)
+            this.dispose();
+
+            // Mở lại màn hình Đăng Nhập
+            new DangNhap().setVisible(true);
+        }
+
+    }// GEN-LAST:event_dangxuat_btn2ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
@@ -1190,10 +1261,6 @@ public class SepGUI extends javax.swing.JFrame {
     private void cmbChiNhanhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cmbChiNhanhActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_cmbChiNhanhActionPerformed
-
-    private void timKiem_btn1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_timKiem_btn1ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_timKiem_btn1ActionPerformed
 
     private void txtTimkiemKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtTimkiemKeyReleased
         String tuKhoa = txtTimkiem.getText().trim();
@@ -1991,12 +2058,13 @@ public class SepGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTimKiem;
+    private javax.swing.JButton btn_thongkecucbo;
     private javax.swing.JComboBox<String> chiNhanh_cbb;
     private javax.swing.JComboBox<String> cmbChiNhanh;
     private de.wannawork.jcalendar.JCalendarComboBox cmbNBD;
     private de.wannawork.jcalendar.JCalendarComboBox cmbNKT;
     private javax.swing.JButton dangXuatBtn;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton dangxuat_btn2;
     private de.wannawork.jcalendar.JCalendarComboBox jCalendarComboBox1;
     private de.wannawork.jcalendar.JCalendarComboBox jCalendarComboBox2;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -2033,6 +2101,7 @@ public class SepGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -2046,7 +2115,6 @@ public class SepGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -2064,6 +2132,7 @@ public class SepGUI extends javax.swing.JFrame {
     private javax.swing.JLabel tenCty;
     private javax.swing.JTextField thanhTimKiem;
     private javax.swing.JPanel thongTinNhanVien;
+    private javax.swing.JTabbedPane thongkecucbo_tab;
     private javax.swing.JButton timKiem_btn1;
     private javax.swing.JTextField txtTimkiem;
     private javax.swing.JLabel xinChaoText;

@@ -80,21 +80,25 @@ public class PhongBanDAO {
     }
 
     // 4. Thêm phòng ban mới
+
     public boolean themPhongBan(PhongBan_DTO pb) {
         String sql = "INSERT INTO PhongBan (MaPB, TenPB, MaCN) VALUES (?, ?, ?)";
+        Connection conn = null;
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, pb.getMaPB());
             ps.setString(2, pb.getTenPB());
             ps.setString(3, pb.getMaCN());
 
-            int rows = ps.executeUpdate();
-            database.closeConnection(conn);
-            return rows > 0;
+            // int rows = ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            database.closeConnection(conn); // Đảm bảo nhả Lock cho Replication
         }
-        return false;
     }
+
 }

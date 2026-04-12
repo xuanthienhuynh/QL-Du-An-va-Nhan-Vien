@@ -6,9 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class DuAnDAO {
+
+    // 1. LẤY DANH SÁCH DỰ ÁN
     public ArrayList<DuAn_DTO> layDanhSachDuAn() {
         ArrayList<DuAn_DTO> list = new ArrayList<>();
         String sql = "SELECT DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai, "
@@ -17,14 +18,15 @@ public class DuAnDAO {
                 + "LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA "
                 + "GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai";
 
+        Connection conn = null;
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 DuAn_DTO da = new DuAn_DTO();
-                da.setMaDA(rs.getString("MaDA"));
+                da.setMaDA(rs.getString("MaDA").trim());
                 da.setTenDA(rs.getString("TenDA"));
                 da.setKinhPhi(rs.getDouble("KinhPhi"));
                 da.setDoanhThu(rs.getDouble("DoanhThu"));
@@ -32,280 +34,105 @@ public class DuAnDAO {
                 da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
                 da.setTrangThai(rs.getString("TrangThai"));
 
-                // Cắt chuỗi 'CN_HCM,CN_HN' thành List để nạp vào DTO
                 String chuoiCN = rs.getString("CacChiNhanh");
                 if (chuoiCN != null && !chuoiCN.isEmpty()) {
-                    List<String> listCN = Arrays.asList(chuoiCN.split(","));
-                    da.setDanhSachMaCN(new ArrayList<>(listCN));
+                    da.setDanhSachMaCN(new ArrayList<>(Arrays.asList(chuoiCN.split(","))));
                 }
-
                 list.add(da);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    public java.util.ArrayList<DTO.DuAn_DTO> thongKeDacBietDuAn(String kieuThongKe, String maCN, java.util.Date ngayBD,
-            java.util.Date ngayKT, String sapXep) {
-        java.util.ArrayList<DTO.DuAn_DTO> list = new java.util.ArrayList<>();
-
-        String select = "";
-        // SỬA LỖI 1: Phải JOIN với DuAn_ChiNhanh vì DA không còn cột MaCN
-        String join = " FROM DuAn DA LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA ";
-        String where = " WHERE 1=1 ";
-        String group = "";
-        String order = "";
-
-        if (ngayBD != null) {
-            where += " AND DA.NgayBatDau >= ? ";
-        }
-        if (ngayKT != null) {
-            where += " AND DA.NgayKetThuc <= ? ";
-        }
-
-        // 1. XỬ LÝ 5 KIỂU THỐNG KÊ (Dùng STRING_AGG để gom chi nhánh)
-        if (kieuThongKe.contains("doanh thu")) {
-            select = "SELECT TOP 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, DA.DoanhThu AS ChiSo ";
-            group = " GROUP BY DA.MaDA, DA.TenDA, DA.DoanhThu ";
-        } else if (kieuThongKe.contains("kinh phí")) {
-            select = "SELECT TOP 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, DA.KinhPhi AS ChiSo ";
-            group = " GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi ";
-        } else if (kieuThongKe.contains("lâu nhất")) {
-            select = "SELECT TOP 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, DATEDIFF(day, DA.NgayBatDau, DA.NgayKetThuc) AS ChiSo ";
-            group = " GROUP BY DA.MaDA, DA.TenDA, DA.NgayBatDau, DA.NgayKetThuc ";
-        } else if (kieuThongKe.contains("Deadline")) {
-            select = "SELECT TOP 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, DATEDIFF(day, GETDATE(), DA.NgayKetThuc) AS ChiSo ";
-            where += " AND DA.NgayKetThuc >= GETDATE() ";
-            group = " GROUP BY DA.MaDA, DA.TenDA, DA.NgayKetThuc ";
-        } else if (kieuThongKe.contains("quy mô")) {
-            select = "SELECT TOP 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, COUNT(DISTINCT PC.MaNV) AS ChiSo ";
-            join += " LEFT JOIN PhanCong PC ON DA.MaDA = PC.MaDA ";
-            group = " GROUP BY DA.MaDA, DA.TenDA ";
-        }
-
-        // 2. XỬ LÝ LỌC THEO CHI NHÁNH (Lọc trên bảng DuAn_ChiNhanh)
-        if (maCN != null && !maCN.toLowerCase().contains("tất cả") && !maCN.isEmpty()) {
-            where += " AND DACN.MaCN = '" + maCN + "' ";
-        }
-
-        // 3. XỬ LÝ SẮP XẾP
-        if (sapXep != null && sapXep.contains("giảm")) {
-            order = " ORDER BY ChiSo DESC ";
-        } else {
-            order = " ORDER BY ChiSo ASC ";
-        }
-
-        String sql = select + join + where + group + order;
-
-        try {
-            java.sql.Connection conn = database.createConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
-
-            int paramIndex = 1;
-            if (ngayBD != null) {
-                ps.setDate(paramIndex++, new java.sql.Date(ngayBD.getTime()));
-            }
-            if (ngayKT != null) {
-                ps.setDate(paramIndex++, new java.sql.Date(ngayKT.getTime()));
-            }
-
-            java.sql.ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                DTO.DuAn_DTO da = new DTO.DuAn_DTO();
-                da.setMaDA(rs.getString("MaDA"));
-                da.setTenDA(rs.getString("TenDA"));
-
-                // SỬA LỖI 2: Lấy chuỗi chi nhánh, cắt ra và nạp vào List
-                String chuoiCN = rs.getString("CacChiNhanh");
-                if (chuoiCN != null && !chuoiCN.isEmpty()) {
-                    da.setDanhSachMaCN(new java.util.ArrayList<>(java.util.Arrays.asList(chuoiCN.split(","))));
-                }
-
-                da.setDoanhThu(rs.getDouble("ChiSo"));
-                list.add(da);
-            }
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
+    // 2. THÊM DỰ ÁN MỚI (Cần Transaction để đồng bộ sang bảng trung gian)
     public boolean themDuAn(DuAn_DTO da) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                conn.setAutoCommit(false); // Tắt Auto Commit
+        String sqlDA = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlDACN = "INSERT INTO DuAn_ChiNhanh (MaDA, MaCN) VALUES (?, ?)";
 
-                // BƯỚC 1: Thêm vào bảng DuAn (Đã bỏ cột MaCN)
-                String sqlDA = "INSERT INTO DuAn (MaDA, TenDA, KinhPhi, DoanhThu, NgayBatDau, NgayKetThuc) VALUES (?, ?, ?, ?, ?, ?)";
-                PreparedStatement psDA = conn.prepareStatement(sqlDA);
-                psDA.setString(1, da.getMaDA());
-                psDA.setString(2, da.getTenDA());
-                psDA.setDouble(3, da.getKinhPhi());
-                psDA.setDouble(4, da.getDoanhThu());
-                psDA.setDate(5, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
-                psDA.setDate(6, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                psDA.executeUpdate();
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            conn.setAutoCommit(false); // Bắt đầu Transaction
 
-                // BƯỚC 2: Thêm danh sách chi nhánh vào bảng DuAn_ChiNhanh
-                String sqlDACN = "INSERT INTO DuAn_ChiNhanh (MaDA, MaCN) VALUES (?, ?)";
+            // Chèn vào bảng DuAn
+            PreparedStatement psDA = conn.prepareStatement(sqlDA);
+            psDA.setString(1, da.getMaDA());
+            psDA.setString(2, da.getTenDA());
+            psDA.setDouble(3, da.getKinhPhi());
+            psDA.setDouble(4, da.getDoanhThu());
+            psDA.setObject(5, da.getNgayBatDau());
+            psDA.setObject(6, da.getNgayKetThuc());
+            psDA.setString(7, da.getTrangThai());
+            psDA.executeUpdate();
+
+            // Chèn vào bảng DuAn_ChiNhanh cho từng chi nhánh được chọn
+            if (da.getDanhSachMaCN() != null) {
                 PreparedStatement psDACN = conn.prepareStatement(sqlDACN);
-                if (da.getDanhSachMaCN() != null) {
-                    for (String maCN : da.getDanhSachMaCN()) {
-                        psDACN.setString(1, da.getMaDA());
-                        psDACN.setString(2, maCN);
-                        psDACN.executeUpdate();
-                    }
+                for (String maCN : da.getDanhSachMaCN()) {
+                    psDACN.setString(1, da.getMaDA());
+                    psDACN.setString(2, maCN);
+                    psDACN.executeUpdate();
                 }
-
-                conn.commit(); // Thành công thì lưu tất cả
-                return true;
-
-            } catch (Exception e) {
-                try {
-                    conn.rollback();
-                } catch (Exception ex) {
-                } // Lỗi thì hủy hết
-                e.printStackTrace();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                } catch (Exception ex) {
-                }
-                database.closeConnection(conn);
             }
-        }
-        return false;
-    }
 
-    // ========================================================
-    // 3. SỬA DỮ LIỆU (UPDATE) - Cập nhật dự án
-    // ========================================================
-    public boolean capNhatDuAn(DuAn_DTO da) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
+            conn.commit(); // Hoàn tất Transaction
+            return true;
+        } catch (Exception e) {
             try {
-                conn.setAutoCommit(false);
-
-                // BƯỚC 1: Cập nhật bảng DuAn
-                String sqlDA = "UPDATE DuAn SET TenDA=?, KinhPhi=?, DoanhThu=?, NgayBatDau=?, NgayKetThuc=? WHERE MaDA=?";
-                PreparedStatement psDA = conn.prepareStatement(sqlDA);
-                psDA.setString(1, da.getTenDA());
-                psDA.setDouble(2, da.getKinhPhi());
-                psDA.setDouble(3, da.getDoanhThu());
-                psDA.setDate(4, da.getNgayBatDau() != null ? new java.sql.Date(da.getNgayBatDau().getTime()) : null);
-                psDA.setDate(5, da.getNgayKetThuc() != null ? new java.sql.Date(da.getNgayKetThuc().getTime()) : null);
-                psDA.setString(6, da.getMaDA());
-                psDA.executeUpdate();
-
-                // BƯỚC 2: Xóa sạch danh sách chi nhánh cũ của dự án này
-                String sqlDeleteCN = "DELETE FROM DuAn_ChiNhanh WHERE MaDA=?";
-                PreparedStatement psDelCN = conn.prepareStatement(sqlDeleteCN);
-                psDelCN.setString(1, da.getMaDA());
-                psDelCN.executeUpdate();
-
-                // BƯỚC 3: Insert lại danh sách chi nhánh mới
-                String sqlInsertCN = "INSERT INTO DuAn_ChiNhanh (MaDA, MaCN) VALUES (?, ?)";
-                PreparedStatement psInsertCN = conn.prepareStatement(sqlInsertCN);
-                if (da.getDanhSachMaCN() != null) {
-                    for (String maCN : da.getDanhSachMaCN()) {
-                        psInsertCN.setString(1, da.getMaDA());
-                        psInsertCN.setString(2, maCN);
-                        psInsertCN.executeUpdate();
-                    }
-                }
-
-                conn.commit();
-                return true;
-
-            } catch (Exception e) {
-                try {
+                if (conn != null)
                     conn.rollback();
-                } catch (Exception ex) {
-                }
-                e.printStackTrace();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                } catch (Exception ex) {
-                }
-                database.closeConnection(conn);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+            e.printStackTrace();
+            return false;
+        } finally {
+            database.closeConnection(conn);
         }
-        return false;
     }
 
-    // ========================================================
-    // 4. XÓA DỮ LIỆU (DELETE) - Hủy/Xóa dự án
-    // ========================================================
-    public boolean xoaDuAn(String maDA) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                conn.setAutoCommit(false);
-
-                // Xóa bảng con PhanCong
-                String sqlPhanCong = "DELETE FROM PhanCong WHERE MaDA = ?";
-                PreparedStatement psPhanCong = conn.prepareStatement(sqlPhanCong);
-                psPhanCong.setString(1, maDA);
-                psPhanCong.executeUpdate();
-
-                // Xóa bảng con DuAn_ChiNhanh
-                String sqlDACN = "DELETE FROM DuAn_ChiNhanh WHERE MaDA = ?";
-                PreparedStatement psDACN = conn.prepareStatement(sqlDACN);
-                psDACN.setString(1, maDA);
-                psDACN.executeUpdate();
-
-                // Xóa bảng cha DuAn
-                String sqlDuAn = "DELETE FROM DuAn WHERE MaDA = ?";
-                PreparedStatement psDuAn = conn.prepareStatement(sqlDuAn);
-                psDuAn.setString(1, maDA);
-                int rowsAffected = psDuAn.executeUpdate();
-
-                conn.commit();
-                return rowsAffected > 0;
-
-            } catch (Exception e) {
-                try {
-                    conn.rollback();
-                } catch (Exception ex) {
-                }
-                e.printStackTrace();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                } catch (Exception ex) {
-                }
-                database.closeConnection(conn);
-            }
+    // 3. CẬP NHẬT TRẠNG THÁI (Đơn giản)
+    public boolean capNhatTrangThaiDuAn(DuAn_DTO da) {
+        String sql = "UPDATE DuAn SET TrangThai = ? WHERE MaDA = ?";
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, da.getTrangThai());
+            ps.setString(2, da.getMaDA());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            database.closeConnection(conn);
         }
-        return false;
     }
 
-    public DTO.DuAn_DTO layThongTinDuAn(String maDA) {
-        DTO.DuAn_DTO da = null;
-
-        // --- ĐÃ FIX: Thay DA.* bằng danh sách các cột cụ thể để không bị dính cột
-        // rowguid của Replication
+    // 4. LẤY THÔNG TIN CHI TIẾT
+    public DuAn_DTO layThongTinDuAn(String maDA) {
+        DuAn_DTO da = null;
         String sql = "SELECT DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai, "
                 + "STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh "
-                + "FROM DuAn DA LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA "
+                + "FROM DuAn DA "
+                + "LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA "
                 + "WHERE DA.MaDA = ? "
                 + "GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai";
 
+        Connection conn = null;
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, maDA);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                da = new DTO.DuAn_DTO();
-                da.setMaDA(rs.getString("MaDA"));
+                da = new DuAn_DTO();
+                da.setMaDA(rs.getString("MaDA").trim());
                 da.setTenDA(rs.getString("TenDA"));
                 da.setKinhPhi(rs.getDouble("KinhPhi"));
                 da.setDoanhThu(rs.getDouble("DoanhThu"));
@@ -318,29 +145,176 @@ public class DuAnDAO {
                     da.setDanhSachMaCN(new ArrayList<>(Arrays.asList(chuoiCN.split(","))));
                 }
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return da;
     }
 
-    public boolean capNhatTrangThaiDuAn(DTO.DuAn_DTO da) {
-        Connection conn = database.createConnection();
-        if (conn != null) {
-            try {
-                String sql = "UPDATE DuAn SET TrangThai = ? WHERE MaDA = ?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, da.getTrangThai());
-                ps.setString(2, da.getMaDA());
-                return ps.executeUpdate() > 0;
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                database.closeConnection(conn);
+    public ArrayList<String[]> layThongKeDuAn() {
+        ArrayList<String[]> list = new ArrayList<>();
+        // Truy vấn lấy: Mã DA, Tên DA, Tên PB (của nhân viên tham gia đầu tiên), và
+        // Tổng số nhân viên
+        String sql = "SELECT da.MaDA, da.TenDA, " +
+                "ISNULL((SELECT TOP 1 pb.TenPB FROM PhanCong pc JOIN NhanVien nv ON pc.MaNV = nv.MaNV " +
+                "JOIN PhongBan pb ON nv.MaPB = pb.MaPB WHERE pc.MaDA = da.MaDA), N'Chưa có') as TenPB, " +
+                "(SELECT COUNT(*) FROM PhanCong pc WHERE pc.MaDA = da.MaDA) as SoNV " +
+                "FROM DuAn da";
+
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[4];
+                row[0] = rs.getString("MaDA").trim();
+                row[1] = rs.getString("TenDA");
+                row[2] = rs.getString("TenPB");
+                row[3] = rs.getString("SoNV") + " Nhân viên";
+                list.add(row);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
-        return false;
+        return list;
     }
 
+    public ArrayList<DuAn_DTO> thongKeDacBietDuAn(String kieu, String maCN, java.util.Date ngayBD,
+            java.util.Date ngayKT, String sapXep) {
+        ArrayList<DuAn_DTO> list = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = database.createConnection();
+            StringBuilder sql = new StringBuilder();
+
+            // 1. CHỌN CỘT DỮ LIỆU CƠ BẢN
+            sql.append("SELECT top 10 DA.MaDA, DA.TenDA, STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh, ");
+
+            // 2. XÁC ĐỊNH CHỈ SỐ THỐNG KÊ DỰA VÀO COMBOBOX
+            String metricCol = "";
+            if (kieu.contains("doanh thu")) {
+                metricCol = "DA.DoanhThu";
+            } else if (kieu.contains("kinh phí")) {
+                metricCol = "DA.KinhPhi";
+            } else if (kieu.contains("lâu nhất") || kieu.contains("Deadline")) {
+                // Tính số ngày chênh lệch giữa Ngày bắt đầu và Ngày kết thúc
+                metricCol = "ISNULL(DATEDIFF(day, DA.NgayBatDau, DA.NgayKetThuc), 0)";
+            } else if (kieu.contains("quy mô")) {
+                // Đếm số lượng nhân viên tham gia dự án
+                metricCol = "ISNULL((SELECT COUNT(*) FROM PhanCong PC WHERE PC.MaDA = DA.MaDA), 0)";
+            } else {
+                metricCol = "DA.DoanhThu"; // Mặc định
+            }
+            // Đặt tên cột ảo là GiaTriThongKe
+            sql.append(metricCol).append(" AS GiaTriThongKe ");
+
+            sql.append("FROM DuAn DA ");
+            sql.append("LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA ");
+            sql.append("WHERE 1=1 ");
+
+            // 3. LỌC THEO NGÀY THÁNG
+            if (ngayBD != null) {
+                sql.append("AND DA.NgayBatDau >= ? ");
+            }
+            if (ngayKT != null) {
+                sql.append("AND DA.NgayKetThuc <= ? ");
+            }
+
+            // Gộp nhóm để dùng STRING_AGG
+            sql.append("GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc ");
+
+            // 4. LỌC THEO CHI NHÁNH
+            if (maCN != null && !maCN.equals("Tất cả Chi Nhánh") && !maCN.equals("Chi Nhánh")) {
+                sql.append("HAVING STRING_AGG(DACN.MaCN, ',') LIKE ? ");
+            }
+
+            // 5. SẮP XẾP TĂNG / GIẢM
+            String orderDir = (sapXep != null && sapXep.contains("giảm")) ? "DESC" : "ASC";
+            sql.append("ORDER BY GiaTriThongKe ").append(orderDir);
+
+            PreparedStatement ps = conn.prepareStatement(sql.toString());
+
+            // 6. GÁN THAM SỐ VÀO DẤU "?" CHUẨN XÁC
+            int paramIndex = 1;
+            if (ngayBD != null) {
+                ps.setDate(paramIndex++, new java.sql.Date(ngayBD.getTime()));
+            }
+            if (ngayKT != null) {
+                ps.setDate(paramIndex++, new java.sql.Date(ngayKT.getTime()));
+            }
+            if (maCN != null && !maCN.equals("Tất cả Chi Nhánh") && !maCN.equals("Chi Nhánh")) {
+                ps.setString(paramIndex++, "%" + maCN + "%");
+            }
+
+            // 7. CHẠY VÀ ĐỔ DỮ LIỆU RA
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DuAn_DTO da = new DuAn_DTO();
+                da.setMaDA(rs.getString("MaDA").trim());
+                da.setTenDA(rs.getString("TenDA"));
+
+                // LƯU Ý QUAN TRỌNG:
+                // Vì SepGUI dùng da.getDoanhThu() để vẽ biểu đồ nên ta phải gán giá trị thống
+                // kê vào biến DoanhThu
+                da.setDoanhThu(rs.getDouble("GiaTriThongKe"));
+
+                String chuoiCN = rs.getString("CacChiNhanh");
+                if (chuoiCN != null && !chuoiCN.isEmpty()) {
+                    da.setDanhSachMaCN(new ArrayList<>(Arrays.asList(chuoiCN.split(","))));
+                }
+                list.add(da);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection(conn); // Luôn đóng kết nối bảo vệ hệ thống Replication
+        }
+        return list;
+    }
+
+    public boolean capNhatDuAn(DuAn_DTO da) {
+        String sql = "UPDATE DuAn SET TenDA = ?, KinhPhi = ?, DoanhThu = ?, NgayBatDau = ?, NgayKetThuc = ?, TrangThai = ? WHERE MaDA = ?";
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, da.getTenDA());
+            ps.setDouble(2, da.getKinhPhi());
+            ps.setDouble(3, da.getDoanhThu());
+            ps.setObject(4, da.getNgayBatDau());
+            ps.setObject(5, da.getNgayKetThuc());
+            ps.setString(6, da.getTrangThai());
+            ps.setString(7, da.getMaDA());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            database.closeConnection(conn);
+        }
+    }
+
+    // Bổ sung hàm xóa bị thiếu mà BUS đang gọi
+    public boolean xoaDuAn(String maDA) {
+        String sql = "DELETE FROM DuAn WHERE MaDA = ?";
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maDA);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            database.closeConnection(conn);
+        }
+    }
 }

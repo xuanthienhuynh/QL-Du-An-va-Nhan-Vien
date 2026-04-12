@@ -366,63 +366,59 @@ public class PanelAddNhanVien extends javax.swing.JPanel {
 
         private void confirm_btnActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-                        // 1. KIỂM TRA THÔNG TIN NHẬP LIỆU (VALIDATION)
+                        // 1. KIỂM TRA THÔNG TIN NHẬP LIỆU
                         String hoTen = fieldName.getText().trim();
                         String gioiTinh = (String) gioiTinh_cbb.getSelectedItem();
                         String chiNhanh = (String) chiNhanh_cbb.getSelectedItem();
                         String phongBan = (String) maPB_cbb.getSelectedItem();
 
-                        // Kiểm tra họ tên không được để trống
                         if (hoTen.isEmpty()) {
                                 javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập Họ tên nhân viên!",
                                                 "Thông báo", javax.swing.JOptionPane.WARNING_MESSAGE);
                                 fieldName.requestFocus();
                                 return;
                         }
-
-                        // Kiểm tra nếu chưa chọn chi nhánh hoặc phòng ban (nếu có item mặc định
-                        // "--Chọn--")
                         if (chiNhanh == null || phongBan == null) {
                                 javax.swing.JOptionPane.showMessageDialog(this,
                                                 "Vui lòng chọn đầy đủ Chi nhánh và Phòng ban!");
                                 return;
                         }
 
-                        // 2. HỎI XÁC NHẬN (YES/NO)
+                        // 2. HỎI XÁC NHẬN
                         int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
                                         "Bạn có chắc chắn muốn thêm nhân viên: " + hoTen + " không?",
-                                        "Xác nhận thêm mới",
-                                        javax.swing.JOptionPane.YES_NO_OPTION,
+                                        "Xác nhận thêm mới", javax.swing.JOptionPane.YES_NO_OPTION,
                                         javax.swing.JOptionPane.QUESTION_MESSAGE);
-
                         if (confirm != javax.swing.JOptionPane.YES_OPTION) {
-                                return; // Người dùng chọn No hoặc đóng cửa sổ -> thoát
+                                return;
                         }
 
-                        // 3. THỰC THI THÊM (SỬ DỤNG MÃ TỰ SINH)
+                        // 3. THỰC THI THÊM
                         BUS.NhanVienBUS bus = new BUS.NhanVienBUS();
 
+                        // ĐÂY LÀ CHỖ KHỞI TẠO nv
                         DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
 
-                        // Gọi hàm tự tạo mã từ BUS mà bạn đã viết
                         String maMoi = bus.taoMaNVMoi();
                         nv.setMaNV(maMoi);
-
                         nv.setHoTen(hoTen);
                         nv.setGioiTinh(gioiTinh);
                         nv.setMaCN(chiNhanh);
                         nv.setMaPB(phongBan);
                         nv.setTinhTrang(true);
-                        // Lấy ngày sinh từ JCalendar nếu có
+
                         if (jCalendarComboBox1.getDate() != null) {
                                 nv.setNgaySinh(new java.sql.Date(jCalendarComboBox1.getDate().getTime()));
                         }
 
+                        // LẤY LƯƠNG VÀ ĐƯA XUỐNG DƯỚI NÀY
+                        String luongStr = (String) maPB_cbb1.getSelectedItem();
+                        nv.setLuong(Double.parseDouble(luongStr));
+
+                        // 4. GỌI DATABASE
                         if (bus.themNhanVien(nv)) {
                                 javax.swing.JOptionPane.showMessageDialog(this,
                                                 "Thêm thành công! Mã nhân viên mới là: " + maMoi);
-
-                                // Đóng cửa sổ sau khi hoàn tất
                                 if (parentDialog != null) {
                                         parentDialog.dispose();
                                 }

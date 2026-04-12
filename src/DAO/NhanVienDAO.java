@@ -1,15 +1,12 @@
 package DAO;
 
-import DTO.NhanVien_DTO; // Nhớ kiểm tra kỹ tên file DTO này nhé
+import DTO.NhanVien_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-// KHÔNG CẦN import database; vì nó nằm cùng gói DAO rồi
-
 public class NhanVienDAO {
 
-    // xuanthien
     public NhanVien_DTO checkLogin(String user, String pass) {
         NhanVien_DTO nv = null;
         Connection conn = null;
@@ -32,13 +29,10 @@ public class NhanVienDAO {
 
             if (rs.next()) {
                 nv = new NhanVien_DTO();
-                // Lấy các thông tin cơ bản (Có trim() để tránh lỗi khoảng trắng)
                 nv.setMaNV(rs.getString("MaNV").trim());
                 nv.setHoTen(rs.getString("HoTen").trim());
                 nv.setVaiTro(rs.getString("VaiTro") != null ? rs.getString("VaiTro").trim() : "");
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
-
-                // --- BỔ SUNG LẤY FULL THÔNG TIN ĐỂ HIỂN THỊ TRÊN PROFILE ---
                 nv.setGioiTinh(rs.getString("GioiTinh"));
                 nv.setLuong(rs.getDouble("Luong"));
 
@@ -48,7 +42,6 @@ public class NhanVienDAO {
                 String maCN = rs.getString("MaCN");
                 nv.setMaCN(maCN != null ? maCN.trim() : "");
 
-                // Lấy địa chỉ
                 nv.setDcSoNha(rs.getString("DcSoNha"));
                 nv.setDcPhuong(rs.getString("DcPhuong"));
                 nv.setDcTinh(rs.getString("DcTinh"));
@@ -62,14 +55,13 @@ public class NhanVienDAO {
         return nv;
     }
 
-    // Hàm lấy danh sách nhân viên (Trả về ArrayList)
     public java.util.ArrayList<DTO.NhanVien_DTO> layDanhSachNhanVien() {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        // THÊM: Cột Luong vào câu lệnh SQL
         String sql = "SELECT MaNV, HoTen, VaiTro, TinhTrang, MaCN, MaPB, Luong FROM NhanVien";
+        Connection conn = null;
 
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             java.sql.ResultSet rs = ps.executeQuery();
 
@@ -77,30 +69,27 @@ public class NhanVienDAO {
                 DTO.NhanVien_DTO nv = new DTO.NhanVien_DTO();
                 nv.setMaNV(rs.getString("MaNV"));
                 nv.setHoTen(rs.getString("HoTen"));
-
-                // QUAN TRỌNG: Gán giá trị lương vào DTO
                 nv.setLuong(rs.getDouble("Luong"));
-
                 nv.setMaPB(rs.getString("MaPB"));
                 nv.setVaiTro(rs.getString("VaiTro"));
                 nv.setTinhTrang(rs.getBoolean("TinhTrang"));
                 list.add(nv);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    // Thêm vào file DAO.NhanVienDAO.java
     public java.util.ArrayList<DTO.NhanVien_DTO> timKiemNhanVien(String tuKhoa) {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-        // FIX: Thêm MaPB vào SELECT
         String sql = "SELECT MaNV, HoTen, VaiTro, MaCN, MaPB FROM NhanVien WHERE MaNV LIKE ? OR HoTen LIKE ? OR VaiTro LIKE ?";
+        Connection conn = null;
 
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
 
             String keyword = "%" + tuKhoa + "%";
@@ -115,84 +104,84 @@ public class NhanVienDAO {
                 nv.setHoTen(rs.getString("HoTen"));
                 nv.setVaiTro(rs.getString("VaiTro"));
                 nv.setMaCN(rs.getString("MaCN"));
-                // FIX: Nạp MaPB vào object
                 nv.setMaPB(rs.getString("MaPB") != null ? rs.getString("MaPB").trim() : "");
                 list.add(nv);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    // 1. Lấy danh sách Mã Phòng Ban để đổ vào ComboBox
     public java.util.ArrayList<String> layDanhSachMaPB(String maCN) {
         java.util.ArrayList<String> list = new java.util.ArrayList<>();
-
-        // Chỉ lấy PB thuộc chi nhánh được chọn
         String sql = "SELECT MaPB FROM PhongBan WHERE MaCN = ?";
+        Connection conn = null;
 
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, maCN); // Truyền mã chi nhánh vào
+            ps.setString(1, maCN);
 
             java.sql.ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(rs.getString("MaPB"));
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    // 2. Lấy danh sách Mã Chi Nhánh
     public java.util.ArrayList<String> layDanhSachMaCN() {
         java.util.ArrayList<String> list = new java.util.ArrayList<>();
         String sql = "SELECT MaCN FROM ChiNhanh";
+        Connection conn = null;
+
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(rs.getString("MaCN"));
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    // 3. Lấy Mã Nhân Viên cuối cùng (Ví dụ: NV09)
     public String layMaNVCuoiCung() {
         String ma = "";
-        // SỬA CÂU SQL: Ưu tiên sắp xếp theo độ dài (LEN) trước
         String sql = "SELECT TOP 1 MaNV FROM NhanVien ORDER BY LEN(MaNV) DESC, MaNV DESC";
-
+        Connection conn = null;
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ma = rs.getString("MaNV");
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return ma;
     }
 
-    // 4. Hàm Thêm Nhân Viên
     public boolean themNhanVien(DTO.NhanVien_DTO nv) {
+        Connection conn = null;
         String sql = "INSERT INTO NhanVien(MaNV, HoTen, GioiTinh, NgaySinh, Luong, MaPB, MaCN, VaiTro, MatKhau, TinhTrang) "
                 + "VALUES(?,?,?,?,?,?,?,?,?,?)";
         try {
-            Connection conn = database.createConnection();
+            conn = database.createConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, nv.getMaNV());
             ps.setString(2, nv.getHoTen());
@@ -201,13 +190,15 @@ public class NhanVienDAO {
             ps.setDouble(5, nv.getLuong());
             ps.setString(6, nv.getMaPB());
             ps.setString(7, nv.getMaCN());
-            ps.setString(8, "NhanVien"); // Mặc định là nhân viên thường
-            ps.setString(9, "123"); // Mật khẩu mặc định
+            ps.setString(8, "NhanVien");
+            ps.setString(9, "123");
             ps.setBoolean(10, nv.getTinhTrang());
-
-            return ps.executeUpdate() > 0;
+            int result = ps.executeUpdate();
+            return result > 0;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return false;
     }
@@ -215,8 +206,10 @@ public class NhanVienDAO {
     public DTO.NhanVien_DTO layThongTinNhanVien(String maNV) {
         DTO.NhanVien_DTO nv = null;
         String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
+        Connection conn = null;
+
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, maNV);
             java.sql.ResultSet rs = ps.executeQuery();
@@ -235,18 +228,19 @@ public class NhanVienDAO {
                 nv.setDcPhuong(rs.getString("DcPhuong"));
                 nv.setDcTinh(rs.getString("DcTinh"));
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return nv;
     }
 
-    // 2. Cập nhật thông tin nhân viên
     public boolean capNhatNhanVien(DTO.NhanVien_DTO nv) {
-        String sql = "UPDATE NhanVien SET HoTen=?, GioiTinh=?, NgaySinh=?, Luong=?, MaPB=?, MaCN=? WHERE MaNV=?";
+        Connection conn = null;
+        String sql = "UPDATE NhanVien SET HoTen=?, GioiTinh=?, NgaySinh=?, Luong=?, MaPB=?, MaCN=?, VaiTro=? WHERE MaNV=?";
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, nv.getHoTen());
             ps.setString(2, nv.getGioiTinh());
@@ -255,55 +249,52 @@ public class NhanVienDAO {
             ps.setString(5, nv.getMaPB());
             ps.setString(6, nv.getMaCN());
             ps.setString(7, nv.getVaiTro());
-            ps.setString(7, nv.getMaNV()); // Điều kiện WHERE
+            ps.setString(8, nv.getMaNV());
 
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return false;
     }
 
-    // 3. Cho nghỉ việc (Đổi tình trạng thành False/0)
     public boolean choNghiViec(String maNV) {
+        Connection conn = null;
         String sql = "UPDATE NhanVien SET TinhTrang = 0 WHERE MaNV = ?";
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, maNV);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return false;
     }
 
-    // thong ke
     public java.util.ArrayList<DTO.NhanVien_DTO> thongKeLuongNhanVien(String maCN, String maPB, String sapXep) {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-
-        // Bắt đầu câu SQL
         String sql = "SELECT TOP 10 MaNV, HoTen, MaPB, Luong FROM NhanVien WHERE TinhTrang = 1 ";
 
-        // CHỈ GIỮ LẠI 1 ĐIỀU KIỆN IF CHO CHI NHÁNH (Đã xóa cái cũ)
         if (maCN != null && !maCN.equals("Chi Nhánh") && !maCN.equals("Tất cả Chi Nhánh") && !maCN.isEmpty()) {
             sql += " AND NhanVien.MaCN = '" + maCN + "' ";
         }
-
-        // CHỈ GIỮ LẠI 1 ĐIỀU KIỆN IF CHO PHÒNG BAN (Đã xóa cái cũ)
         if (maPB != null && !maPB.equals("Phòng ban") && !maPB.equals("Tất cả Phòng Ban") && !maPB.isEmpty()) {
             sql += " AND NhanVien.MaPB = '" + maPB + "' ";
         }
-
-        // XỬ LÝ SẮP XẾP
         if (sapXep != null && sapXep.equals("Sắp xếp giảm ")) {
             sql += " ORDER BY Luong DESC";
         } else {
-            sql += " ORDER BY Luong ASC"; // Mặc định là tăng dần
+            sql += " ORDER BY Luong ASC";
         }
 
+        Connection conn = null;
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             java.sql.ResultSet rs = ps.executeQuery();
 
@@ -315,42 +306,36 @@ public class NhanVienDAO {
                 nv.setLuong(rs.getDouble("Luong"));
                 list.add(nv);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
-
         return list;
     }
 
-    // Thống kê dự án
     public java.util.ArrayList<DTO.NhanVien_DTO> thongKeTopDuAn(String maCN, String maPB, String sapXep) {
         java.util.ArrayList<DTO.NhanVien_DTO> list = new java.util.ArrayList<>();
-
         String sql = "SELECT TOP 10 NhanVien.MaNV, NhanVien.HoTen, NhanVien.MaPB, COUNT(PhanCong.MaDA) AS SoLuongDuAn "
                 + "FROM NhanVien LEFT JOIN PhanCong ON NhanVien.MaNV = PhanCong.MaNV " +
                 "WHERE NhanVien.TinhTrang = 1 ";
 
-        // CHỈ GIỮ LẠI 1 ĐIỀU KIỆN IF CHO CHI NHÁNH
         if (maCN != null && !maCN.equals("Chi Nhánh") && !maCN.equals("Tất cả Chi Nhánh") && !maCN.isEmpty()) {
             sql += " AND NhanVien.MaCN = '" + maCN + "' ";
         }
-
-        // CHỈ GIỮ LẠI 1 ĐIỀU KIỆN IF CHO PHÒNG BAN
         if (maPB != null && !maPB.equals("Phòng ban") && !maPB.equals("Tất cả Phòng Ban") && !maPB.isEmpty()) {
             sql += " AND NhanVien.MaPB = '" + maPB + "' ";
         }
-
         sql += " GROUP BY NhanVien.MaNV, NhanVien.HoTen, NhanVien.MaPB ";
-
         if (sapXep != null && sapXep.equals("Sắp xếp giảm ")) {
             sql += " ORDER BY SoLuongDuAn DESC";
         } else {
             sql += " ORDER BY SoLuongDuAn ASC";
         }
 
+        Connection conn = null;
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             java.sql.ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -361,20 +346,21 @@ public class NhanVienDAO {
                 nv.setLuong(rs.getDouble("SoLuongDuAn"));
                 list.add(nv);
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
 
-    // Lấy danh sách dự án (Mã + Tên) mà nhân viên tham gia
     public java.util.ArrayList<String> layDuAnCuaNhanVien(String maNV) {
         java.util.ArrayList<String> list = new java.util.ArrayList<>();
-        // Kết hợp bảng PhanCong và DuAn để lấy tên dự án
         String sql = "SELECT DuAn.MaDA, DuAn.TenDA FROM PhanCong JOIN DuAn ON PhanCong.MaDA = DuAn.MaDA WHERE PhanCong.MaNV = ?";
+        Connection conn = null;
+
         try {
-            java.sql.Connection conn = database.createConnection();
+            conn = database.createConnection();
             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, maNV);
             java.sql.ResultSet rs = ps.executeQuery();
@@ -384,12 +370,11 @@ public class NhanVienDAO {
                 list.add(stt + ") " + rs.getString("MaDA") + " - " + rs.getString("TenDA"));
                 stt++;
             }
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
         return list;
     }
-
-    // xuan thien
 }
