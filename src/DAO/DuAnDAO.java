@@ -280,11 +280,17 @@ public class DuAnDAO {
     }
 
     public boolean capNhatDuAn(DuAn_DTO da) {
-        String sql = "UPDATE DuAn SET TenDA = ?, KinhPhi = ?, DoanhThu = ?, NgayBatDau = ?, NgayKetThuc = ?, TrangThai = ? WHERE MaDA = ?";
+        String sqlUpdateDA = "UPDATE DuAn SET TenDA = ?, KinhPhi = ?, DoanhThu = ?, NgayBatDau = ?, NgayKetThuc = ?, TrangThai = ? WHERE MaDA = ?";
+        String sqlDeleteCN = "DELETE FROM DuAn_ChiNhanh WHERE MaDA = ?";
+        String sqlInsertCN = "INSERT INTO DuAn_ChiNhanh (MaDA, MaCN) VALUES (?, ?)";
+
         Connection conn = null;
         try {
             conn = database.createConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            conn.setAutoCommit(false); // Dùng Transaction để bảo vệ dữ liệu
+
+            // 1. Cập nhật bảng DuAn
+            PreparedStatement ps = conn.prepareStatement(sqlUpdateDA);
             ps.setString(1, da.getTenDA());
             ps.setDouble(2, da.getKinhPhi());
             ps.setDouble(3, da.getDoanhThu());
@@ -292,8 +298,31 @@ public class DuAnDAO {
             ps.setObject(5, da.getNgayKetThuc());
             ps.setString(6, da.getTrangThai());
             ps.setString(7, da.getMaDA());
-            return ps.executeUpdate() > 0;
+            ps.executeUpdate();
+
+            // 2. Xóa các chi nhánh cũ của dự án này
+            PreparedStatement psDel = conn.prepareStatement(sqlDeleteCN);
+            psDel.setString(1, da.getMaDA());
+            psDel.executeUpdate();
+
+            // 3. Chèn lại danh sách chi nhánh mới
+            if (da.getDanhSachMaCN() != null) {
+                PreparedStatement psIns = conn.prepareStatement(sqlInsertCN);
+                for (String maCN : da.getDanhSachMaCN()) {
+                    psIns.setString(1, da.getMaDA());
+                    psIns.setString(2, maCN);
+                    psIns.executeUpdate();
+                }
+            }
+
+            conn.commit(); // Hoàn tất
+            return true;
         } catch (Exception e) {
+            try {
+                if (conn != null)
+                    conn.rollback();
+            } catch (Exception ex) {
+            }
             e.printStackTrace();
             return false;
         } finally {
@@ -316,5 +345,45 @@ public class DuAnDAO {
         } finally {
             database.closeConnection(conn);
         }
+    }
+
+    public DuAn_DTO getChiTietDuAn(String maDA) {
+        DuAn_DTO da = null;
+        Connection conn = null;
+        try {
+            conn = database.createConnection();
+            // 1. Lấy thông tin cơ bản của dự án
+            String sql = "SELECT * FROM DuAn WHERE MaDA = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maDA);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                da = new DuAn_DTO();
+                da.setMaDA(rs.getString("MaDA"));
+                da.setTenDA(rs.getString("TenDA"));
+                // ... (bạn gán các trường kinh phí, doanh thu, ngày tháng như bình thường) ...
+
+                // --- BỔ SUNG ĐOẠN NÀY ĐỂ LẤY CHI NHÁNH ---
+                String sqlCN = "SELECT MaCN FROM DuAn_ChiNhanh WHERE MaDA = ?";
+                PreparedStatement psCN = conn.prepareStatement(sqlCN);
+                psCN.setString(1, maDA);
+                ResultSet rsCN = psCN.executeQuery();
+
+                java.util.List<String> listCN = new java.util.ArrayList<>();
+                while (rsCN.next()) {
+                    // Nhớ dùng .trim() để phòng trường hợp SQL bị dư khoảng trắng (VD: "CN_HCM ")
+                    listCN.add(rsCN.getString("MaCN").trim());
+                }
+                // Đưa danh sách chi nhánh vào đối tượng dự án
+                da.setDanhSachMaCN(listCN);
+                // -----------------------------------------
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
+        }
+        return da;
     }
 }
