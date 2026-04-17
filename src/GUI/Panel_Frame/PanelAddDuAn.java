@@ -73,7 +73,7 @@ public class PanelAddDuAn extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(541, 422));
 
-        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));

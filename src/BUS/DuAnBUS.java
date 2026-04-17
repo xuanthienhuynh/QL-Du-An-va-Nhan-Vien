@@ -159,4 +159,24 @@ public class DuAnBUS {
         return dao.capNhatDuAn(dto);
     }
 
+    // dinh
+    public java.util.ArrayList<Object[]> getDuAnDangLamCuaNhanVien(String maNV) {
+        // Kiểm tra an toàn
+        if (maNV == null || maNV.trim().isEmpty()) {
+            return new java.util.ArrayList<>();
+        }
+        DAO.DuAnDAO dao = new DAO.DuAnDAO();
+        return dao.layDanhSachDuAnDangLam(maNV);
+    }
+
+    // =========================================================================
+    // HÀM CHO TAB 3: GỌI DAO LẤY LỊCH SỬ DỰ ÁN
+    // =========================================================================
+    public java.util.ArrayList<Object[]> getLichSuDuAn(String maNV) {
+        if (maNV == null || maNV.trim().isEmpty()) {
+            return new java.util.ArrayList<>();
+        }
+        DAO.DuAnDAO dao = new DAO.DuAnDAO();
+        return dao.layLichSuDuAnCuaNhanVien(maNV);
+    }
 }

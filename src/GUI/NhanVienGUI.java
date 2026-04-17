@@ -4,6 +4,16 @@
  */
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
 /**
  *
  * @author huynh
@@ -17,18 +27,183 @@ public class NhanVienGUI extends javax.swing.JFrame {
         initComponents();
     }
 
+    private String maNVDangNhap;
+
+    public NhanVienGUI(String maNV) {
+        this.maNVDangNhap = maNV;
+        initComponents(); // Cho NetBeans vẽ cái UI kéo thả ra trước
+
+        // 1. Set chữ xin chào trên cái Header của NetBeans
+        xinChaoText.setText("Xin chào: " + this.maNVDangNhap);
+
+        // 2. Căn giữa màn hình và set kích thước
+        this.setSize(1300, 750);
+        this.setLocationRelativeTo(null);
+
+        // 3. Xóa 3 cái tab rác (tab1, tab2, tab3) do NetBeans tự sinh ra
+        jTabbedPane1.removeAll();
+
+        // 4. Nhét 3 cái Panel xịn sò của thành viên nhóm vào JTabbedPane của NetBeans
+        try {
+            // Tab 1: Thông tin
+            GUI.NhanVien_component.PanelThongTinCaNhanNV tab1 = new GUI.NhanVien_component.PanelThongTinCaNhanNV(
+                    this.maNVDangNhap);
+            jTabbedPane1.addTab("Thông tin cá nhân", tab1);
+
+            // Tab 2: Dự án đang làm
+            GUI.NhanVien_component.PanelDuAnDangLamNV tab2 = new GUI.NhanVien_component.PanelDuAnDangLamNV(
+                    this.maNVDangNhap);
+            jTabbedPane1.addTab("Dự án đang làm", tab2);
+
+            // Tab 3: Lịch sử dự án
+            GUI.NhanVien_component.PanelLichSuDuAnNV tab3 = new GUI.NhanVien_component.PanelLichSuDuAnNV(
+                    this.maNVDangNhap);
+            jTabbedPane1.addTab("Lịch sử dự án", tab3);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu các Tab: " + e.getMessage());
+        }
+    }
+
+    private void initCustomTabs() {
+        try {
+            // ==========================================
+            // 1.KHỔ CHỮ VÀ LẤY TÊN NHÂN VIÊN
+            // ==========================================
+            this.setSize(1300, 750);
+            this.setLocationRelativeTo(null);
+
+            String tenNhanVien = null;
+            try {
+                // Chỉ móc DB nếu mã NV không bị null
+                if (this.maNVDangNhap != null && !this.maNVDangNhap.isEmpty()) {
+                    java.sql.Connection conn = DAO.database.createConnection();
+                    java.sql.PreparedStatement ps = conn.prepareStatement("SELECT HoTen FROM NhanVien WHERE MaNV = ?");
+                    ps.setString(1, this.maNVDangNhap);
+                    java.sql.ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        tenNhanVien = rs.getString("HoTen");
+                    }
+                    conn.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("Lỗi load tên NV: " + ex.getMessage());
+            }
+
+            String tenHienThi = "NHÂN VIÊN"; // Giá trị mặc định an toàn nhất
+            if (tenNhanVien != null && !tenNhanVien.trim().isEmpty()) {
+                tenHienThi = tenNhanVien.toUpperCase();
+            } else if (this.maNVDangNhap != null && !this.maNVDangNhap.trim().isEmpty()) {
+                tenHienThi = this.maNVDangNhap.toUpperCase();
+            }
+
+            // ==========================================
+            // 3. TẠO BANNER HEADER
+            // ==========================================
+            JPanel pnlHeader = new JPanel(new BorderLayout());
+            pnlHeader.setBackground(new Color(0, 0, 153));
+            pnlHeader.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+            JLabel lblLogo = new JLabel("ABC GROUP");
+            lblLogo.setFont(new Font("Arial", Font.BOLD, 36));
+            lblLogo.setForeground(new Color(255, 102, 0)); // Màu cam chuẩn
+            pnlHeader.add(lblLogo, BorderLayout.WEST);
+
+            JPanel pnlRight = new JPanel(new java.awt.GridLayout(2, 1, 5, 5));
+            pnlRight.setOpaque(false);
+
+            // Xin chào + TÊN NHÂN VIÊN
+            JLabel lblChao = new JLabel("Xin chào: " + tenHienThi, javax.swing.SwingConstants.RIGHT);
+            lblChao.setFont(new Font("Arial", Font.BOLD, 16));
+            lblChao.setForeground(Color.WHITE);
+
+            JButton btnDangXuat = new JButton("Đăng xuất");
+            btnDangXuat.setFont(new Font("Arial", Font.BOLD, 12));
+            btnDangXuat.addActionListener(e -> {
+                this.dispose();
+                new GUI.DangNhap().setVisible(true);
+            });
+
+            pnlRight.add(lblChao);
+            pnlRight.add(btnDangXuat);
+            pnlHeader.add(pnlRight, BorderLayout.EAST);
+
+            // ==========================================
+            // 4. KHỞI TẠO 3 TAB
+            // ==========================================
+            JTabbedPane myTabbedPane = new JTabbedPane();
+            myTabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
+
+            // --- Xử lý Tab 1 ---
+            try {
+                // Nhét thẳng mã nhân viên vào trong ngoặc tròn luôn!
+                GUI.NhanVien_component.PanelThongTinCaNhanNV tab1 = new GUI.NhanVien_component.PanelThongTinCaNhanNV(
+                        this.maNVDangNhap);
+                if (tab1 != null)
+                    myTabbedPane.addTab("Thông tin cá nhân", tab1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // --- Xử lý Tab 2 ---
+            try {
+                // Nhét thẳng mã nhân viên vào trong ngoặc tròn luôn!
+                GUI.NhanVien_component.PanelDuAnDangLamNV tab2 = new GUI.NhanVien_component.PanelDuAnDangLamNV(
+                        this.maNVDangNhap);
+                if (tab2 != null)
+                    myTabbedPane.addTab("Dự án đang làm", tab2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // --- Xử lý Tab 3 ---
+            try {
+                // Nhét thẳng mã nhân viên vào trong ngoặc tròn luôn!
+                GUI.NhanVien_component.PanelLichSuDuAnNV tab3 = new GUI.NhanVien_component.PanelLichSuDuAnNV(
+                        this.maNVDangNhap);
+                if (tab3 != null)
+                    myTabbedPane.addTab("Lịch sử dự án", tab3);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            {
+            }
+
+            // ==========================================
+            // 5. RÁP VÀO JFRAME CHÍNH
+            // ==========================================
+            this.getContentPane().removeAll();
+            this.getContentPane().setLayout(new BorderLayout());
+            this.getContentPane().add(pnlHeader, BorderLayout.NORTH);
+            this.getContentPane().add(myTabbedPane, BorderLayout.CENTER);
+
+            this.revalidate();
+            this.repaint();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Gọi initCustomTabs trong constructor
+    {
+        initCustomTabs();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        sepGUI1 = new GUI.SepGUI();
         Header = new javax.swing.JPanel();
         tenCty = new javax.swing.JLabel();
         leftGroupHeader = new javax.swing.JPanel();
@@ -37,14 +212,11 @@ public class NhanVienGUI extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        pnListDuAnCuaToi = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1292, 720));
 
         Header.setBackground(new java.awt.Color(0, 0, 153));
         Header.setPreferredSize(new java.awt.Dimension(1280, 100));
@@ -101,8 +273,8 @@ public class NhanVienGUI extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(tenCty, javax.swing.GroupLayout.PREFERRED_SIZE, 319,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 311,
+                                        Short.MAX_VALUE)
                                 .addComponent(leftGroupHeader, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
         HeaderLayout.setVerticalGroup(
@@ -121,57 +293,58 @@ public class NhanVienGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1292, Short.MAX_VALUE));
+                        .addGap(0, 961, Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 673, Short.MAX_VALUE));
+                        .addGap(0, 646, Short.MAX_VALUE));
 
         jTabbedPane1.addTab("tab1", jPanel1);
-
-        pnListDuAnCuaToi.setLayout(new javax.swing.BoxLayout(pnListDuAnCuaToi, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane1.setViewportView(pnListDuAnCuaToi);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1292, Short.MAX_VALUE));
+                        .addGap(0, 961, Short.MAX_VALUE));
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1));
+                        .addGap(0, 646, Short.MAX_VALUE));
 
-        jTabbedPane1.addTab("Dự án của tôi", jPanel2);
+        jTabbedPane1.addTab("tab2", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1292, Short.MAX_VALUE));
+                        .addGap(0, 961, Short.MAX_VALUE));
         jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 673, Short.MAX_VALUE));
+                        .addGap(0, 646, Short.MAX_VALUE));
 
-        jTabbedPane1.addTab("Dự án công ty", jPanel3);
+        jTabbedPane1.addTab("tab3", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 1292, Short.MAX_VALUE)
-                        .addComponent(jTabbedPane1));
+                        .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
+                                .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTabbedPane1)));
+                                .addGap(18, 18, 18)
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+                                .addContainerGap()));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void dangXuatBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_dangXuatBtnActionPerformed
-        // TODO add your handling code here:
+        this.dispose(); // Close the current window to log out
     }// GEN-LAST:event_dangXuatBtnActionPerformed
 
     /**
@@ -212,7 +385,7 @@ public class NhanVienGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NhanVienGUI().setVisible(true);
+                new NhanVienGUI("NV01").setVisible(true);
             }
         });
     }
@@ -224,10 +397,9 @@ public class NhanVienGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel leftGroupHeader;
-    private javax.swing.JPanel pnListDuAnCuaToi;
+    private GUI.SepGUI sepGUI1;
     private javax.swing.JLabel tenCty;
     private javax.swing.JLabel xinChaoText;
     // End of variables declaration//GEN-END:variables

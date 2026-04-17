@@ -386,4 +386,78 @@ public class DuAnDAO {
         }
         return da;
     }
+
+    // dinh
+    public java.util.ArrayList<Object[]> layDanhSachDuAnDangLam(String maNV) {
+        java.util.ArrayList<Object[]> list = new java.util.ArrayList<>();
+
+        String sql = "SELECT DA.MaDA, DA.TenDA, DA.NgayBatDau, DA.TrangThai, PC.VaiTroDuAn "
+                + "FROM PhanCong PC "
+                + "JOIN DuAn DA ON PC.MaDA = DA.MaDA "
+                + "WHERE PC.MaNV = ? AND (DA.TrangThai != 'KetThuc' OR DA.TrangThai IS NULL)";
+
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maNV);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] row = new Object[5];
+                row[0] = rs.getString("MaDA");
+                row[1] = rs.getString("TenDA");
+                // Format ngày nếu có, null thì để trống
+                java.sql.Date ngayBD = rs.getDate("NgayBatDau");
+                row[2] = (ngayBD != null) ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(ngayBD)
+                        : "Chưa xác định";
+
+                String trangThai = rs.getString("TrangThai");
+                row[3] = (trangThai == null || trangThai.trim().isEmpty()) ? "Đang thực hiện" : trangThai;
+
+                row[4] = rs.getString("VaiTroDuAn");
+                list.add(row);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public java.util.ArrayList<Object[]> layLichSuDuAnCuaNhanVien(String maNV) {
+        java.util.ArrayList<Object[]> list = new java.util.ArrayList<>();
+
+        // BỔ SUNG: Lấy thêm cột PC.DanhGia
+        String sql = "SELECT DA.MaDA, DA.TenDA, DA.NgayBatDau, DA.NgayKetThuc, PC.VaiTroDuAn, PC.DanhGia "
+                + "FROM PhanCong PC "
+                + "JOIN DuAn DA ON PC.MaDA = DA.MaDA "
+                + "WHERE PC.MaNV = ? AND DA.TrangThai = 'KetThuc'";
+
+        try {
+            java.sql.Connection conn = DAO.database.createConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maNV);
+            java.sql.ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] row = new Object[6]; // Tăng lên 6 ô để chứa điểm
+                row[0] = rs.getString("MaDA");
+                row[1] = rs.getString("TenDA");
+                row[2] = rs.getDate("NgayBatDau");
+                row[3] = rs.getDate("NgayKetThuc");
+                row[4] = rs.getString("VaiTroDuAn");
+
+                // Xử lý điểm đánh giá (Lỡ dự án chưa có điểm thì để chữ "Chưa chấm")
+                Object diem = rs.getObject("DanhGia");
+                row[5] = (diem != null) ? diem : "Chưa chấm";
+
+                list.add(row);
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

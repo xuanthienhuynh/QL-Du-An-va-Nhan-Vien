@@ -245,7 +245,7 @@ public class DangNhap extends javax.swing.JFrame {
                 gui.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
                 gui.setVisible(true);
             } else {
-                NhanVienGUI gui = new NhanVienGUI();
+                NhanVienGUI gui = new NhanVienGUI(user);
                 gui.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
                 gui.setVisible(true);
             }

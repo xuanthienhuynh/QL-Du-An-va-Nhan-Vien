@@ -135,4 +135,8 @@ public class NhanVienBUS {
     public ArrayList<NhanVien_DTO> layDanhSachNhanVien() {
         return dao.layDanhSachNhanVien();
     }
+
+    // dinh
+
+
 }
