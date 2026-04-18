@@ -101,4 +101,83 @@ public class PhongBanDAO {
         }
     }
 
+    // 5. Tìm kiếm và lọc kết hợp (Dùng cho thanh Search và ComboBox Chi nhánh)
+    public ArrayList<PhongBan_DTO> timKiemVaLoc(String tuKhoa, String maCN) {
+        ArrayList<PhongBan_DTO> list = new ArrayList<>();
+
+        // Câu SQL cơ bản: Tìm theo Mã hoặc Tên Phòng Ban (Dùng N? để tìm tiếng Việt có
+        // dấu)
+        String sql = "SELECT * FROM PhongBan WHERE (MaPB LIKE ? OR TenPB LIKE ?) ";
+
+        // Nếu Chi nhánh được chọn KHÔNG PHẢI là "Tất cả", thì nối thêm điều kiện lọc
+        boolean coLocChiNhanh = (maCN != null && !maCN.isEmpty() && !maCN.equals("Tất cả chi nhánh"));
+        if (coLocChiNhanh) {
+            sql += " AND MaCN = ?";
+        }
+
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            // Đổ chuỗi tìm kiếm vào
+            String keyword = "%" + tuKhoa + "%";
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+
+            // Nếu có lọc chi nhánh thì truyền tham số thứ 3 vào
+            if (coLocChiNhanh) {
+                ps.setString(3, maCN);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                PhongBan_DTO pb = new PhongBan_DTO();
+                pb.setMaPB(rs.getString("MaPB").trim());
+                pb.setTenPB(rs.getString("TenPB"));
+                pb.setMaCN(rs.getString("MaCN").trim());
+                list.add(pb);
+            }
+            database.closeConnection(conn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // 5. Cập nhật phòng ban
+    public boolean capNhatPhongBan(PhongBan_DTO pb) {
+        String sql = "UPDATE PhongBan SET TenPB = ?, MaCN = ? WHERE MaPB = ?";
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, pb.getTenPB());
+            ps.setString(2, pb.getMaCN());
+            ps.setString(3, pb.getMaPB());
+
+            int rows = ps.executeUpdate();
+            database.closeConnection(conn);
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 6. Xóa phòng ban
+    public boolean xoaPhongBan(String maPB) {
+        String sql = "DELETE FROM PhongBan WHERE MaPB = ?";
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maPB);
+
+            int rows = ps.executeUpdate();
+            database.closeConnection(conn);
+            return rows > 0;
+        } catch (Exception e) {
+            // Nếu có nhân viên thuộc phòng này, SQL sẽ văng lỗi ở đây
+            return false;
+        }
+    }
+
 }

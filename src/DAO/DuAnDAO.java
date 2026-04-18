@@ -16,7 +16,8 @@ public class DuAnDAO {
                 + "STRING_AGG(DACN.MaCN, ',') AS CacChiNhanh "
                 + "FROM DuAn DA "
                 + "LEFT JOIN DuAn_ChiNhanh DACN ON DA.MaDA = DACN.MaDA "
-                + "GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai";
+                + "GROUP BY DA.MaDA, DA.TenDA, DA.KinhPhi, DA.DoanhThu, DA.NgayBatDau, DA.NgayKetThuc, DA.TrangThai "
+                + "ORDER BY CASE WHEN DA.TrangThai = 'DangChay' THEN 1 ELSE 2 END ASC, DA.NgayBatDau DESC";
 
         Connection conn = null;
         try {
@@ -454,6 +455,45 @@ public class DuAnDAO {
                 list.add(row);
             }
             conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public ArrayList<DuAn_DTO> timKiemVaLocTrangThai(String tuKhoa, String locTrangThai) {
+        ArrayList<DuAn_DTO> list = new ArrayList<>();
+        // Câu lệnh SQL cơ bản
+        String sql = "SELECT * FROM DuAn WHERE (MaDA LIKE ? OR TenDA LIKE ?) ";
+
+        // Logic lọc trạng thái
+        if (locTrangThai.equals("DangChay")) {
+            sql += " AND (TrangThai = 'DangChay' AND NgayKetThuc >= GETDATE())";
+        } else if (locTrangThai.equals("KetThuc")) {
+            sql += " AND (TrangThai = 'KetThuc' OR NgayKetThuc < GETDATE())";
+        }
+        sql += " ORDER BY CASE WHEN TrangThai = 'DangChay' THEN 1 ELSE 2 END ASC, NgayBatDau DESC";
+
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            String key = "%" + tuKhoa + "%";
+            ps.setString(1, key);
+            ps.setString(2, key);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DuAn_DTO da = new DuAn_DTO();
+                da.setMaDA(rs.getString("MaDA").trim());
+                da.setTenDA(rs.getString("TenDA"));
+                da.setDoanhThu(rs.getDouble("DoanhThu"));
+                da.setKinhPhi(rs.getDouble("KinhPhi"));
+                da.setNgayBatDau(rs.getDate("NgayBatDau"));
+                da.setNgayKetThuc(rs.getDate("NgayKetThuc"));
+                da.setTrangThai(rs.getString("TrangThai"));
+                list.add(da);
+            }
+            database.closeConnection(conn);
         } catch (Exception e) {
             e.printStackTrace();
         }

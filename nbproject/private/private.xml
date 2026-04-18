@@ -4,16 +4,23 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelItemNhanVien.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelEditNhanVien.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelAddDuAn.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelItemDuAn.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/NhanVien_component/PanelLichSuDuAnNV.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailsNhanVien.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/NhanVien_component/PanelDuAnDangLamNV.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelEditPhongBan.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelAddPhongBan.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelThongKeDuAn.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelEditNhanVien.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/QuanLyGUI.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/NhanVienGUI.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/NhanVien_component/PanelThongTinCaNhanNV.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/SepGUI.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailsNhanVienThongKe.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailsNhanVien.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailsDuAn.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelThongKeNhanVien.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/DangNhap.java</file>
-            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelThongKeDuAn.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelDetailPhongBan.java</file>
+            <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelEditDuAn.java</file>
             <file>file:/D:/Năm%203/KỲ%202/QLDA_NB/src/GUI/Panel_Frame/PanelAddNhanVien.java</file>
         </group>
     </open-files>

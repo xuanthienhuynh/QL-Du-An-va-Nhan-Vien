@@ -43,4 +43,34 @@ public class PhongBanBUS {
             return "Thêm thất bại (Có thể trùng mã)!";
         }
     }
+
+    // 5. Tìm kiếm và lọc phòng ban
+    public ArrayList<PhongBan_DTO> timKiemVaLoc(String tuKhoa, String maCN) {
+        // Chuẩn hóa từ khóa tránh lỗi NullPointerException
+        if (tuKhoa == null) {
+            tuKhoa = "";
+        }
+        return pbDAO.timKiemVaLoc(tuKhoa.trim(), maCN);
+    }
+
+    // 6. Cập nhật phòng ban
+    public String capNhatPhongBan(PhongBan_DTO pb) {
+        if (pb.getTenPB().isEmpty())
+            return "Tên phòng ban không được để trống!";
+
+        if (pbDAO.capNhatPhongBan(pb)) {
+            return "Cập nhật phòng ban thành công!";
+        } else {
+            return "Cập nhật thất bại (Lỗi hệ thống)!";
+        }
+    }
+
+    // 7. Xóa phòng ban kèm thông báo lỗi
+    public String xoaPhongBan(String maPB) {
+        if (pbDAO.xoaPhongBan(maPB)) {
+            return "Xóa phòng ban thành công!";
+        } else {
+            return "Không thể xóa! Phòng ban này đang có nhân viên trực thuộc hoặc lỗi hệ thống.";
+        }
+    }
 }

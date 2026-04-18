@@ -138,5 +138,10 @@ public class NhanVienBUS {
 
     // dinh
 
+    public ArrayList<DTO.NhanVien_DTO> layNhanVienTheoPhongBan(String maPB) {
+        // Tự khởi tạo mới một đối tượng DAO ngay tại đây để không bị phụ thuộc tên biến
+        DAO.NhanVienDAO dao = new DAO.NhanVienDAO();
+        return dao.layNhanVienTheoPhongBan(maPB);
+    }
 
 }

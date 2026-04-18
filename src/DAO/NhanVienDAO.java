@@ -4,6 +4,7 @@ import DTO.NhanVien_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class NhanVienDAO {
 
@@ -374,6 +375,28 @@ public class NhanVienDAO {
             e.printStackTrace();
         } finally {
             database.closeConnection(conn);
+        }
+        return list;
+    }
+
+    public ArrayList<NhanVien_DTO> layNhanVienTheoPhongBan(String maPB) {
+        ArrayList<NhanVien_DTO> list = new ArrayList<>();
+        String sql = "SELECT MaNV, HoTen, VaiTro FROM NhanVien WHERE MaPB = ?";
+        try {
+            Connection conn = database.createConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maPB);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                NhanVien_DTO nv = new NhanVien_DTO();
+                nv.setMaNV(rs.getString("MaNV").trim());
+                nv.setHoTen(rs.getString("HoTen"));
+                nv.setVaiTro(rs.getString("VaiTro"));
+                list.add(nv);
+            }
+            database.closeConnection(conn);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }

@@ -179,4 +179,10 @@ public class DuAnBUS {
         DAO.DuAnDAO dao = new DAO.DuAnDAO();
         return dao.layLichSuDuAnCuaNhanVien(maNV);
     }
+
+    public ArrayList<DuAn_DTO> timKiemVaLocTrangThai(String tuKhoa, String loc) {
+        DAO.DuAnDAO dao = new DAO.DuAnDAO();
+        return dao.timKiemVaLocTrangThai(tuKhoa, loc);
+    }
+
 }
